@@ -136,7 +136,7 @@ dependencies:
 
   http_parser: 4.0.2
 
-  collection: ^1.19.1
+  collection: ^1.18.0
 
   filesize: 2.0.1
 
@@ -178,7 +178,7 @@ dependencies:
 
   worker_manager: 5.0.3
 
-  async: ^2.13.0
+  async: ^2.11.0
 
   html: 0.15.3
 
@@ -216,7 +216,7 @@ dependencies:
 
   flutter_keyboard_visibility: 6.0.0
 
-  extended_text: ^15.0.0
+  extended_text: ^14.2.2
 
   date_format: 2.0.7
 
@@ -302,7 +302,7 @@ dependency_overrides:
 
   json_annotation: 4.8.1
 
-  intl: 0.20.2
+  intl: ^0.19.0
 
   # TODO: Due conflict version of hive_ce_generator with other dependencies
   # So we will remove it when found the appropriate version
