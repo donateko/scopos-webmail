@@ -12,6 +12,7 @@ enum AccountMenuItem {
   mailboxVisibility,
   notification,
   contactSupport,
+  addOrSwitchAccount,
   signOut,
   none;
 
@@ -35,6 +36,8 @@ enum AccountMenuItem {
         return imagePaths.icNotification;
       case AccountMenuItem.contactSupport:
         return imagePaths.icHelp;
+      case AccountMenuItem.addOrSwitchAccount:
+        return imagePaths.icAddNewFolder;
       case AccountMenuItem.signOut:
         return imagePaths.icSignOut;
       case AccountMenuItem.none:
@@ -62,6 +65,8 @@ enum AccountMenuItem {
         return appLocalizations.notification;
       case AccountMenuItem.contactSupport:
         return appLocalizations.contactSupport;
+      case AccountMenuItem.addOrSwitchAccount:
+        return appLocalizations.add_or_switch_account;
       case AccountMenuItem.signOut:
         return appLocalizations.sign_out;
       case AccountMenuItem.none:
@@ -83,6 +88,8 @@ enum AccountMenuItem {
         return appLocalizations.vacationSettingExplanation;
       case AccountMenuItem.mailboxVisibility:
         return appLocalizations.folderVisibilitySubtitle;
+      case AccountMenuItem.addOrSwitchAccount:
+        return '';
       default:
         return '';
     }
@@ -108,6 +115,8 @@ enum AccountMenuItem {
         return 'notification';
       case AccountMenuItem.contactSupport:
         return 'contact-support';
+      case AccountMenuItem.addOrSwitchAccount:
+        return 'add-or-switch-account';
       case AccountMenuItem.signOut:
         return 'sign-out';
       case AccountMenuItem.none:

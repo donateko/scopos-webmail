@@ -220,6 +220,20 @@ class SettingsFirstLevelView extends GetWidget<SettingsController> {
           endIndent: SettingsUtils.getHorizontalPadding(context, controller.responsiveUtils)
         ),
         SettingFirstLevelTileBuilder(
+          AccountMenuItem.addOrSwitchAccount.getName(AppLocalizations.of(context)),
+          AccountMenuItem.addOrSwitchAccount.getIcon(controller.imagePaths),
+          () => controller.manageAccountDashboardController.logout(
+              context,
+              controller.manageAccountDashboardController.sessionCurrent,
+              controller.manageAccountDashboardController.accountId.value)
+        ),
+        Divider(
+          color: AppColor.colorDividerHorizontal,
+          height: 1,
+          indent: SettingsUtils.getHorizontalPadding(context, controller.responsiveUtils),
+          endIndent: SettingsUtils.getHorizontalPadding(context, controller.responsiveUtils)
+        ),
+        SettingFirstLevelTileBuilder(
           AppLocalizations.of(context).sign_out,
           controller.imagePaths.icSignOut,
           () => controller.manageAccountDashboardController.logout(

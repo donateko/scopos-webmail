@@ -1247,6 +1247,11 @@ class AppLocalizations {
         name: 'manage_account');
   }
 
+  String get add_or_switch_account {
+    return Intl.message('Add Account/Switch Account',
+        name: 'add_or_switch_account');
+  }
+
   String get profiles {
     return Intl.message('Profiles',
         name: 'profiles');

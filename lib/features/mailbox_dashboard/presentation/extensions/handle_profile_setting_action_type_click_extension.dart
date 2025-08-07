@@ -12,6 +12,9 @@ extension HandleProfileSettingActionTypeClickExtension on MailboxDashBoardContro
       case ProfileSettingActionType.signOut:
         logout(context, sessionCurrent, accountId.value);
         break;
+      case ProfileSettingActionType.addOrSwitchAccount:
+        logout(context, sessionCurrent, accountId.value);
+        break;
       case ProfileSettingActionType.manageAccount:
         goToSettings();
         break;

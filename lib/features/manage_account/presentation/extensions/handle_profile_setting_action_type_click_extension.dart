@@ -12,6 +12,9 @@ extension HandleProfileSettingActionTypeClickExtension on ManageAccountDashBoard
       case ProfileSettingActionType.signOut:
         logout(context, sessionCurrent, accountId.value);
         break;
+      case ProfileSettingActionType.addOrSwitchAccount:
+        logout(context, sessionCurrent, accountId.value);
+        break;
       default:
         break;
     }

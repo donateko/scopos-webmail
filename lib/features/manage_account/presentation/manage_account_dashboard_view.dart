@@ -50,7 +50,7 @@ class ManageAccountDashBoardView extends GetWidget<ManageAccountDashBoardControl
                       ownEmailAddress: controller.ownEmailAddress.value,
                       onTapApplicationLogoAction: () =>
                           controller.backToMailboxDashBoard(context: context),
-                  settingActionTypes: const [ProfileSettingActionType.signOut],
+                  settingActionTypes: const [ProfileSettingActionType.addOrSwitchAccount, ProfileSettingActionType.signOut],
                       onProfileSettingActionTypeClick: (actionType) =>
                         controller.handleProfileSettingActionTypeClick(
                       context: context,
