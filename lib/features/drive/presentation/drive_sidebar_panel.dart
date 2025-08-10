@@ -10,6 +10,7 @@ import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller
 import 'package:tmail_ui_user/features/quotas/presentation/quotas_view.dart';
 import 'package:get/get.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_list_controller.dart';
+import 'package:tmail_ui_user/features/drive/data/network/webdav_api.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 
 class DriveSidebarPanel extends StatelessWidget with DragDropFileMixin {
@@ -110,11 +111,32 @@ class DriveSidebarPanel extends StatelessWidget with DragDropFileMixin {
                     onTap: () => controller.goToRoot(),
                   ),
                   const SizedBox(height: 4),
-                  ...dirs.map((d) => ListTile(
-                        dense: true,
-                        leading: const Icon(Icons.folder_outlined),
-                        title: Text(d.name),
-                        onTap: () => controller.openDirectory(d),
+                  ...dirs.map((d) => DragTarget<WebDavItem>(
+                        onWillAccept: (data) {
+                          controller.setHover(d.href, true);
+                          return true;
+                        },
+                        onLeave: (_) => controller.setHover(d.href, false),
+                        onAccept: (data) async {
+                          controller.setHover(d.href, false);
+                          final destRel = controller.relativePathFromHref(d.href) ?? '';
+                          await controller.moveItemsToFolder(destRel, [data.href]);
+                        },
+                        builder: (context, candidateData, rejected) {
+                          final isHover = controller.hoverTargets.contains(d.href);
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: isHover ? AppColor.lightGrayEBEDF0 : Colors.transparent,
+                              border: isHover ? Border.all(color: AppColor.m3Tertiary70) : null,
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              leading: const Icon(Icons.folder_outlined),
+                              title: Text(d.name == '.trash' ? 'Trash' : d.name),
+                              onTap: () => controller.openDirectory(d),
+                            ),
+                          );
+                        },
                       )),
                 ],
               );

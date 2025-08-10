@@ -200,14 +200,25 @@ class CardDavApi {
   }
 
   Future<void> deleteContact(Session session, Contacts contact) async {
-    final url = Uri.parse(contact.href).toQualifiedUrl(baseUrl: _serverRootBaseUrl(session)).toString();
+    var url = Uri.parse(contact.href).toQualifiedUrl(baseUrl: _serverRootBaseUrl(session)).toString();
+    // Some older contacts may use relative hrefs without default trailing slash; normalize
+    if (!url.endsWith('.vcf')) {
+      if (!url.endsWith('/')) url = '$url/';
+      url = '$url${contact.fullName ?? 'contact'}.vcf';
+    }
     final headers = <String, dynamic>{
       HttpHeaders.acceptHeader: '*/*',
     };
     if (contact.etag != null) {
       headers['If-Match'] = contact.etag!;
     }
-    await _dio.request(url, options: Options(method: 'DELETE', headers: headers, responseType: ResponseType.plain));
+    try {
+      await _dio.request(url, options: Options(method: 'DELETE', headers: headers, responseType: ResponseType.plain));
+    } catch (e) {
+      // Retry without If-Match when server doesn't return etag for legacy entries
+      headers.remove('If-Match');
+      await _dio.request(url, options: Options(method: 'DELETE', headers: headers, responseType: ResponseType.plain));
+    }
   }
 }
 

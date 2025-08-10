@@ -99,7 +99,10 @@ class ContactsListController extends BaseController {
     if (index >= _loaded - 5 && _loaded < _allContacts.length) {
       final next = (_loaded + _pageSize) < _allContacts.length ? (_loaded + _pageSize) : _allContacts.length;
       _loaded = next;
-      contacts.value = _allContacts.take(_loaded).toList();
+      // Defer state update to next microtask to avoid 'setState during build'
+      Future.microtask(() {
+        contacts.value = _allContacts.take(_loaded).toList();
+      });
     }
   }
 

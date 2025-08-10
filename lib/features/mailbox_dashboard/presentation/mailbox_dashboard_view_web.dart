@@ -45,6 +45,7 @@ import 'package:tmail_ui_user/features/contact/presentation/contacts_search_inpu
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_controller.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_list_view.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_sidebar_panel.dart';
+import 'package:tmail_ui_user/features/drive/presentation/drive_search_input.dart';
 import 'package:tmail_ui_user/main/routes/app_routes.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/widgets/top_bar_thread_selection.dart';
 import 'package:tmail_ui_user/features/manage_account/presentation/extensions/vacation_response_extension.dart';
@@ -112,7 +113,9 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                             contactSupportCapability: contactSupportCapability,
                             searchForm: (Get.currentRoute == AppRoutes.contacts)
                                 ? const ContactsSearchInput()
-                                : SearchInputFormWidget(),
+                                : (Get.currentRoute == AppRoutes.drive)
+                                    ? const DriveSearchInput()
+                                    : SearchInputFormWidget(),
                             appGridController:
                                 controller.appGridDashboardController,
                             settingActionTypes: ProfileSettingActionType.values,

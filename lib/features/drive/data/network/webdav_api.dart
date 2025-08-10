@@ -1,4 +1,5 @@
 
+import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:jmap_dart_client/jmap/core/session/session.dart';
 
@@ -71,6 +72,170 @@ class WebDavApi {
     await _dio.request(absolute.toString(), options: Options(method: 'DELETE'));
   }
 
+  // Download file bytes by href
+  Future<Uint8List> downloadBytes(Session session, {required String href, void Function(int, int)? onReceiveProgress}) async {
+    final uri = Uri.parse(href);
+    final base = _baseDavUri(session);
+    final absolute = uri.hasScheme
+        ? uri
+        : base.replace(path: uri.path.startsWith('/') ? uri.path : '/${uri.path}');
+    final resp = await _dio.request(
+      absolute.toString(),
+      options: Options(
+        method: 'GET',
+        responseType: ResponseType.bytes,
+        headers: {
+          'Accept': 'application/octet-stream',
+        },
+      ),
+      onReceiveProgress: onReceiveProgress,
+    );
+    final data = resp.data;
+    if (data is List<int>) {
+      return Uint8List.fromList(data);
+    } else if (data is Uint8List) {
+      return data;
+    }
+    return Uint8List(0);
+  }
+
+  // Move file to a destination (WebDAV MOVE)
+  Future<void> move(Session session, {required String srcHref, required String destHref, void Function(double progress)? onProgress}) async {
+    final base = _baseDavUri(session);
+    final src = Uri.parse(srcHref).hasScheme
+        ? Uri.parse(srcHref)
+        : base.replace(path: srcHref.startsWith('/') ? srcHref : '/$srcHref');
+    final dst = Uri.parse(destHref).hasScheme
+        ? Uri.parse(destHref)
+        : base.replace(path: destHref.startsWith('/') ? destHref : '/$destHref');
+
+    // Ensure destination parent directories exist
+    await _ensureDestinationParents(session, dst);
+
+    // 1) Try MOVE with absolute Destination header
+    try {
+      await _dio.request(
+        src.toString(),
+        options: Options(
+          method: 'MOVE',
+          headers: {
+            'Destination': dst.toString(),
+            'Overwrite': 'T',
+          },
+        ),
+      );
+      onProgress?.call(1.0);
+      return;
+    } catch (_) {/* continue fallback */}
+
+    // 2) Try MOVE with path-only Destination header (some proxies require this)
+    try {
+      await _dio.request(
+        src.toString(),
+        options: Options(
+          method: 'MOVE',
+          headers: {
+            'Destination': dst.path,
+            'Overwrite': 'T',
+          },
+        ),
+      );
+      onProgress?.call(1.0);
+      return;
+    } catch (_) {/* continue fallback */}
+
+    // 3) Try COPY + DELETE (still may be blocked by CORS)
+    try {
+      await copy(session, srcHref: src.toString(), destHref: dst.toString());
+      await _dio.request(src.toString(), options: Options(method: 'DELETE'));
+      onProgress?.call(1.0);
+      return;
+    } catch (_) {/* continue fallback */}
+
+    // 4) Final fallback for browsers: download -> upload -> delete
+    try {
+      // download with progress [0, 0.5]
+      final bytes = await downloadBytes(session, href: src.toString(), onReceiveProgress: (rec, total) {
+        if (total > 0) onProgress?.call((rec / total) * 0.5);
+      });
+      // Derive target userPath and fileName from destination
+      final dstSegments = dst.path.split('/').where((s) => s.isNotEmpty).toList();
+      // expected: ['dav','file','<user>'[, sub...], '<file>']
+      final fileName = Uri.decodeComponent(dstSegments.last);
+      final userName = Uri.decodeComponent(dstSegments[2]);
+      final subParts = dstSegments.length > 4
+          ? dstSegments.sublist(3, dstSegments.length - 1).map(Uri.decodeComponent).toList()
+          : <String>[];
+      final fullUserPath = subParts.isEmpty ? userName : '$userName/${subParts.join('/')}'
+      ;
+      // ensure again in case of race
+      await _ensureDestinationParents(session, dst);
+      await upload(
+        session,
+        userPath: fullUserPath,
+        fileName: fileName,
+        bytes: bytes,
+        contentType: 'application/octet-stream',
+        onSendProgress: (sent, total) {
+          if (total > 0) onProgress?.call(0.5 + (sent / total) * 0.5);
+        },
+      );
+      await _dio.request(src.toString(), options: Options(method: 'DELETE'));
+      onProgress?.call(1.0);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> _ensureDestinationParents(Session session, Uri dst) async {
+    try {
+      final segments = dst.path.split('/').where((s) => s.isNotEmpty).toList();
+      // We need to create all folders up to the parent of the last segment (file name)
+      if (segments.length < 4) return; // must at least have dav/file/<user>/file
+      // Start from '/dav/file/<user>' (index 0:'dav',1:'file',2:'<user>')
+      String current = '/${segments[0]}/${segments[1]}/${segments[2]}';
+      for (int i = 3; i < segments.length - 1; i++) {
+        current = '$current/${segments[i]}';
+        final target = _baseDavUri(session).replace(path: current);
+        try {
+          await _dio.request(
+            target.toString(),
+            options: Options(
+              method: 'MKCOL',
+              headers: {
+                'Content-Type': 'application/xml',
+                'Accept': 'application/xml',
+              },
+            ),
+          );
+        } catch (_) {
+          // ignore if already exists (405) or other non-fatal
+        }
+      }
+    } catch (_) {
+      // ignore
+    }
+  }
+
+  Future<void> copy(Session session, {required String srcHref, required String destHref}) async {
+    final base = _baseDavUri(session);
+    final src = Uri.parse(srcHref).hasScheme
+        ? Uri.parse(srcHref)
+        : base.replace(path: srcHref.startsWith('/') ? srcHref : '/$srcHref');
+    final dst = Uri.parse(destHref).hasScheme
+        ? Uri.parse(destHref)
+        : base.replace(path: destHref.startsWith('/') ? destHref : '/$destHref');
+    await _dio.request(
+      src.toString(),
+      options: Options(
+        method: 'COPY',
+        headers: {
+          'Destination': dst.toString(),
+          'Overwrite': 'T',
+        },
+      ),
+    );
+  }
   // Stat a single file/folder (Depth: 0)
   Future<WebDavItem?> stat(Session session, {required String userPath, required String fileName}) async {
     final root = _baseDavUri(session);

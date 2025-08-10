@@ -65,34 +65,38 @@ final controller = Get.isRegistered<ContactsListController>()
               child: Obx(() {
                 final isLoading = controller.isLoading.value;
                 final items = controller.contacts;
-                return AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 200),
-                  child: isLoading
-                      ? const Center(child: CircularProgressIndicator())
-                      : items.isEmpty
-                          ? const Center(child: Text('No contacts found'))
-                          : ListView.separated(
+                // Avoid setState during build exceptions by not mutating state inside builder
+                if (isLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (items.isEmpty) {
+                  return const Center(child: Text('No contacts found'));
+                }
+                return ListView.separated(
                               key: const ValueKey('contactsList'),
                               itemCount: items.length,
                               separatorBuilder: (_, __) => const Divider(height: 1, color: AppColor.folderDivider),
                               itemBuilder: (_, i) {
-                                final c = items[i];
-                                controller.loadMoreIfNeeded(i);
+                      final c = items[i];
+                      if (i >= items.length - 5) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) => controller.loadMoreIfNeeded(i));
+                      }
                                 final title = c.fullName?.isNotEmpty == true ? c.fullName! : (c.emails.isNotEmpty ? c.emails.first : c.href);
                                 final subtitle = c.emails.join(', ');
                                 return ListTile(
                                   title: Text(title),
                                   subtitle: subtitle.isNotEmpty ? Text(subtitle) : null,
                                   onTap: () => _openEditDialog(context, contact: c),
-                                  trailing: IconButton(
+                        trailing: IconButton(
                                     icon: const Icon(Icons.delete_outline),
-                                    onPressed: () => controller.deleteContact(c),
+                          onPressed: () async {
+                            await controller.deleteContact(c);
+                          },
                                     tooltip: 'Delete',
                                   ),
                                 );
-                              },
-                            ),
-                );
+                    },
+                  );
               }),
             ),
           ],
