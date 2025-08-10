@@ -21,4 +21,4 @@ Accepted
 
 ## Consequences
 
-- Twake Mail iOS app will get latest updates when app is in foreground
+- Mailbux iOS app will get latest updates when app is in foreground

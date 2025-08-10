@@ -237,6 +237,19 @@ class EmailAPI with HandleSetErrorMixin {
       markAsAnsweredOrForwardedSetResponse
     ]);
 
+    // In some servers, attempting to set a keyword (e.g. $answered/$forwarded)
+    // to its current value yields an invalidProperties error with description
+    // "No changes found in request.". This is a benign no-op and should not
+    // fail the whole send flow. We safely ignore that specific error for the
+    // original email being replied/forwarded.
+    if ((emailRequest.isEmailAnswered || emailRequest.isEmailForwarded) &&
+        emailRequest.emailIdAnsweredOrForwarded != null) {
+      mapErrors.removeWhere((id, error) =>
+        id == emailRequest.emailIdAnsweredOrForwarded!.id &&
+        error.type == SetError.invalidProperties &&
+        (error.description?.contains('No changes found in request') == true));
+    }
+
     if (emailCreated == null || mapErrors.isNotEmpty) {
       throw SetMethodException(mapErrors);
     }

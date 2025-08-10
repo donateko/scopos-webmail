@@ -27,7 +27,7 @@ For mobile, you need to input your email address first. From this email address,
 
 If Tmail detects that  your account are not supported with identification through an indentity provider,  you need to connect to your home JMAP email server. Tmail will prompt you for its URL first. Your administrator should have provided you this value.
 
-Then Twake mail will ask you directly for your credentials to log-in 
+Then Mailbux will ask you directly for your credentials to log-in 
 
 ![Frame 33](https://github.com/linagora/tmail-flutter/assets/68209176/e2ecc279-95d0-4374-9d7f-7ab19ec9bac3)
 

@@ -13,7 +13,7 @@ Accepted
 - With other third-party mails, app will redirect users to system settings if they desire to change it
 
 ## Decision
-Twake Mail will follow the method of other third-party mails
+Mailbux will follow the method of other third-party mails
 
 ## Consequences
 The permission's status will always reflect system's configuration, and the system's configuration will be the single source of truth.

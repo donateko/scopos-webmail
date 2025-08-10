@@ -25,4 +25,4 @@ Accepted
 
 ## Consequences
 
-- The attachment button on Twake Mail will now only be tapped once per handling, improving performance & prevent multiple actions by mistake
+- The attachment button on Mailbux will now only be tapped once per handling, improving performance & prevent multiple actions by mistake

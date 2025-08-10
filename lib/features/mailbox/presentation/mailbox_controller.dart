@@ -1607,15 +1607,9 @@ class MailboxController extends BaseMailboxController
   void emptyMailboxAction(BuildContext context, PresentationMailbox presentationMailbox) {
     log('MailboxController::emptyMailboxAction:presentationMailbox: ${presentationMailbox.name}');
     if (presentationMailbox.isTrash) {
-      mailboxDashBoardController.emptyTrashFolderAction(
-        trashFolderId: presentationMailbox.id,
-        totalEmails: presentationMailbox.countTotalEmails
-      );
+      emptyTrashAction(context, presentationMailbox, mailboxDashBoardController);
     } else if (presentationMailbox.isSpam) {
-      mailboxDashBoardController.emptySpamFolderAction(
-        spamFolderId: presentationMailbox.id,
-        totalEmails: presentationMailbox.countTotalEmails
-      );
+      emptySpamAction(context, presentationMailbox, mailboxDashBoardController);
     }
   }
 }

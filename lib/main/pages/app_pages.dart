@@ -92,6 +92,13 @@ class AppPages {
       ),
       binding: EmailPreviewerBindings(),
     ),
+    GetPage(
+      name: AppRoutes.contacts,
+      page: () => DeferredWidget(
+        mailbox_dashboard.loadLibrary,
+        () => mailbox_dashboard.MailboxDashBoardView()),
+      binding: MailboxDashBoardBindings(),
+    ),
     unknownRoutePage,
     if (PlatformInfo.isMobile)
       ...[

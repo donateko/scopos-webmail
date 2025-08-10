@@ -25,7 +25,7 @@ class AppLocalizations {
   }
 
   String get login_text_slogan {
-    return Intl.message('Twake Mail',
+    return Intl.message('Mailbux',
         name: 'login_text_slogan');
   }
 
@@ -873,7 +873,7 @@ class AppLocalizations {
 
   String get app_name {
     return Intl.message(
-        'Twake Mail',
+        'Mailbux',
         name: 'app_name');
   }
 
@@ -1042,7 +1042,7 @@ class AppLocalizations {
 
   String get page_name {
     return Intl.message(
-        'Twake Mail',
+        'Mailbux',
         name: 'page_name');
   }
 
@@ -1628,7 +1628,7 @@ class AppLocalizations {
 
   String get languageSubtitle {
     return Intl.message(
-        'Set the language you use on Twake Mail.',
+        'Set the language you use on Mailbux.',
         name: 'languageSubtitle');
   }
 
@@ -2710,7 +2710,7 @@ class AppLocalizations {
 
   String get appTitlePushNotification {
     return Intl.message(
-      'Twake Mail',
+      'Mailbux',
       name: 'appTitlePushNotification');
   }
 
@@ -3862,7 +3862,7 @@ class AppLocalizations {
 
   String get bannerProgressingRecoveryMessage {
     return Intl.message(
-      'The recovery is in progress. You can continue using Twake Mail',
+      'The recovery is in progress. You can continue using Mailbux',
       name: 'bannerProgressingRecoveryMessage',
     );
   }
@@ -4186,7 +4186,7 @@ class AppLocalizations {
 
   String get pleaseAllowNotifications {
     return Intl.message(
-      'Please allow notifications from Twake Mail in the device\'s Settings',
+      'Please allow notifications from Mailbux in the device\'s Settings',
       name: 'pleaseAllowNotifications',
     );
   }
@@ -4200,7 +4200,7 @@ class AppLocalizations {
 
   String get allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone {
     return Intl.message(
-      'Allows Twake Mail to notify you when a new message arrives on your phone',
+      'Allows Mailbux to notify you when a new message arrives on your phone',
       name: 'allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone',
     );
   }

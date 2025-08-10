@@ -17,4 +17,4 @@ New method is written in Kotlin for Android side only, to handle this permission
 - For Android lower than 28, a simple check by `areNotificationsEnabled()` is enough
 
 ## Consequences
-The permission's status is better reflect on the Twake Mail app.
+The permission's status is better reflect on the Mailbux app.

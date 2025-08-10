@@ -88,7 +88,7 @@ On mobile, you can long- press on a folder to see the possible actions for that 
 This action will permanently delete all items in Trash/Spam (In web you can click Clean button next to the folder's name)
 ## Enable/Disable Spam report
 - On actions list of Spam folder, you can see option: Enable/Disable spam report
-- If you enable Spam report, when you log-in to Twake Mail, you can see a banner that shows report of new Spam messages.
+- If you enable Spam report, when you log-in to Mailbux, you can see a banner that shows report of new Spam messages.
 - If you disable Spam report, you will not see the spam banner
 
 ![image 41](https://github.com/user-attachments/assets/5216dd7f-1640-4ce0-b84a-05c9ce98f979)

@@ -273,4 +273,18 @@ class AuthorizationInterceptors extends QueuedInterceptorsWrapper {
     _configOIDC = null;
     _authenticationType = AuthenticationType.none;
   }
+
+  // Exposed helper for WebSocket auth refresh in environments requiring query access_token
+  Future<TokenOIDC?> invokeRefreshTokenForWebSocket() async {
+    try {
+      if (_token == null || _configOIDC == null) return null;
+      if (!_isTokenExpired(_token)) return _token;
+      final refreshed = await _invokeRefreshTokenFromServer();
+      await _updateCurrentAccount(tokenOIDC: refreshed);
+      return refreshed;
+    } catch (e) {
+      logError('AuthorizationInterceptors::invokeRefreshTokenForWebSocket: $e');
+      return null;
+    }
+  }
 }

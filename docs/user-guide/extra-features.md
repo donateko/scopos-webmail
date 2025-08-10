@@ -71,7 +71,7 @@ This small page will present features specific to Twake-Mail.
 
 ## III. Event information display
 
-When you receive a calendar event invitation in an email, Twake Mail will display the event details in a format that allows you to easily review and respond to the invitation. 
+When you receive a calendar event invitation in an email, Mailbux will display the event details in a format that allows you to easily review and respond to the invitation. 
 
 **1. On Email listing**
 

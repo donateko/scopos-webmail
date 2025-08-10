@@ -193,6 +193,9 @@ import 'package:tmail_ui_user/main/utils/email_receive_manager.dart';
 import 'package:tmail_ui_user/main/utils/ios_notification_manager.dart';
 import 'package:server_settings/server_settings/tmail_server_settings_extension.dart';
 import 'package:uuid/uuid.dart';
+  import 'package:tmail_ui_user/features/contact/data/network/carddav_api.dart';
+  import 'package:model/contact/contacts.dart';
+  import 'package:collection/collection.dart';
 
 class MailboxDashBoardController extends ReloadableController
     with ContactSupportMixin {
@@ -1664,7 +1667,10 @@ class MailboxDashBoardController extends ReloadableController
 
     switch(actionType) {
       case DeleteActionType.all:
-        emptyTrashFolderAction(onCancelSelectionEmail: onCancelSelectionEmail);
+        emptyTrashFolderAction(
+          onCancelSelectionEmail: onCancelSelectionEmail,
+          trashFolderId: mapDefaultMailboxIdByRole[PresentationMailbox.roleTrash]
+        );
         break;
       case DeleteActionType.multiple:
         _deleteMultipleEmailsPermanently(listEmails ?? [], onCancelSelectionEmail: onCancelSelectionEmail);
@@ -1681,7 +1687,7 @@ class MailboxDashBoardController extends ReloadableController
   }) {
     onCancelSelectionEmail?.call();
 
-    final trashMailboxId = trashFolderId ?? mapDefaultMailboxIdByRole[PresentationMailbox.roleTrash];
+    final trashMailboxId = trashFolderId;
     final accountId = this.accountId.value;
 
     if (accountId == null || sessionCurrent == null) {
@@ -2599,7 +2605,6 @@ class MailboxDashBoardController extends ReloadableController
   }) {
     onCancelSelectionEmail?.call();
 
-    spamFolderId ??= spamMailboxId;
     final accountId = this.accountId.value;
 
     if (accountId == null || sessionCurrent == null) {
@@ -2817,6 +2822,29 @@ class MailboxDashBoardController extends ReloadableController
 
     if (success.emailRequest.isEmailForwarded) {
       updateEmailForwarded(success.emailRequest.emailIdAnsweredOrForwarded!);
+    }
+
+    // Auto-save recipients to CardDAV Contacts (Stalwart)
+    try {
+      final session = sessionCurrent;
+      if (session != null) {
+        final cardDavApi = getBinding<CardDavApi>();
+        final email = success.emailRequest.email;
+        final recipients = <String>{}
+          ..addAll(email.to?.map((a) => a.email ?? '') ?? const [])
+          ..addAll(email.cc?.map((a) => a.email ?? '') ?? const [])
+          ..addAll(email.bcc?.map((a) => a.email ?? '') ?? const []);
+        recipients.where((e) => e.isNotEmpty).forEach((addr) {
+          final name = email.to?.firstWhereOrNull((a) => (a.email ?? '') == addr)?.name
+            ?? email.cc?.firstWhereOrNull((a) => (a.email ?? '') == addr)?.name
+            ?? email.bcc?.firstWhereOrNull((a) => (a.email ?? '') == addr)?.name
+            ?? '';
+          // Fire-and-forget; errors are caught by outer try/catch
+          cardDavApi?.createContact(session, Contacts(fullName: name, emails: [addr], href: ''));
+        });
+      }
+    } catch (e) {
+      logError('MailboxDashBoardController::_handleSendEmailSuccess:auto-save-contacts: $e');
     }
   }
 

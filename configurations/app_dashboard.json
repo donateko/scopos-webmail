@@ -14,6 +14,11 @@
       "appName": "Calendar",
       "icon": "ic_calendar_app.svg",
       "appLink": "/"
+    },
+     {
+      "appName": "Contacts",
+      "icon": "ic_contacts_app.svg",
+      "appLink": "/contacts"
     }
   ]
 }

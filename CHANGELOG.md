@@ -316,7 +316,7 @@
 ### Fixed
 - #3253 Fix body content is lost
 - Close keyboard when login in iOS
-- #3250 Fix share file from external app to Twake Mail
+- #3250 Fix share file from external app to Mailbux
 - #2528 Sorting email by order ids list of Email/query
 - #3221 handle mailto with additional cc and bcc
 - #3276 Fix debouncer in Quick Search web app
@@ -414,7 +414,7 @@
 
 ## [0.13.0] - 2024-08-23
 ### Added
-- #2857 New icon for Twake Mail
+- #2857 New icon for Mailbux
 - #3023 Display SMime signature status in headers email
 - #2975 Change the layout main screen in mobile app
 - #3042 Support PublicAsset in Signature

@@ -13,7 +13,7 @@ Accepted
 
 ## Decision
 
-- Twake Mail no longer have to implement Echo ping
+- Mailbux no longer have to implement Echo ping
 - Browser will automatically send pong frame as default implementation
 - Echo ping will still be left as an option in `env.file` through `WS_ECHO_PING`
   - Set it to `true` if you want to use Echo ping

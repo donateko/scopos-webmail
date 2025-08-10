@@ -46,7 +46,11 @@ mixin LauncherApplicationMixin {
   }
 
   Future<void> openWebApplication(Uri uri) async {
-    await launcher.launchUrl(uri);
+    await launcher.launchUrl(
+      uri,
+      mode: launcher.LaunchMode.platformDefault,
+      webOnlyWindowName: '_self',
+    );
   }
 
   Future<void> openOtherApplication(Uri uri) async {

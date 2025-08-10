@@ -311,6 +311,7 @@ abstract class BaseMailboxView extends GetWidget<MailboxController>
             onToggleExpandFolder: controller.toggleExpandFolders,
           );
         }),
+        const SizedBox.shrink(),
         Obx(() => AnimatedContainer(
           duration: const Duration(milliseconds: 400),
           child: controller.foldersExpandMode.value == ExpandMode.EXPAND

@@ -24,15 +24,15 @@ User Content: User Content is defined as Content which is directly or indirectly
 
 ## Scope
 
-The present privacy policy is limited only to the Twake Mail application. 
+The present privacy policy is limited only to the Mailbux application. 
 
 ## Email server disclaimer
 
-The users need to be aware that the email server and its owner may have a different privacy policy. Twake Mail being usable 
+The users need to be aware that the email server and its owner may have a different privacy policy. Mailbux being usable 
 with any email server, we cannot assume here which would be the terms of the emails server owner privacy policy. Users are responsible of consulting and validating the privacy policy of the email 
 server.
 
-By no means can LINAGORA be held accountable for the doings of arbitrary email servers owners that the users have been setting up with Twake Mail application.
+By no means can LINAGORA be held accountable for the doings of arbitrary email servers owners that the users have been setting up with Mailbux application.
 
 ## Acceptance
 
@@ -47,20 +47,20 @@ The present Privacy policy may be amended or changed at any time at LINAGORA's d
 User is informed that none of its personnal data are collected.
 
 If supported by the email server, the fact that emails are received might transit through third party infrastructure ([firebase cloud messaging](https://firebase.google.com/docs/cloud-messaging)). 
-In the process, no personal data is being exposed, and the Twake Mail application need to contact directly the mail server in order to gather the notification information.
+In the process, no personal data is being exposed, and the Mailbux application need to contact directly the mail server in order to gather the notification information.
 
 ## Application Permissions
 
-In order to work smoothly on your device the Twake Mail application needs the following authorization:
+In order to work smoothly on your device the Mailbux application needs the following authorization:
 
- - `Files, documnents, and audio files`: This permission is used by Twake Mail to access files of your device and allows using those files as email attachments. Once selected files are uploaded to the remote 
+ - `Files, documnents, and audio files`: This permission is used by Mailbux to access files of your device and allows using those files as email attachments. Once selected files are uploaded to the remote 
 email server.
- - `Photos and videos`: This permission is used by Twake Mail to access photos and videos and allows using those files as email attachments. Once selected files are uploaded to the remote 
+ - `Photos and videos`: This permission is used by Mailbux to access photos and videos and allows using those files as email attachments. Once selected files are uploaded to the remote 
 email server.
- - `Contacts`: Used by Twake Mail for Email address auto-completion against local address book. Local address book are never uploaded to third-party. Only once an email is sent to a 
+ - `Contacts`: Used by Mailbux for Email address auto-completion against local address book. Local address book are never uploaded to third-party. Only once an email is sent to a 
 local contact, does the email server become aware of the mail address and display names of the contact.
 
-Those rights are only intendeed to improve Twake Mail user experience. Twake Mail is still usable, with a reduced functional scope might the user deny permissions.
+Those rights are only intendeed to improve Mailbux user experience. Mailbux is still usable, with a reduced functional scope might the user deny permissions.
 
 ## Our guiding principles for privacy
 

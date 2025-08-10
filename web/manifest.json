@@ -1,11 +1,11 @@
 {
-    "name": "Twake Mail - JMAP Email Client",
-    "short_name": "Twake Mail",
+    "name": "Mailbux - JMAP Email Client",
+    "short_name": "Mailbux",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Twake Mail - JMAP Email Client",
+    "description": "Mailbux - JMAP Email Client",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

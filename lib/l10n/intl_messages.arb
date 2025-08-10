@@ -6,7 +6,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Twake Mail",
+  "login_text_slogan": "Mailbux",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -860,7 +860,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Twake Mail",
+  "app_name": "Mailbux",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1016,7 +1016,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Twake Mail",
+  "page_name": "Mailbux",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1608,7 +1608,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Set the language you use on Twake Mail.",
+  "languageSubtitle": "Set the language you use on Mailbux.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -2650,7 +2650,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Twake Mail",
+  "appTitlePushNotification": "Mailbux",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],
@@ -3718,7 +3718,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bannerProgressingRecoveryMessage": "The recovery is in progress. You can continue using Twake Mail",
+  "bannerProgressingRecoveryMessage": "The recovery is in progress. You can continue using Mailbux",
   "@bannerProgressingRecoveryMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -4016,7 +4016,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseAllowNotifications": "Please allow notifications from Twake Mail in the device's Settings",
+  "pleaseAllowNotifications": "Please allow notifications from Mailbux in the device's Settings",
   "@pleaseAllowNotifications": {
     "type": "text",
     "placeholders_order": [],
@@ -4028,7 +4028,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Allows Twake Mail to notify you when a new message arrives on your phone",
+  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Allows Mailbux to notify you when a new message arrives on your phone",
   "@allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": {
     "type": "text",
     "placeholders_order": [],

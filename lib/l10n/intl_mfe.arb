@@ -41,7 +41,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Twake Mail",
+  "login_text_slogan": "Mailbux",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -2347,7 +2347,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Twake Mail",
+  "app_name": "Mailbux",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],

@@ -1,6 +1,6 @@
 # Twake-Mail productivity tips {#tips}
 
-This page makes a list of all features that Twake Mail advanced users would love.
+This page makes a list of all features that Mailbux advanced users would love.
 
 ## Drag and drop mails
 

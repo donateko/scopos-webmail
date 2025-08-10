@@ -17,7 +17,8 @@ class LinkBrowserWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Link(
       uri: uri,
-      builder: (context, function) => child
+      target: LinkTarget.self,
+      builder: (context, followLink) => child,
     );
   }
 }

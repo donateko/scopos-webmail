@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:get/get.dart';
 import 'package:tmail_ui_user/features/email/presentation/email_view.dart';
+import 'package:tmail_ui_user/features/contact/presentation/contacts_sidebar_view.dart';
+import 'package:tmail_ui_user/main/routes/app_routes.dart';
+import 'package:tmail_ui_user/features/contact/presentation/contacts_list_view.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/mailbox_view.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/base_mailbox_dashboard_view.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/model/dashboard_routes.dart';
@@ -31,14 +34,23 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
       ],
     );
 
+    final isContactsRoute = Get.currentRoute == AppRoutes.contacts;
     return FocusDetector(
       onForegroundGained: controller.handleOnForegroundGained,
       child: Scaffold(
         drawerEnableOpenDragGesture: controller.responsiveUtils.hasLeftMenuDrawerActive(context),
         body: Obx(() {
-          var bodyView = controller.searchController.isSearchEmailRunning
-            ? const EmailView()
-            : bodyLandscapeTablet;
+          if (isContactsRoute) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                SizedBox(width: ResponsiveUtils.defaultSizeLeftMenuMobile, child: ContactsSidebarView()),
+                VerticalDivider(width: 12),
+                Expanded(child: ContactsListView()),
+              ],
+            );
+          }
+          var bodyView = controller.searchController.isSearchEmailRunning ? const EmailView() : bodyLandscapeTablet;
           
           switch(controller.dashboardRoute.value) {
             case DashboardRoutes.thread:

@@ -37,7 +37,6 @@ import 'package:tmail_ui_user/features/manage_account/domain/usecases/log_out_oi
 import 'package:tmail_ui_user/features/manage_account/presentation/email_rules/bindings/email_rules_interactor_bindings.dart';
 import 'package:tmail_ui_user/features/manage_account/presentation/forward/bindings/forwarding_interactors_bindings.dart';
 import 'package:tmail_ui_user/features/push_notification/domain/exceptions/fcm_exception.dart';
-import 'package:tmail_ui_user/features/push_notification/domain/exceptions/web_socket_exceptions.dart';
 import 'package:tmail_ui_user/features/push_notification/domain/state/destroy_firebase_registration_state.dart';
 import 'package:tmail_ui_user/features/push_notification/domain/state/get_stored_firebase_registration_state.dart';
 import 'package:tmail_ui_user/features/push_notification/domain/usecases/destroy_firebase_registration_interactor.dart';
@@ -62,6 +61,15 @@ import 'package:tmail_ui_user/main/universal_import/html_stub.dart' as html;
 import 'package:tmail_ui_user/main/utils/toast_manager.dart';
 import 'package:tmail_ui_user/main/utils/twake_app_manager.dart';
 import 'package:uuid/uuid.dart';
+  import 'package:tmail_ui_user/features/contact/data/network/carddav_api.dart';
+  import 'package:tmail_ui_user/features/contact/data/datasource/carddav_autocomplete_datasource.dart';
+  import 'package:tmail_ui_user/features/contact/data/datasource/auto_complete_datasource.dart';
+  import 'package:tmail_ui_user/features/contact/data/datasource_impl/tmail_contact_datasource_impl.dart';
+  import 'package:tmail_ui_user/features/composer/data/repository/auto_complete_repository_impl.dart';
+  import 'package:tmail_ui_user/features/composer/domain/repository/auto_complete_repository.dart';
+  import 'package:tmail_ui_user/features/composer/domain/usecases/get_autocomplete_interactor.dart';
+  import 'package:tmail_ui_user/features/composer/domain/usecases/get_all_autocomplete_interactor.dart';
+  import 'package:tmail_ui_user/features/composer/domain/usecases/get_device_contact_suggestions_interactor.dart';
 
 abstract class BaseController extends GetxController
     with MessageDialogActionMixin,
@@ -303,9 +311,57 @@ abstract class BaseController extends GetxController
 
   void injectAutoCompleteBindings(Session? session, AccountId? accountId) {
     try {
+      // Always enable device suggestion bindings (non-throwing)
       ContactAutoCompleteBindings().dependencies();
-      requireCapability(session!, accountId!, [tmailContactCapabilityIdentifier]);
-      TMailAutoCompleteBindings().dependencies();
+
+      final combinedSources = <AutoCompleteDataSource>{};
+
+      // Try TMail autocomplete only if capability is supported
+      final bool tmailSupported = () {
+        try {
+          if (session != null && accountId != null) {
+            return tmailContactCapabilityIdentifier.isSupported(session, accountId);
+          }
+        } catch (_) {}
+        return false;
+      }();
+
+      if (tmailSupported) {
+        TMailAutoCompleteBindings().dependencies();
+        if (Get.isRegistered<TMailContactDataSourceImpl>()) {
+          combinedSources.add(Get.find<TMailContactDataSourceImpl>());
+        }
+      }
+
+      // Always add CardDAV source when session is available
+      if (session != null) {
+        combinedSources.add(CardDavAutoCompleteDataSource(Get.find<CardDavApi>(), session));
+      }
+
+      if (combinedSources.isNotEmpty) {
+        final newRepo = AutoCompleteRepositoryImpl(combinedSources);
+        if (Get.isRegistered<AutoCompleteRepository>()) {
+          Get.replace<AutoCompleteRepository>(newRepo);
+        } else {
+          Get.put<AutoCompleteRepository>(newRepo, permanent: true);
+        }
+        if (Get.isRegistered<GetAutoCompleteInteractor>()) {
+          Get.replace<GetAutoCompleteInteractor>(GetAutoCompleteInteractor(Get.find<AutoCompleteRepository>()));
+        } else {
+          Get.put(GetAutoCompleteInteractor(Get.find<AutoCompleteRepository>()), permanent: true);
+        }
+        if (Get.isRegistered<GetDeviceContactSuggestionsInteractor>()) {
+          final all = GetAllAutoCompleteInteractor(
+            Get.find<GetAutoCompleteInteractor>(),
+            Get.find<GetDeviceContactSuggestionsInteractor>(),
+          );
+          if (Get.isRegistered<GetAllAutoCompleteInteractor>()) {
+            Get.replace<GetAllAutoCompleteInteractor>(all);
+          } else {
+            Get.put(all, permanent: true);
+          }
+        }
+      }
     } catch (e) {
       logError('$runtimeType::injectAutoCompleteBindings(): exception: $e');
     }
@@ -363,22 +419,21 @@ abstract class BaseController extends GetxController
   void injectWebSocket(Session? session, AccountId? accountId) {
     try {
       log('$runtimeType::injectWebSocket:');
-      requireCapability(
-        session!,
-        accountId!,
-        [
-          CapabilityIdentifier.jmapWebSocket,
-          CapabilityIdentifier.jmapWebSocketTicket
-        ]
+      // Loosen checks to support Stalwart where WebSocket Ticket capability
+      // may be absent and ws endpoint is the server root without /jmap.
+      // If capabilities are present we still log them; otherwise proceed.
+      final sess = session;
+      final acc = accountId;
+      if (sess == null || acc == null) return;
+
+      final wsCapability = sess.getCapabilityProperties<WebSocketCapability>(
+        acc,
+        CapabilityIdentifier.jmapWebSocket,
       );
-      final wsCapability = session.getCapabilityProperties<WebSocketCapability>(
-        accountId,
-        CapabilityIdentifier.jmapWebSocket);
-      if (wsCapability?.supportsPush != true) {
-        throw WebSocketPushNotSupportedException();
-      }
+      log('$runtimeType::injectWebSocket: ws capability = ${wsCapability?.toJson()}');
+
       WebSocketInteractorBindings().dependencies();
-      WebSocketController.instance.initialize(accountId: accountId, session: session);
+      WebSocketController.instance.initialize(accountId: acc, session: sess);
     } catch(e) {
       logError('$runtimeType::injectWebSocket(): exception: $e');
     }

@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:collection/collection.dart';
+import 'package:jmap_dart_client/jmap/core/unsigned_int.dart';
 import 'package:jmap_dart_client/jmap/mail/mailbox/mailbox.dart';
 import 'package:model/extensions/mailbox_name_extension.dart';
 import 'package:model/extensions/presentation_mailbox_extension.dart';
@@ -66,8 +67,12 @@ class TreeBuilder {
       );
 
       final isDeactivated = mailbox.id == mailboxIdSelected;
+      
+      // Override sortOrder for special mailboxes to ensure correct ordering
+      final modifiedMailbox = _overrideSortOrderForSpecialMailboxes(mailbox);
+      
       final newMailboxNode = MailboxNode(
-        isDeactivated ? mailbox.withMailboxSate(MailboxState.deactivated) : mailbox,
+        isDeactivated ? modifiedMailbox.withMailboxSate(MailboxState.deactivated) : modifiedMailbox,
         nodeState: isDeactivated ? MailboxState.deactivated : MailboxState.activated,
         expandMode: currentMailboxNode?.expandMode ?? ExpandMode.COLLAPSE,
         selectMode: currentMailboxNode?.selectMode ?? SelectMode.INACTIVE,
@@ -103,7 +108,8 @@ class TreeBuilder {
       newAllMailboxes.add(currentNode.item);
     }
 
-    sortNodeChildren(newDefaultTree.root);
+    // Commented out to prevent overriding custom sorting logic
+    // sortNodeChildren(newDefaultTree.root);
 
     return (
       allMailboxes: newAllMailboxes,
@@ -137,8 +143,11 @@ class TreeBuilder {
         currentTeamMailboxTree: currentTeamMailboxTree,
       );
 
+      // Override sortOrder for special mailboxes to ensure correct ordering
+      final modifiedMailbox = _overrideSortOrderForSpecialMailboxes(mailbox);
+
       final newMailboxNode = MailboxNode(
-        mailbox,
+        modifiedMailbox,
         expandMode: currentMailboxNode?.expandMode ?? ExpandMode.COLLAPSE,
         selectMode: currentMailboxNode?.selectMode ?? SelectMode.INACTIVE,
       );
@@ -166,7 +175,8 @@ class TreeBuilder {
       }
     }
 
-    sortNodeChildren(newDefaultTree.root);
+    // Commented out to prevent overriding custom sorting logic
+    // sortNodeChildren(newDefaultTree.root);
 
     return (
       defaultTree: newDefaultTree,
@@ -180,10 +190,7 @@ class TreeBuilder {
   }
 
   void sortByMailboxNameNodeChildren(MailboxNode mailboxNode) {
-    mailboxNode.childrenItems?.sortByCompare<MailboxName?>(
-      (node) => node.item.name,
-      (name, other) => name?.compareAlphabetically(other) ?? -1,
-    );
+    mailboxNode.childrenItems?.sort((a, b) => a.compareTo(b));
   }
 
   MailboxNode? findExistingNode({
@@ -195,5 +202,26 @@ class TreeBuilder {
     return currentDefaultTree.findNode((node) => node.item.id == id) ??
       currentPersonalTree.findNode((node) => node.item.id == id) ??
       currentTeamMailboxTree.findNode((node) => node.item.id == id);
+  }
+
+  PresentationMailbox _overrideSortOrderForSpecialMailboxes(PresentationMailbox mailbox) {
+    final name = mailbox.name?.name.toLowerCase() ?? '';
+    final role = mailbox.role?.value.toLowerCase() ?? '';
+    
+    // Define custom sortOrder values for special mailboxes
+    if (name == 'inbox' || role == 'inbox') {
+      return mailbox.copyWith(sortOrder: SortOrder(sortValue: 1));
+    } else if (name == 'sent' || role == 'sent') {
+      return mailbox.copyWith(sortOrder: SortOrder(sortValue: 2));
+    } else if (name == 'drafts' || role == 'drafts') {
+      return mailbox.copyWith(sortOrder: SortOrder(sortValue: 3));
+    } else if (name == 'trash' || role == 'trash') {
+      return mailbox.copyWith(sortOrder: SortOrder(sortValue: 4));
+    } else if (name == 'spam' || role == 'spam' || name == 'junk' || role == 'junk') {
+      return mailbox.copyWith(sortOrder: SortOrder(sortValue: 5));
+    }
+    
+    // Keep original sortOrder for other mailboxes
+    return mailbox;
   }
 }

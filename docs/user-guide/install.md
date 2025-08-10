@@ -1,4 +1,4 @@
-# Install Twake Mail application {#install}
+# Install Mailbux application {#install}
 
 This small guides explains how to install Twake-Mail applications on your devices.
 
@@ -6,7 +6,7 @@ This small guides explains how to install Twake-Mail applications on your device
 
  **-> How to install the app from the store**
 1. Open Google Play Store: Open the Google Play Store app on your Android device. It usually has a shopping bag icon with a colorful triangle.
-2. Search for the App: Use the search bar at the top to search for Twake Mail application
+2. Search for the App: Use the search bar at the top to search for Mailbux application
 3. Select the App: When you find the app, tap on it to open its details page.
 4. Install the App: On the app's details page, tap the "Install" button.
 5. Wait for Download and Installation: The app will download and install automatically. Once it's installed, the "Install" button will change to "Open."
@@ -19,7 +19,7 @@ This small guides explains how to install Twake-Mail applications on your device
 **-> Which rights the application needs and why?**
 
 1. Contacts
-- When you open Twake Mail app for the first time,and you click Compose button, you will be asked to grant permission for Contacts. When you compose an email, Twake Mail will search your phone contacts and suggest the appopriate recipients 
+- When you open Mailbux app for the first time,and you click Compose button, you will be asked to grant permission for Contacts. When you compose an email, Mailbux will search your phone contacts and suggest the appopriate recipients 
 
 ![Frame 6 (1)](https://github.com/user-attachments/assets/cabfada0-10c1-4486-b6d0-961757244fe0)
 
@@ -35,7 +35,7 @@ This small guides explains how to install Twake-Mail applications on your device
 
 2. Apps or Application Manager: Scroll down and look for an option like "Apps," "Applications," or "Application Manager." Tap on it.
 
-3. Select the App Twake Mail: 
+3. Select the App Mailbux: 
 - Look for an option called "Permissions" or "App Permissions" within the app settings. This will display a list of permissions that the app has requested or been granted.
  You can toggle individual permissions on or off, depending on your preferences.
 
@@ -47,7 +47,7 @@ This small guides explains how to install Twake-Mail applications on your device
  **-> How to install the app from the store**
 
 1. Open the App Store: Tap on the App Store icon on your device's home screen.
-2. Search for the App: Use the search bar at the top to search for Twake Mail application
+2. Search for the App: Use the search bar at the top to search for Mailbux application
 3. Select the App: Once you've found the app, tap on its icon to open its details page.
 4. Install the App: On the app's details page, you'll see an "Install" or "Get" button. Tap on it. You might be prompted to enter your Apple ID password or use Face ID/Touch ID for confirmation.
 5. Wait for Download and Installation: The app will download and install automatically. Once it's installed, the "Install" button will change to "Open."
@@ -59,10 +59,10 @@ This small guides explains how to install Twake-Mail applications on your device
 **-> Which rights the application needs and why?**
 
  1. Notification
-- When you open Twake Mail app for the first time, you will be asked to grant permission for Notifications:
+- When you open Mailbux app for the first time, you will be asked to grant permission for Notifications:
 
  2. Contacts
-- When you open Twake Mail app for the first time and you click Compose button, you will be asked to grant permission for Contacts. When you compose an email, TwakeMail will search your phone contacts and suggest the appopriate recipients
+- When you open Mailbux app for the first time and you click Compose button, you will be asked to grant permission for Contacts. When you compose an email, TwakeMail will search your phone contacts and suggest the appopriate recipients
 
 ![Frame 24 (1)](https://github.com/user-attachments/assets/a4140927-ac49-4c1c-8b42-218ecdf406dd)
 

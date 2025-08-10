@@ -98,6 +98,9 @@ abstract class BaseMailboxController extends BaseController {
     personalMailboxTree.value = recordTree.personalTree;
     teamMailboxesTree.value = recordTree.teamMailboxTree;
     allMailboxes = recordTree.allMailboxes;
+    
+    // Force re-sort with custom logic
+    _forceResortTrees();
   }
 
   Future<void> refreshTree(List<PresentationMailbox> allMailbox) async {
@@ -114,6 +117,29 @@ abstract class BaseMailboxController extends BaseController {
     personalMailboxTree.value = recordTree.personalTree;
     teamMailboxesTree.value = recordTree.teamMailboxTree;
     allMailboxes = allMailbox;
+    
+    // Force re-sort with custom logic
+    _forceResortTrees();
+  }
+
+  void _forceResortTrees() {
+    // Re-sort default tree
+    if (defaultMailboxTree.value.root.childrenItems?.isNotEmpty == true) {
+      defaultMailboxTree.value.root.childrenItems!.sort((a, b) => a.compareTo(b));
+      defaultMailboxTree.refresh();
+    }
+    
+    // Re-sort personal tree
+    if (personalMailboxTree.value.root.childrenItems?.isNotEmpty == true) {
+      personalMailboxTree.value.root.childrenItems!.sort((a, b) => a.compareTo(b));
+      personalMailboxTree.refresh();
+    }
+    
+    // Re-sort team mailboxes tree
+    if (teamMailboxesTree.value.root.childrenItems?.isNotEmpty == true) {
+      teamMailboxesTree.value.root.childrenItems!.sort((a, b) => a.compareTo(b));
+      teamMailboxesTree.refresh();
+    }
   }
 
   void syncAllMailboxWithDisplayName(BuildContext context) {

@@ -5,7 +5,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Twake Mail",
+  "login_text_slogan": "Mailbux",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -677,7 +677,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Twake Mail",
+  "app_name": "Mailbux",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -827,7 +827,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Twake Mail",
+  "page_name": "Mailbux",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -2395,13 +2395,13 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "textQuotasRunningOutOfStorageContent": "A breve non potrai più inviare email in Twake Mail. Pulisci il tuo spazio di archiviazione o aggiornalo per ottenere tutte le funzionalità di Twake Mail.",
+  "textQuotasRunningOutOfStorageContent": "A breve non potrai più inviare email in Mailbux. Pulisci il tuo spazio di archiviazione o aggiornalo per ottenere tutte le funzionalità di Mailbux.",
   "@textQuotasRunningOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "textQuotasRunOutOfStorageContent": "Ora non puoi temporaneamente inviare o ricevere e-mail.  Libera o aggiorna il tuo spazio di archiviazione per ottenere tutte le funzionalità di Twake Mail.",
+  "textQuotasRunOutOfStorageContent": "Ora non puoi temporaneamente inviare o ricevere e-mail.  Libera o aggiorna il tuo spazio di archiviazione per ottenere tutte le funzionalità di Mailbux.",
   "@textQuotasRunOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2467,7 +2467,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Twake Mail",
+  "appTitlePushNotification": "Mailbux",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],

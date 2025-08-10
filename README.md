@@ -2,7 +2,7 @@
 
 
    <p align="center">
-    <a href="https://github.com/linagora/tmail-flutter/">Forked from Twake Mail</a>
+    <a href="https://github.com/linagora/tmail-flutter/">Forked from Mailbux</a>
   </p>
 
 ---

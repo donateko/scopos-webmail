@@ -1,4 +1,4 @@
-# 36. Mailto URI schemes to interact Twake Mail
+# 36. Mailto URI schemes to interact Mailbux
 
 Date: 2024-02-19
 
@@ -8,11 +8,11 @@ Accepted
 
 ## Context
 
-Supported URI schemes can be relied upon to interact with Twake Mail
+Supported URI schemes can be relied upon to interact with Mailbux
 
 ## Decision
 
-Summary of URI schemes that can interact with Twake Mail:
+Summary of URI schemes that can interact with Mailbux:
 
 1. URI scheme
 
@@ -28,4 +28,4 @@ Summary of URI schemes that can interact with Twake Mail:
 
 ## Consequences
 
-- Interact more easily with Twake Mail web via URI schemes
+- Interact more easily with Mailbux web via URI schemes

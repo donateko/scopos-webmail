@@ -6,7 +6,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Twake Mail",
+  "login_text_slogan": "Mailbux",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -666,7 +666,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Twake Mail",
+  "app_name": "Mailbux",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -816,7 +816,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Twake Mail",
+  "page_name": "Mailbux",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1234,7 +1234,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Définissez la langue de Twake Mail.",
+  "languageSubtitle": "Définissez la langue de Mailbux.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -1844,7 +1844,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Twake Mail",
+  "appTitlePushNotification": "Mailbux",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],
@@ -2096,7 +2096,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "textQuotasRunOutOfStorageContent": "Maintenant, vous ne pouvez temporairement pas envoyer ou recevoir d'e-mail. Veuillez libérer ou mettre à niveau votre espace de stockage pour bénéficier de toutes les fonctionnalités de Twake Mail.",
+  "textQuotasRunOutOfStorageContent": "Maintenant, vous ne pouvez temporairement pas envoyer ou recevoir d'e-mail. Veuillez libérer ou mettre à niveau votre espace de stockage pour bénéficier de toutes les fonctionnalités de Mailbux.",
   "@textQuotasRunOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2216,7 +2216,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "textQuotasRunningOutOfStorageContent": "Bientôt, vous ne pourrez plus envoyer d'e-mails via Twake Mail. Veuillez nettoyer votre stockage ou mettre à niveau votre stockage pour obtenir toutes les fonctionnalités de Twake Mail.",
+  "textQuotasRunningOutOfStorageContent": "Bientôt, vous ne pourrez plus envoyer d'e-mails via Mailbux. Veuillez nettoyer votre stockage ou mettre à niveau votre stockage pour obtenir toutes les fonctionnalités de Mailbux.",
   "@textQuotasRunningOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2894,7 +2894,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "quotaWarningBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Twake Mail. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Twake Mail.",
+  "quotaWarningBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Mailbux. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Mailbux.",
   "@quotaWarningBannerMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -2988,7 +2988,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "quotaErrorBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Twake Mail. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Twake Mail.",
+  "quotaErrorBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Mailbux. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Mailbux.",
   "@quotaErrorBannerMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -3680,7 +3680,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bannerProgressingRecoveryMessage": "La récupération est en cours. Vous pouvez continuer à utiliser Twake Mail",
+  "bannerProgressingRecoveryMessage": "La récupération est en cours. Vous pouvez continuer à utiliser Mailbux",
   "@bannerProgressingRecoveryMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -4030,7 +4030,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseAllowNotifications": "Veuillez autoriser les notifications de Twake Mail dans les réglages de l'appareil",
+  "pleaseAllowNotifications": "Veuillez autoriser les notifications de Mailbux dans les réglages de l'appareil",
   "@pleaseAllowNotifications": {
     "type": "text",
     "placeholders_order": [],
@@ -4072,7 +4072,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Permet à Twake Mail de vous avertir quand un nouveau message arrive sur votre téléphone",
+  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Permet à Mailbux de vous avertir quand un nouveau message arrive sur votre téléphone",
   "@allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": {
     "type": "text",
     "placeholders_order": [],

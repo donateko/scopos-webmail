@@ -5,7 +5,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Twake Mail",
+  "login_text_slogan": "Mailbux",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -799,7 +799,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Twake Mail",
+  "app_name": "Mailbux",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -943,7 +943,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Twake Mail",
+  "page_name": "Mailbux",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1517,7 +1517,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Set the language you use on Twake Mail.",
+  "languageSubtitle": "Set the language you use on Mailbux.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -2517,7 +2517,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Twake Mail",
+  "appTitlePushNotification": "Mailbux",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],

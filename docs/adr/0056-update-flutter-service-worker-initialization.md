@@ -10,7 +10,7 @@ Accepted
 
 - Since the new version of Flutter, old initialization of Flutter Service Worker does not work.
   - Version is always null
-  - Twake Mail web resources is requested everytime the web is loaded, no cache is used <img src="../images/before-flutter-3.22.png">
+  - Mailbux web resources is requested everytime the web is loaded, no cache is used <img src="../images/before-flutter-3.22.png">
     - One hard-reload, one normal reload
 
 ## Decision
@@ -20,5 +20,5 @@ Accepted
 
 ## Consequences
 
-- Twake Mail web use cache resources to improve performance <img src="../images/after-flutter-3.22.png">
+- Mailbux web use cache resources to improve performance <img src="../images/after-flutter-3.22.png">
   - One hard-reload, many normal reload

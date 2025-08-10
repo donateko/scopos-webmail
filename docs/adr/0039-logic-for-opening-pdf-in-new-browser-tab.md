@@ -28,4 +28,4 @@ Separate the business logic of both tappable places:
 
 ## Consequences
 
-- Different behaviors will be triggered depends on where user taps inside the attachment button on Twake Mail web
+- Different behaviors will be triggered depends on where user taps inside the attachment button on Mailbux web

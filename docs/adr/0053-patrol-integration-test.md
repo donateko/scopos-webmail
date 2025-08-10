@@ -8,16 +8,16 @@ Accepted
 
 ## Context
 
-- A need for integration testing for Twake Mail mobile arised.
+- A need for integration testing for Mailbux mobile arised.
 - The testing tool must be able to handle native UI and webview.
 
 ## Decision
 
-- Patrol was chosen to write and test Twake Mail.
+- Patrol was chosen to write and test Mailbux.
 
 ## Consequences
 
-- Developers are now able to integration test Twake Mail
+- Developers are now able to integration test Mailbux
 - Set up:
   - Run `dart pub global activate patrol_cli` to enable Patrol CLI
   - Install ngrok and jq

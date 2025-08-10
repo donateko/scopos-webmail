@@ -401,6 +401,6 @@ cider:
     tag: https://github.com/linagora/tmail-flutter/releases/tag/v%tag% # initial release link template
 
 patrol:
-  app_name: Twake Mail
+  app_name: Mailbux
   android:
     package_name: com.linagora.android.teammail
