@@ -99,6 +99,13 @@ class AppPages {
         () => mailbox_dashboard.MailboxDashBoardView()),
       binding: MailboxDashBoardBindings(),
     ),
+    GetPage(
+      name: AppRoutes.drive,
+      page: () => DeferredWidget(
+        mailbox_dashboard.loadLibrary,
+        () => mailbox_dashboard.MailboxDashBoardView()),
+      binding: MailboxDashBoardBindings(),
+    ),
     unknownRoutePage,
     if (PlatformInfo.isMobile)
       ...[

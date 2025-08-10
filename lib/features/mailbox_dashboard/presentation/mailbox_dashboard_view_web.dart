@@ -43,6 +43,8 @@ import 'package:tmail_ui_user/features/contact/presentation/contacts_sidebar_pan
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_view.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_search_input.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_controller.dart';
+import 'package:tmail_ui_user/features/drive/presentation/drive_list_view.dart';
+import 'package:tmail_ui_user/features/drive/presentation/drive_sidebar_panel.dart';
 import 'package:tmail_ui_user/main/routes/app_routes.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/widgets/top_bar_thread_selection.dart';
 import 'package:tmail_ui_user/features/manage_account/presentation/extensions/vacation_response_extension.dart';
@@ -129,6 +131,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                     ),
                   Expanded(child: Builder(builder: (context) {
                     final isContacts = Get.currentRoute == AppRoutes.contacts;
+                    final isDrive = Get.currentRoute == AppRoutes.drive;
                     if (isContacts) {
                       final session = controller.sessionCurrent;
                       if (session != null) {
@@ -142,6 +145,16 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                         ),
                         SizedBox(width: 12),
                         Expanded(child: ContactsListView()),
+                      ]);
+                    }
+                    if (isDrive) {
+                      return Row(children: const [
+                        SizedBox(
+                          width: ResponsiveUtils.defaultSizeMenu,
+                          child: DriveSidebarPanel(),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(child: DriveListView()),
                       ]);
                     }
                     return Row(children: [
@@ -323,6 +336,15 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
             ),
             tabletLarge: Get.currentRoute == AppRoutes.contacts
                 ? _buildScaffoldHaveDrawer(body: ContactsListView())
+                : Get.currentRoute == AppRoutes.drive
+                ? _buildScaffoldHaveDrawer(body: Row(children: const [
+                    SizedBox(
+                      width: ResponsiveUtils.defaultSizeLeftMenuMobile,
+                      child: DriveSidebarPanel(),
+                    ),
+                    VerticalDivider(width: 1),
+                    Expanded(child: DriveListView()),
+                  ]))
                 : Obx(() {
                     switch (controller.dashboardRoute.value) {
                       case DashboardRoutes.searchEmail:
@@ -375,6 +397,8 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                   }),
             mobile: Get.currentRoute == AppRoutes.contacts
                 ? _buildScaffoldHaveDrawer(body: ContactsListView())
+                : Get.currentRoute == AppRoutes.drive
+                ? _buildScaffoldHaveDrawer(body: DriveListView())
                 : Obx(() {
                     switch (controller.dashboardRoute.value) {
                       case DashboardRoutes.thread:
@@ -432,11 +456,19 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
         responsiveUtils: controller.responsiveUtils,
         mobile: SizedBox(
           width: ResponsiveUtils.mobileLeftMenuSize,
-          child: Get.currentRoute == AppRoutes.contacts ? const ContactsSidebarPanel() : MailboxView(),
+          child: Get.currentRoute == AppRoutes.contacts
+              ? const ContactsSidebarPanel()
+              : Get.currentRoute == AppRoutes.drive
+                  ? const DriveSidebarPanel()
+                  : MailboxView(),
         ),
         tabletLarge: SizedBox(
           width: ResponsiveUtils.defaultSizeLeftMenuMobile,
-          child: Get.currentRoute == AppRoutes.contacts ? const ContactsSidebarPanel() : MailboxView(),
+          child: Get.currentRoute == AppRoutes.contacts
+              ? const ContactsSidebarPanel()
+              : Get.currentRoute == AppRoutes.drive
+                  ? const DriveSidebarPanel()
+                  : MailboxView(),
         ),
         desktop: const SizedBox.shrink()
       ),

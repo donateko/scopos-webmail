@@ -7,11 +7,17 @@ class DropZoneWidgetStyle {
   static const double space = 20;
   static const double borderWidth = 2;
   static const double radius = 16;
+  static const Duration animationDuration = Duration(milliseconds: 180);
 
   static const List<double> dashSize = [6, 3];
 
   static Color backgroundColor = AppColor.colorDropZoneBackground.withValues(alpha: 0.7);
   static const Color borderColor = AppColor.colorDropZoneBorder;
+  static Color activeBackgroundColor = AppColor.blue100;
+  static const Color activeBorderColor = AppColor.blue700;
+  static final List<BoxShadow> activeShadows = [
+    BoxShadow(color: AppColor.blue400.withOpacity(0.5), blurRadius: 12, spreadRadius: 1),
+  ];
 
   static const EdgeInsetsGeometry padding = EdgeInsets.all(20);
   static const EdgeInsetsGeometry margin = EdgeInsetsDirectional.only(

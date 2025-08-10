@@ -18,4 +18,5 @@ abstract class AppRoutes {
   static const emailRecovery = '/email_recovery';
   static const emailEMLPreviewer = '/mail/eml/preview';
   static const contacts = '/contacts';
+  static const drive = '/drive';
 }

@@ -8,12 +8,12 @@
     {
       "appName": "Drive",
       "icon": "ic_tdrive_app.svg",
-      "appLink": "/"
+      "appLink": "/drive"
     },
      {
       "appName": "Calendar",
       "icon": "ic_calendar_app.svg",
-      "appLink": "/"
+      "appLink": "/calendar"
     },
      {
       "appName": "Contacts",

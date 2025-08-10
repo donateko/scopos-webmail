@@ -41,7 +41,7 @@ class ContactsSidebarPanel extends StatelessWidget {
                 openContactSupportAction: null,
               ),
             ),
-          // Compose-like primary button styled consistently
+          // Add Contact button styled like Compose
           SizedBox(
             width: ResponsiveUtils.defaultSizeMenu,
             child: Padding(

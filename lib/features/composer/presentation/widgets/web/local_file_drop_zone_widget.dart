@@ -9,7 +9,7 @@ import 'package:desktop_drop/desktop_drop.dart';
 
 typedef OnLocalFileDropZoneListener = Function(DropDoneDetails details);
 
-class LocalFileDropZoneWidget extends StatelessWidget {
+class LocalFileDropZoneWidget extends StatefulWidget {
 
   final ImagePaths imagePaths;
   final double? width;
@@ -27,24 +27,39 @@ class LocalFileDropZoneWidget extends StatelessWidget {
   });
 
   @override
+  State<LocalFileDropZoneWidget> createState() => _LocalFileDropZoneWidgetState();
+}
+
+class _LocalFileDropZoneWidgetState extends State<LocalFileDropZoneWidget> {
+  bool _active = false;
+
+  @override
   Widget build(BuildContext context) {
     return DropTarget(
-      onDragDone: onLocalFileDropZoneListener,
+      onDragEntered: (_) => setState(() => _active = true),
+      onDragExited: (_) => setState(() => _active = false),
+      onDragDone: (details) {
+        setState(() => _active = false);
+        widget.onLocalFileDropZoneListener?.call(details);
+      },
       child: SizedBox(
-        width: width,
-        height: height,
+        width: widget.width,
+        height: widget.height,
         child: Padding(
-          padding: margin,
+          padding: widget.margin,
           child: DottedBorder(
             borderType: BorderType.RRect,
             radius: const Radius.circular(DropZoneWidgetStyle.radius),
-            color: DropZoneWidgetStyle.borderColor,
+            color: _active ? DropZoneWidgetStyle.activeBorderColor : DropZoneWidgetStyle.borderColor,
             strokeWidth: DropZoneWidgetStyle.borderWidth,
             dashPattern: DropZoneWidgetStyle.dashSize,
-            child: Container(
+            child: AnimatedContainer(
+              duration: DropZoneWidgetStyle.animationDuration,
+              curve: Curves.easeOut,
               clipBehavior: Clip.antiAlias,
               decoration: ShapeDecoration(
-                color: DropZoneWidgetStyle.backgroundColor,
+                color: _active ? DropZoneWidgetStyle.activeBackgroundColor : DropZoneWidgetStyle.backgroundColor,
+                shadows: _active ? DropZoneWidgetStyle.activeShadows : null,
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(DropZoneWidgetStyle.radius)),
                 ),
@@ -54,13 +69,13 @@ class LocalFileDropZoneWidget extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Flexible(child: SvgPicture.asset(imagePaths.icDropZoneIcon)),
+                  Flexible(child: SvgPicture.asset(widget.imagePaths.icDropZoneIcon)),
                   const SizedBox(height: DropZoneWidgetStyle.space),
                   Text(
                     AppLocalizations.of(context).dropFileHereToAttachThem,
                     style: DropZoneWidgetStyle.labelTextStyle,
                   )
-                ]
+                ],
               ),
             ),
           ),

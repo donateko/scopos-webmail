@@ -5,5 +5,7 @@ enum DashboardRoutes {
   threadDetailed,
   searchEmail,
   waiting,
-  sendingQueue;
+  sendingQueue,
+  contacts,
+  drive;
 }
