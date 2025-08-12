@@ -1807,9 +1807,16 @@ class MailboxDashBoardController extends ReloadableController
 
     switch(actionType) {
       case DeleteActionType.all:
+        // Prefer the currently selected Trash mailbox if present; fallback to default by role
+        final selected = selectedMailbox.value;
+        final trashId = (selected != null && selected.isTrash)
+          ? selected.id
+          : mapDefaultMailboxIdByRole[PresentationMailbox.roleTrash];
+        final total = selected?.isTrash == true ? selected!.countTotalEmails : 0;
         emptyTrashFolderAction(
           onCancelSelectionEmail: onCancelSelectionEmail,
-          trashFolderId: mapDefaultMailboxIdByRole[PresentationMailbox.roleTrash]
+          trashFolderId: trashId,
+          totalEmails: total,
         );
         break;
       case DeleteActionType.multiple:
@@ -1840,26 +1847,18 @@ class MailboxDashBoardController extends ReloadableController
       return;
     }
 
-    if (CapabilityIdentifier.jmapMailboxClear.isSupported(sessionCurrent!, accountId)) {
-      clearMailbox(
-        sessionCurrent!,
-        accountId,
-        trashMailboxId,
-        PresentationMailbox.roleTrash,
-      );
-    } else {
-      final totalEmailsInTrash = totalEmails == 0
-          ? mapMailboxById[trashMailboxId]?.countTotalEmails ?? 0
-          : totalEmails;
+    // Use per-folder delete to avoid server-side bugs clearing other folders
+    final totalEmailsInTrash = totalEmails == 0
+        ? mapMailboxById[trashMailboxId]?.countTotalEmails ?? 0
+        : totalEmails;
 
-      consumeState(_emptyTrashFolderInteractor.execute(
-        sessionCurrent!,
-        accountId,
-        trashMailboxId,
-        totalEmailsInTrash,
-        _progressStateController,
-      ));
-    }
+    consumeState(_emptyTrashFolderInteractor.execute(
+      sessionCurrent!,
+      accountId,
+      trashMailboxId,
+      totalEmailsInTrash,
+      _progressStateController,
+    ));
   }
 
   void _emptyTrashFolderSuccess(EmptyTrashFolderSuccess success) {
@@ -2757,22 +2756,14 @@ class MailboxDashBoardController extends ReloadableController
       return;
     }
 
-    if (CapabilityIdentifier.jmapMailboxClear.isSupported(sessionCurrent!, accountId)) {
-      clearMailbox(
-        sessionCurrent!,
-        accountId,
-        spamFolderId,
-        PresentationMailbox.roleSpam,
-      );
-    } else {
-      consumeState(_emptySpamFolderInteractor.execute(
-        sessionCurrent!,
-        accountId,
-        spamFolderId,
-        totalEmails,
-        _progressStateController,
-      ));
-    }
+    // Use per-folder delete to avoid server-side bugs clearing other folders
+    consumeState(_emptySpamFolderInteractor.execute(
+      sessionCurrent!,
+      accountId,
+      spamFolderId,
+      totalEmails,
+      _progressStateController,
+    ));
   }
 
   void _emptySpamFolderSuccess(EmptySpamFolderSuccess success) {

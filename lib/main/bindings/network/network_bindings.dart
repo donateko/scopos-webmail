@@ -12,6 +12,7 @@ import 'package:jmap_dart_client/http/http_client.dart';
 import 'package:tmail_ui_user/features/contact/data/network/contact_api.dart';
 import 'package:tmail_ui_user/features/email/data/network/email_api.dart';
 import 'package:tmail_ui_user/features/contact/data/network/carddav_api.dart';
+import 'package:tmail_ui_user/features/calendar/data/network/caldav_api.dart';
 import 'package:tmail_ui_user/features/email/data/network/mdn_api.dart';
 import 'package:tmail_ui_user/features/home/data/network/session_api.dart';
 import 'package:tmail_ui_user/features/login/data/local/account_cache_manager.dart';
@@ -119,6 +120,7 @@ class NetworkBindings extends Bindings {
       Get.find<Uuid>(),
     ));
     Get.put(CardDavApi(Get.find<Dio>()));
+    Get.put(CalDavApi(Get.find<Dio>()));
     // Drive/WebDAV API binding will be added when Drive module is ready
     Get.put(RuleFilterAPI(Get.find<HttpClient>()));
     Get.put(VacationAPI(Get.find<HttpClient>()));

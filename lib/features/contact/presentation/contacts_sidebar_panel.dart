@@ -6,6 +6,8 @@ import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 import 'package:core/presentation/resources/image_paths.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/widgets/mailbox_app_bar.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
+import 'package:tmail_ui_user/features/mailbox/presentation/extensions/open_app_grid_extension.dart';
+import 'package:tmail_ui_user/features/mailbox/presentation/mailbox_controller.dart';
 import 'package:model/contact/contacts.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_controller.dart';
 import 'package:tmail_ui_user/features/quotas/presentation/quotas_view.dart';
@@ -37,7 +39,12 @@ class ContactsSidebarPanel extends StatelessWidget {
                 imagePaths: imagePaths,
                 username: Get.find<MailboxDashBoardController>().ownEmailAddress.value,
                 openSettingsAction: Get.find<MailboxDashBoardController>().goToSettings,
-                openAppGridAction: null,
+                 // Always show on mobile; overlay can open even before list arrives
+                 openAppGridAction: () {
+                   final dash = Get.find<MailboxDashBoardController>();
+                   final apps = dash.appGridDashboardController.listLinagoraApp;
+                   Get.find<MailboxController>().openAppGrid(apps);
+                 },
                 openContactSupportAction: null,
               ),
             ),
@@ -50,7 +57,7 @@ class ContactsSidebarPanel extends StatelessWidget {
                 height: 44,
                 child: ElevatedButton.icon(
                 onPressed: () => _openEditDialog(context, controller),
-                icon: Icon(Icons.person_add_alt, color: Colors.white, size: 24),
+                icon: const Icon(Icons.person_add_alt, color: Colors.white, size: 24),
                 label: const Text('Add contact'),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.blue700,

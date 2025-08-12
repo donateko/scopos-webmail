@@ -61,7 +61,7 @@ class CardDavApi {
         HttpHeaders.acceptHeader: 'application/xml, text/xml, */*',
         'Depth': '1',
       };
-      final xml = '''<?xml version="1.0" encoding="UTF-8"?>
+      const xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
     <d:resourcetype/>
@@ -95,7 +95,7 @@ class CardDavApi {
   }
 
   Future<List<Contacts>> _queryAddressBook(String url) async {
-    final xml = '''<?xml version="1.0" encoding="UTF-8"?>
+    const xml = '''<?xml version="1.0" encoding="UTF-8"?>
 <card:addressbook-query xmlns:d="DAV:" xmlns:card="urn:ietf:params:xml:ns:carddav">
   <d:prop>
     <d:getetag/>
@@ -169,7 +169,7 @@ class CardDavApi {
 
     DioError? lastError;
     for (final book in candidates) {
-      final url = '$book/${uid}.vcf';
+      final url = '$book/$uid.vcf';
       try {
         log('CardDavApi::createContact: PUT $url');
         await _dio.request(url, data: vcard, options: Options(method: 'PUT', headers: headers, responseType: ResponseType.plain));

@@ -7,6 +7,8 @@ import 'package:focus_detector_v2/focus_detector_v2.dart';
 import 'package:get/get.dart';
 import 'package:tmail_ui_user/features/email/presentation/email_view.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_sidebar_view.dart';
+import 'package:tmail_ui_user/features/drive/presentation/drive_list_view.dart';
+import 'package:tmail_ui_user/features/drive/presentation/drive_sidebar_panel.dart';
 import 'package:tmail_ui_user/main/routes/app_routes.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_view.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/mailbox_view.dart';
@@ -41,9 +43,9 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
         drawerEnableOpenDragGesture: controller.responsiveUtils.hasLeftMenuDrawerActive(context),
         body: Obx(() {
           if (isContactsRoute) {
-            return Row(
+            return const Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
+              children: [
                 SizedBox(width: ResponsiveUtils.defaultSizeLeftMenuMobile, child: ContactsSidebarView()),
                 VerticalDivider(width: 12),
                 Expanded(child: ContactsListView()),
@@ -76,6 +78,30 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                 mobile: const ThreadDetailView());
             case DashboardRoutes.searchEmail:
               return SafeArea(child: SearchEmailView());
+            case DashboardRoutes.contacts:
+              return const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: ResponsiveUtils.defaultSizeLeftMenuMobile,
+                    child: ContactsSidebarView(),
+                  ),
+                  VerticalDivider(width: 12),
+                  Expanded(child: ContactsListView()),
+                ],
+              );
+            case DashboardRoutes.drive:
+              return const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: ResponsiveUtils.defaultSizeLeftMenuMobile,
+                    child: DriveSidebarPanel(),
+                  ),
+                  VerticalDivider(width: 12),
+                  Expanded(child: DriveListView()),
+                ],
+              );
             case DashboardRoutes.sendingQueue:
               bodyView = Row(
                 crossAxisAlignment: CrossAxisAlignment.start,

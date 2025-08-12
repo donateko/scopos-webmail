@@ -329,8 +329,11 @@ class DriveListController extends GetxController {
       selectedHrefs.add(item.href);
     }
     selectedHrefs.refresh();
-    if (selectedHrefs.isEmpty) selectionMode.value = false;
-    else selectionMode.value = true;
+    if (selectedHrefs.isEmpty) {
+      selectionMode.value = false;
+    } else {
+      selectionMode.value = true;
+    }
   }
 
   void cancelSelection() {

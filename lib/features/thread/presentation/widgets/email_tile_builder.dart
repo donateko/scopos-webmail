@@ -68,33 +68,49 @@ class EmailTileBuilder extends StatelessWidget with BaseEmailItemTile {
               : buildIconAvatarText(presentationEmail)
           )
         ),
-        title: Row(
-          children: [
-            if (!presentationEmail.hasRead)
-              Padding(
-                  padding: const EdgeInsetsDirectional.only(end: 5),
-                  child: SvgPicture.asset(
-                      imagePaths.icUnreadStatus,
-                      width: 9,
-                      height: 9,
-                      fit: BoxFit.fill)),
-            Expanded(child: buildInformationSender(
-              context,
-              presentationEmail,
-              mailboxContain,
-              isSearchEmailRunning,
-              searchQuery)),
-            buildIconAnsweredOrForwarded(width: 16, height: 16, presentationEmail: presentationEmail),
-            if (presentationEmail.hasAttachment == true)
-              Padding(
-                  padding: const EdgeInsetsDirectional.only(start: 8),
-                  child: buildIconAttachment()),
+        title: Row(children: [
+          if (!presentationEmail.hasRead)
             Padding(
-                padding: const EdgeInsetsDirectional.only(end: 4, start: 8),
-                child: buildDateTime(context, presentationEmail)),
-            buildIconChevron(),
-          ],
-        ),
+                padding: const EdgeInsetsDirectional.only(end: 5),
+                child: SvgPicture.asset(
+                    imagePaths.icUnreadStatus,
+                    width: 9,
+                    height: 9,
+                    fit: BoxFit.fill)),
+          // Show count only when > 1 (no badge for single message)
+          ...((){
+            final c = computeThreadCount(presentationEmail);
+            if (c > 1) {
+              return [
+                buildThreadCountBadge(
+                  context,
+                  c,
+                  forceVisible: false,
+                ),
+                const SizedBox(width: 4),
+              ];
+            }
+            return <Widget>[];
+          })(),
+          Expanded(
+              child: buildInformationSender(
+                  context,
+                  presentationEmail,
+                  mailboxContain,
+                  isSearchEmailRunning,
+                  searchQuery)),
+          buildIconAnsweredOrForwarded(
+              width: 16, height: 16, presentationEmail: presentationEmail),
+          if (presentationEmail.hasAttachment == true)
+            Padding(
+                padding: const EdgeInsetsDirectional.only(start: 8),
+                child: buildIconAttachment()),
+          Padding(
+              padding:
+                  const EdgeInsetsDirectional.only(end: 4, start: 8),
+              child: buildDateTime(context, presentationEmail)),
+          buildIconChevron(),
+        ]),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -108,18 +124,40 @@ class EmailTileBuilder extends StatelessWidget with BaseEmailItemTile {
                       buildCalendarEventIcon(context: context, presentationEmail: presentationEmail),
                     if (presentationEmail.isMarkAsImportant && isSenderImportantFlagEnabled)
                       buildMarkAsImportantIcon(context),
-                    buildMailboxContain(
-                      context,
-                      isSearchEmailRunning,
-                      presentationEmail),
-                    Expanded(child: Padding(
-                      padding: const EdgeInsetsDirectional.only(start: 8),
+                    // Count first when there are replies (>1)
+                    ...((){
+                      final c = computeThreadCount(presentationEmail);
+                      if (c > 1) {
+                        return [
+                          buildThreadCountBadge(
+                            context,
+                            c,
+                            forceVisible: false,
+                          ),
+                          const SizedBox(width: 4),
+                        ];
+                      }
+                      return <Widget>[];
+                    })(),
+                    // Title expands
+                    Expanded(
                       child: buildEmailTitle(
                         context,
                         presentationEmail,
                         isSearchEmailRunning,
-                        searchQuery),
-                    )),
+                        searchQuery,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    // Chips constrained to avoid pushing title and count off-screen
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 60),
+                      child: buildMailboxContain(
+                        context,
+                        isSearchEmailRunning,
+                        presentationEmail,
+                      ),
+                    ),
                     if (presentationEmail.hasStarred)
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 8),
@@ -127,16 +165,7 @@ class EmailTileBuilder extends StatelessWidget with BaseEmailItemTile {
                       )
                   ],
                 )),
-            Padding(
-                padding: const EdgeInsetsDirectional.only(top: 2),
-                child: Row(children: [
-                  Expanded(child: buildEmailPartialContent(
-                    context,
-                    presentationEmail,
-                    isSearchEmailRunning,
-                    searchQuery)),
-                ])
-            ),
+            // Remove snippet on list (title only)
           ],
         ),
       ),

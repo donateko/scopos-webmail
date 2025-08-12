@@ -48,9 +48,8 @@ abstract class BaseMailboxView extends GetWidget<MailboxController>
         imagePaths: controller.imagePaths,
         username: username,
         openSettingsAction: dashboardController.goToSettings,
-        openAppGridAction: linagoraApps.isNotEmpty
-          ? () => controller.openAppGrid(linagoraApps)
-          : null,
+        // Always show the App Grid icon on mobile; overlay can render even if list is empty
+        openAppGridAction: () => controller.openAppGrid(linagoraApps),
         openContactSupportAction: contactSupportCapability?.isAvailable == true
           ? () => dashboardController.onGetHelpOrReportBug(contactSupportCapability!)
           : null,

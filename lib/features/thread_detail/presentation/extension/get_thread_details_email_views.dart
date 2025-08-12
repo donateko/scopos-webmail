@@ -125,6 +125,7 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
           isInsideThreadDetailView: true,
           emailId: presentationEmail.id,
           onToggleThreadDetailCollapseExpand: () {
+            // In accordion mode, tapping expanded email collapses only that one
             toggleThreadDetailCollapeExpand(presentationEmail);
           },
           scrollController: scrollController,

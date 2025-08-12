@@ -31,6 +31,33 @@ mixin BaseEmailItemTile {
   final imagePaths = Get.find<ImagePaths>();
   final mailboxDashBoardController = Get.find<MailboxDashBoardController>();
 
+  int computeThreadCount(PresentationEmail email) {
+    final list = mailboxDashBoardController.emailsInCurrentMailbox;
+    final threadKey = email.threadId?.id.value;
+    if (threadKey == null || list.isEmpty) return 1;
+    return list.where((e) => e.threadId?.id.value == threadKey).length;
+  }
+
+  Widget buildThreadCountBadge(BuildContext context, int count, {bool forceVisible = false}) {
+    if (count <= 1 && !forceVisible) return const SizedBox.shrink();
+    return Container(
+      margin: const EdgeInsetsDirectional.only(start: 0),
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: const BoxDecoration(
+        color: AppColor.lightGrayEBEDF0,
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+      ),
+      child: Text(
+        '$count',
+        style: ThemeUtils.defaultTextStyleInterFont.copyWith(
+          fontSize: 10,
+          fontWeight: FontWeight.w600,
+          color: AppColor.gray686E76,
+        ),
+      ),
+    );
+  }
+
   Widget buildMailboxContain(
     BuildContext context,
     bool isSearchEmailRunning,
@@ -93,7 +120,8 @@ mixin BaseEmailItemTile {
     if (responsiveUtils.isMobile(context)) {
       maxVisible = 1;
     } else if (responsiveUtils.isTablet(context)) {
-      maxVisible = 2;
+      // Favor title width on tablet: show only 1 chip + N
+      maxVisible = 1;
     }
 
     List<Widget> visibleChips = chips;
@@ -114,7 +142,7 @@ mixin BaseEmailItemTile {
     int hiddenCount,
     List<String> allLabels,
   ) {
-    final Color chipColor = AppColor.backgroundCounterMailboxColor;
+    const Color chipColor = AppColor.backgroundCounterMailboxColor;
     final Color bgColor = Color.lerp(Colors.white, chipColor, 0.25)!;
     final bool isBgLight = bgColor.computeLuminance() >= 0.55;
     return GestureDetector(
@@ -241,9 +269,19 @@ mixin BaseEmailItemTile {
     bool isSearchEmailRunning,
     SearchQuery? query
   ) {
+    String cleanSubject(String subject) {
+      if (subject.isEmpty) return subject;
+      // Remove leading reply/forward prefixes like RE:, Re[3]:, Fwd:
+      final prefixRegex = RegExp(r'^(?:(re(?:\[\d+\])?|fw|fwd):\s*)+', caseSensitive: false);
+      final result = subject.replaceFirst(prefixRegex, '');
+      // Keep any thread information markers as requested
+      return result.trim();
+    }
+
+    final cleanedTitle = cleanSubject(email.getEmailTitle());
     if (isSearchEnabled(isSearchEmailRunning, query)) {
       return RichTextBuilder(
-        textOrigin: email.getEmailTitle(),
+        textOrigin: cleanedTitle,
         wordToStyle: query?.value ?? '',
         preMarkedText: email.sanitizedSearchSnippetSubject,
         ensureHighlightVisible: true,
@@ -259,7 +297,7 @@ mixin BaseEmailItemTile {
       );
     } else {
       return TextOverflowBuilder(
-        email.getEmailTitle(),
+        cleanedTitle,
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
           color: buildTextColorForReadEmail(email),
           fontWeight: buildFontForReadEmail(email),

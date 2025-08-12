@@ -35,6 +35,7 @@ class CalendarEventInformationWidget extends StatelessWidget {
   final List<String> listEmailAddressSender;
   final String ownEmailAddress;
   final bool isPortraitMobile;
+  final VoidCallback? onImportToCalendar;
 
   const CalendarEventInformationWidget({
     super.key,
@@ -50,6 +51,7 @@ class CalendarEventInformationWidget extends StatelessWidget {
     this.openEmailAddressDetailAction,
     this.listEmailAddressSender = const [],
     this.isPortraitMobile = false,
+    this.onImportToCalendar,
   });
 
   @override
@@ -178,6 +180,18 @@ class CalendarEventInformationWidget extends StatelessWidget {
               onMailToAttendeesAction: () => onMailtoAttendeesAction?.call(
                 calendarEvent.organizer,
                 calendarEvent.participants,
+              ),
+            ),
+          if (onImportToCalendar != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: OutlinedButton.icon(
+                  onPressed: onImportToCalendar,
+                  icon: const Icon(Icons.calendar_month_outlined, size: 18),
+                  label: const Text('Import to calendar'),
+                ),
               ),
             ),
         ],

@@ -203,11 +203,15 @@ class ThreadView extends GetWidget<ThreadController>
                             positiveAction: AppLocalizations
                               .of(context)
                               .empty_trash_now,
-                            onPositiveAction: () =>
-                              controller.deleteSelectionEmailsPermanently(
-                                context,
-                                DeleteActionType.all,
-                              ),
+                            onPositiveAction: () {
+                              final selected = controller.mailboxDashBoardController.selectedMailbox.value;
+                              if (selected != null && selected.isTrash) {
+                                controller.mailboxDashBoardController.emptyTrashFolderAction(
+                                  trashFolderId: selected.id,
+                                  totalEmails: selected.countTotalEmails,
+                                );
+                              }
+                            },
                             margin: ThreadViewStyle.getBannerMargin(
                               context,
                               controller.responsiveUtils,
@@ -244,10 +248,12 @@ class ThreadView extends GetWidget<ThreadController>
                           child: Obx(() {
                             return Visibility(
                               visible: controller.openingEmail.isFalse,
-                              child: _buildResultListEmail(
-                                context,
-                                controller.mailboxDashBoardController.emailsInCurrentMailbox
-                              )
+                          child: _buildResultListEmail(
+                            context,
+                            _groupEmailsByThread(
+                              controller.mailboxDashBoardController.emailsInCurrentMailbox,
+                            ),
+                          )
                             );
                           })
                         )
@@ -282,6 +288,28 @@ class ThreadView extends GetWidget<ThreadController>
         ),
       ),
     );
+  }
+
+  List<PresentationEmail> _groupEmailsByThread(List<PresentationEmail> emails) {
+    // Group by threadId; for threads, keep the latest email as the representative item
+    final Map<String, List<PresentationEmail>> byThread = {};
+    for (final e in emails) {
+      final key = e.threadId?.id.value ?? e.id?.id.value ?? UniqueKey().toString();
+      final list = byThread.putIfAbsent(key, () => <PresentationEmail>[]);
+      list.add(e);
+    }
+
+    final List<PresentationEmail> representatives = [];
+    byThread.forEach((_, list) {
+      list.sort((a, b) => (b.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0))
+          .compareTo(a.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0)));
+      representatives.add(list.first);
+    });
+
+    // Preserve original ordering by received date desc similar to current listing
+    representatives.sort((a, b) => (b.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0))
+        .compareTo(a.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0)));
+    return representatives;
   }
 
   bool _supportVerticalDivider(BuildContext context) {

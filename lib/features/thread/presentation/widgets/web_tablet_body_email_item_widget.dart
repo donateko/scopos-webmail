@@ -136,27 +136,34 @@ class _WebTabletBodyEmailItemWidgetState
                               Expanded(
                                 child: Row(children: [
                                   Expanded(
-                                    child: buildEmailTitle(
-                                      context,
-                                      widget.presentationEmail,
-                                      widget.isSearchEmailRunning,
-                                      widget.searchQuery,
-                                    ),
+                                    child: Row(children: [
+                                      ...((){
+                                        final c = computeThreadCount(widget.presentationEmail);
+                                        if (c > 1) {
+                                          return [
+                                            buildThreadCountBadge(context, c),
+                                            const SizedBox(width: 6),
+                                          ];
+                                        }
+                                        return <Widget>[];
+                                      })(),
+                                      // Title next, flexible
+                                      Expanded(
+                                        child: buildEmailTitle(
+                                          context,
+                                          widget.presentationEmail,
+                                          widget.isSearchEmailRunning,
+                                          widget.searchQuery,
+                                        ),
+                                      ),
+                                    ]),
                                   ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: buildEmailPartialContent(
-                                      context,
-                                      widget.presentationEmail,
-                                      widget.isSearchEmailRunning,
-                                      widget.searchQuery,
-                                    ),
-                                  ),
+                                  // Remove snippet on list (title only)
                                 ]),
                               ),
-                              const SizedBox(width: 8),
-                              ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 160),
+                              const SizedBox(width: 4),
+                               ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 90),
                                 child: Align(
                                   alignment: Alignment.centerRight,
                                   child: buildMailboxContain(

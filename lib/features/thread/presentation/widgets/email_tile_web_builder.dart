@@ -130,6 +130,16 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+                        ...((){
+                          final c = computeThreadCount(widget.presentationEmail);
+                          if (c > 1) {
+                            return [
+                              buildThreadCountBadge(context, c),
+                              const SizedBox(width: 4),
+                            ];
+                          }
+                          return <Widget>[];
+                        })(),
                         if (widget.presentationEmail.hasCalendarEvent)
                           buildCalendarEventIcon(
                             context: context,
@@ -145,10 +155,13 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
                             widget.searchQuery
                           )
                         ),
-                        buildMailboxContain(
-                          context,
-                          widget.isSearchEmailRunning,
-                          widget.presentationEmail
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 60),
+                          child: buildMailboxContain(
+                            context,
+                            widget.isSearchEmailRunning,
+                            widget.presentationEmail
+                          ),
                         ),
                         if (widget.presentationEmail.hasStarred)
                           Padding(
@@ -386,18 +399,18 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
         const SizedBox(width: 8),
         Expanded(
           child: Row(children: [
-            Flexible(
-              flex: 0,
-              child: buildEmailTitle(
-                context,
-                widget.presentationEmail,
-                widget.isSearchEmailRunning,
-                widget.searchQuery,
-              ),
-            ),
-            const SizedBox(width: 8),
+            ...((){
+              final c = computeThreadCount(widget.presentationEmail);
+              if (c > 1) {
+                return [
+                  buildThreadCountBadge(context, c),
+                  const SizedBox(width: 6),
+                ];
+              }
+              return <Widget>[];
+            })(),
             Expanded(
-              child: buildEmailPartialContent(
+              child: buildEmailTitle(
                 context,
                 widget.presentationEmail,
                 widget.isSearchEmailRunning,

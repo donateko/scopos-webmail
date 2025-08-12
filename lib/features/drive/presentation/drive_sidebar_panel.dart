@@ -9,9 +9,12 @@ import 'package:tmail_ui_user/features/mailbox/presentation/widgets/mailbox_app_
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
 import 'package:tmail_ui_user/features/quotas/presentation/quotas_view.dart';
 import 'package:get/get.dart';
+import 'package:flutter/services.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_list_controller.dart';
 import 'package:tmail_ui_user/features/drive/data/network/webdav_api.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
+import 'package:tmail_ui_user/features/mailbox/presentation/mailbox_controller.dart';
+import 'package:tmail_ui_user/features/mailbox/presentation/extensions/open_app_grid_extension.dart';
 
 class DriveSidebarPanel extends StatelessWidget with DragDropFileMixin {
   const DriveSidebarPanel({super.key});
@@ -31,11 +34,18 @@ class DriveSidebarPanel extends StatelessWidget with DragDropFileMixin {
           if (!Get.find<ResponsiveUtils>().isWebDesktop(context))
             SafeArea(
               bottom: false,
-              child: MailboxAppBar(
-                imagePaths: Get.find<ImagePaths>(),
-                username: Get.find<MailboxDashBoardController>().ownEmailAddress.value,
-                openSettingsAction: Get.find<MailboxDashBoardController>().goToSettings,
-              ),
+              child: Builder(builder: (context) {
+                final dash = Get.find<MailboxDashBoardController>();
+                final apps = dash.appGridDashboardController.listLinagoraApp;
+                return MailboxAppBar(
+                  imagePaths: Get.find<ImagePaths>(),
+                  username: dash.ownEmailAddress.value,
+                  openSettingsAction: dash.goToSettings,
+                  // Always show on mobile; overlay can open even before list arrives
+                  openAppGridAction: () => Get.find<MailboxController>().openAppGrid(apps),
+                  openContactSupportAction: null,
+                );
+              }),
             ),
           SizedBox(
             width: ResponsiveUtils.defaultSizeMenu,
@@ -112,15 +122,15 @@ class DriveSidebarPanel extends StatelessWidget with DragDropFileMixin {
                   ),
                   const SizedBox(height: 4),
                   ...dirs.map((d) => DragTarget<WebDavItem>(
-                        onWillAccept: (data) {
+                        onWillAcceptWithDetails: (details) {
                           controller.setHover(d.href, true);
                           return true;
                         },
                         onLeave: (_) => controller.setHover(d.href, false),
-                        onAccept: (data) async {
+                        onAcceptWithDetails: (details) async {
                           controller.setHover(d.href, false);
                           final destRel = controller.relativePathFromHref(d.href) ?? '';
-                          await controller.moveItemsToFolder(destRel, [data.href]);
+                          await controller.moveItemsToFolder(destRel, [details.data.href]);
                         },
                         builder: (context, candidateData, rejected) {
                           final isHover = controller.hoverTargets.contains(d.href);
@@ -132,8 +142,22 @@ class DriveSidebarPanel extends StatelessWidget with DragDropFileMixin {
                             child: ListTile(
                               dense: true,
                               leading: const Icon(Icons.folder_outlined),
-                              title: Text(d.name == '.trash' ? 'Trash' : d.name),
-                              onTap: () => controller.openDirectory(d),
+                               title: Row(children: [
+                                 Expanded(child: Text(d.name == '.trash' ? 'Trash' : d.name)),
+                                 IconButton(
+                                   icon: const Icon(Icons.link, size: 18),
+                                   tooltip: 'Copy folder link',
+                                   onPressed: () async {
+                                     final session = Get.find<MailboxDashBoardController>().sessionCurrent;
+                                     if (session == null) return;
+                                     final abs = Get.find<WebDavApi>().absoluteHref(session, href: d.href);
+                                     try {
+                                       await Clipboard.setData(ClipboardData(text: abs));
+                                     } catch (_) {}
+                                   },
+                                 )
+                               ]),
+                               onTap: () => controller.openDirectory(d),
                             ),
                           );
                         },

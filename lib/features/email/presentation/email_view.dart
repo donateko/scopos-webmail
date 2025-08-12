@@ -323,6 +323,7 @@ class EmailView extends GetWidget<SingleEmailController> {
                 isPortraitMobile: controller
                     .responsiveUtils
                     .isPortraitMobile(context),
+                onImportToCalendar: () => controller.importInviteToCalDav(),
               )),
               if (_validateDisplayEventActionBanner(
                   context: context,

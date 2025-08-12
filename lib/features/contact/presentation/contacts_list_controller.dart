@@ -15,7 +15,7 @@ class ContactsListController extends BaseController {
   final _query = ''.obs;
   List<Contacts> _allContacts = const [];
   bool _initialized = false;
-  int _pageSize = 50;
+  final int _pageSize = 50;
   int _loaded = 0;
   Timer? _retryInitTimer;
   int _initAttempts = 0;

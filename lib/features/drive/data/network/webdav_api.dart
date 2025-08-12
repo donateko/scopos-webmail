@@ -18,7 +18,7 @@ class WebDavApi {
     final root = _baseDavUri(session);
     final normalized = userPath.endsWith('/') ? userPath : '$userPath/';
     final target = root.replace(path: '/dav/file/$normalized');
-    final reqBody = '''<?xml version="1.0"?>
+    const reqBody = '''<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
     <d:displayname/>
@@ -97,6 +97,16 @@ class WebDavApi {
       return data;
     }
     return Uint8List(0);
+  }
+
+  // Build absolute URL for a given WebDAV href
+  String absoluteHref(Session session, {required String href}) {
+    final uri = Uri.parse(href);
+    final base = _baseDavUri(session);
+    final absolute = uri.hasScheme
+        ? uri
+        : base.replace(path: uri.path.startsWith('/') ? uri.path : '/${uri.path}');
+    return absolute.toString();
   }
 
   // Move file to a destination (WebDAV MOVE)
@@ -240,7 +250,7 @@ class WebDavApi {
   Future<WebDavItem?> stat(Session session, {required String userPath, required String fileName}) async {
     final root = _baseDavUri(session);
     final target = root.replace(path: '/dav/file/$userPath/$fileName');
-    final reqBody = '''<?xml version="1.0"?>
+    const reqBody = '''<?xml version="1.0"?>
 <d:propfind xmlns:d="DAV:">
   <d:prop>
     <d:displayname/>

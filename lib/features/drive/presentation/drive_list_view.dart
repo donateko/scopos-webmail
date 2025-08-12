@@ -7,7 +7,7 @@ import 'package:tmail_ui_user/features/drive/data/network/webdav_api.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_list_controller.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/model/draggable_app_state.dart';
-import 'dart:html' as html show window; // web only listeners
+// web only listeners
 import 'package:tmail_ui_user/main/utils/toast_manager.dart';
 import 'dart:typed_data';
 import 'package:tmail_ui_user/features/drive/presentation/drive_preview_page.dart';
@@ -199,16 +199,16 @@ class DriveListView extends StatelessWidget with DragDropFileMixin {
                                 borderRadius: BorderRadius.zero,
                             ),
                               child: DragTarget<WebDavItem>(
-                                onWillAccept: (data) {
+                                onWillAcceptWithDetails: (details) {
                                   if (!f.isDirectory) return false;
                                   controller.setHover(f.href, true);
                                   return true;
                                 },
                                 onLeave: (_) => controller.setHover(f.href, false),
-                                onAccept: (data) async {
+                                onAcceptWithDetails: (details) async {
                                   controller.setHover(f.href, false);
                                   final destRel = controller.relativePathFromHref(f.href) ?? '';
-                                  await controller.moveItemsToFolder(destRel, [data.href]);
+                                  await controller.moveItemsToFolder(destRel, [details.data.href]);
                                   controller.flashTarget(f.href);
                                 },
                                 builder: (context, candidate, rejected) {
@@ -312,6 +312,7 @@ class DriveListView extends StatelessWidget with DragDropFileMixin {
                                               html.Url.revokeObjectUrl(url);
                                             },
                                           ),
+                                          
                                           if (!isDir)
                                             IconButton(
                                               icon: const Icon(Icons.drive_file_move_outline),
@@ -579,7 +580,7 @@ class DriveListView extends StatelessWidget with DragDropFileMixin {
                           item.name,
                           onProgress: (p) {
                             dialogProgress = p;
-                            (ctx as Element).markNeedsBuild();
+                            (ctx).markNeedsBuild();
                           },
                         );
                         if (Navigator.canPop(ctx)) Navigator.of(ctx).pop();

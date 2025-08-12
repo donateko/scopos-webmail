@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:core/presentation/extensions/color_extension.dart';
 import 'package:flutter/material.dart';

@@ -10,7 +10,6 @@ import 'package:core/utils/html/html_utils.dart';
 import 'package:core/presentation/utils/html_transformer/dom/sanitize_hyper_link_tag_in_html_transformers.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
@@ -108,6 +107,7 @@ import 'package:tmail_ui_user/features/email/presentation/widgets/attachment_lis
 import 'package:tmail_ui_user/features/email/presentation/widgets/attachment_list/attachment_list_dialog_builder.dart';
 import 'package:tmail_ui_user/features/email/presentation/widgets/html_attachment_previewer.dart';
 import 'package:tmail_ui_user/features/email/presentation/widgets/pdf_viewer/pdf_viewer.dart';
+import 'package:tmail_ui_user/features/calendar/data/network/caldav_api.dart';
 import 'package:tmail_ui_user/features/email_previewer/email_previewer_dialog_view.dart';
 import 'package:tmail_ui_user/features/home/data/exceptions/session_exceptions.dart';
 import 'package:tmail_ui_user/features/home/domain/extensions/session_extensions.dart';
@@ -1680,6 +1680,38 @@ class SingleEmailController extends BaseController with AppLoaderMixin {
         break;
       default:
         break;
+    }
+  }
+
+  Future<void> importInviteToCalDav() async {
+    final session = mailboxDashBoardController.sessionCurrent;
+    if (session == null) return;
+    final ev = calendarEvent;
+    if (ev == null) return;
+    final api = Get.find<CalDavApi>();
+    try {
+      final start = ev.startDate ?? ev.startUtcDate?.value.toLocal();
+      final end = ev.endDate ?? ev.endUtcDate?.value.toLocal();
+      await api.createEvent(
+        session,
+        summary: ev.title ?? '(no title)',
+        start: start ?? DateTime.now(),
+        end: end ?? (start ?? DateTime.now()).add(const Duration(hours: 1)),
+        location: ev.location,
+        description: ev.description,
+        attendees: (ev.participants ?? [])
+            .where((a) => a.mailto != null)
+            .map((a) => a.mailto!.mailAddress.value)
+            .toList(),
+      );
+      if (currentOverlayContext != null && currentContext != null) {
+        appToast.showToastSuccessMessage(currentOverlayContext!, 'Imported to calendar');
+      }
+    } catch (e) {
+      logError('SingleEmailController::importInviteToCalDav $e');
+      if (currentOverlayContext != null && currentContext != null) {
+        appToast.showToastErrorMessage(currentOverlayContext!, AppLocalizations.of(currentContext!).an_error_occurred);
+      }
     }
   }
 

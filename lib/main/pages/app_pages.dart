@@ -100,6 +100,13 @@ class AppPages {
       binding: MailboxDashBoardBindings(),
     ),
     GetPage(
+      name: AppRoutes.calendar,
+      page: () => DeferredWidget(
+        mailbox_dashboard.loadLibrary,
+        () => mailbox_dashboard.MailboxDashBoardView()),
+      binding: MailboxDashBoardBindings(),
+    ),
+    GetPage(
       name: AppRoutes.drive,
       page: () => DeferredWidget(
         mailbox_dashboard.loadLibrary,

@@ -43,6 +43,10 @@ import 'package:tmail_ui_user/features/contact/presentation/contacts_sidebar_pan
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_view.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_search_input.dart';
 import 'package:tmail_ui_user/features/contact/presentation/contacts_list_controller.dart';
+import 'package:tmail_ui_user/features/calendar/presentation/calendar_sidebar_panel.dart';
+import 'package:tmail_ui_user/features/calendar/presentation/calendar_list_view.dart';
+import 'package:tmail_ui_user/features/calendar/presentation/calendar_search_input.dart';
+import 'package:tmail_ui_user/features/calendar/presentation/calendar_list_controller.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_list_view.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_sidebar_panel.dart';
 import 'package:tmail_ui_user/features/drive/presentation/drive_search_input.dart';
@@ -71,12 +75,21 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
   @override
   Widget build(BuildContext context) {
     final isContactsRoute = Get.currentRoute == AppRoutes.contacts;
+    final isCalendarRoute = Get.currentRoute == AppRoutes.calendar;
     if (isContactsRoute) {
       final session = controller.sessionCurrent;
       final contactsController = Get.put(ContactsListController(), permanent: false);
       if (session != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           contactsController.ensureInitialized(session: session);
+        });
+      }
+    } else if (isCalendarRoute) {
+      final session = controller.sessionCurrent;
+      final calendarController = Get.put(CalendarListController(), permanent: false);
+      if (session != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          calendarController.ensureInitialized(session: session);
         });
       }
     }
@@ -113,9 +126,11 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                             contactSupportCapability: contactSupportCapability,
                             searchForm: (Get.currentRoute == AppRoutes.contacts)
                                 ? const ContactsSearchInput()
-                                : (Get.currentRoute == AppRoutes.drive)
-                                    ? const DriveSearchInput()
-                                    : SearchInputFormWidget(),
+                                : (Get.currentRoute == AppRoutes.calendar)
+                                    ? const CalendarSearchInput()
+                                    : (Get.currentRoute == AppRoutes.drive)
+                                        ? const DriveSearchInput()
+                                        : SearchInputFormWidget(),
                             appGridController:
                                 controller.appGridDashboardController,
                             settingActionTypes: ProfileSettingActionType.values,
@@ -134,6 +149,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                     ),
                   Expanded(child: Builder(builder: (context) {
                     final isContacts = Get.currentRoute == AppRoutes.contacts;
+                    final isCalendar = Get.currentRoute == AppRoutes.calendar;
                     final isDrive = Get.currentRoute == AppRoutes.drive;
                     if (isContacts) {
                       final session = controller.sessionCurrent;
@@ -141,7 +157,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                         final c = Get.put(ContactsListController(), permanent: false);
                         WidgetsBinding.instance.addPostFrameCallback((_) => c.ensureInitialized(session: session));
                       }
-                      return Row(children: const [
+                      return const Row(children: [
                         SizedBox(
                           width: ResponsiveUtils.defaultSizeMenu,
                           child: ContactsSidebarPanel(),
@@ -150,8 +166,23 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                         Expanded(child: ContactsListView()),
                       ]);
                     }
+                    if (isCalendar) {
+                      final session = controller.sessionCurrent;
+                      if (session != null) {
+                        final c = Get.put(CalendarListController(), permanent: false);
+                        WidgetsBinding.instance.addPostFrameCallback((_) => c.ensureInitialized(session: session));
+                      }
+                      return const Row(children: [
+                        SizedBox(
+                          width: ResponsiveUtils.defaultSizeMenu,
+                          child: CalendarSidebarPanel(),
+                        ),
+                        SizedBox(width: 12),
+                        Expanded(child: CalendarListView()),
+                      ]);
+                    }
                     if (isDrive) {
-                      return Row(children: const [
+                      return const Row(children: [
                         SizedBox(
                           width: ResponsiveUtils.defaultSizeMenu,
                           child: DriveSidebarPanel(),
@@ -291,7 +322,15 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                               positiveAction: AppLocalizations
                                 .of(context)
                                 .empty_trash_now,
-                              onPositiveAction: controller.emptyTrashAction,
+                              onPositiveAction: () {
+                                final selected = controller.selectedMailbox.value;
+                                if (selected != null && selected.isTrash) {
+                                  controller.emptyTrashFolderAction(
+                                    trashFolderId: selected.id,
+                                    totalEmails: selected.countTotalEmails,
+                                  );
+                                }
+                              },
                               margin: const EdgeInsetsDirectional.only(
                                 bottom: 8,
                                 end: 16,
@@ -338,9 +377,11 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
               ),
             ),
             tabletLarge: Get.currentRoute == AppRoutes.contacts
-                ? _buildScaffoldHaveDrawer(body: ContactsListView())
+                ? _buildScaffoldHaveDrawer(body: const ContactsListView())
+                : Get.currentRoute == AppRoutes.calendar
+                ? _buildScaffoldHaveDrawer(body: const CalendarListView())
                 : Get.currentRoute == AppRoutes.drive
-                ? _buildScaffoldHaveDrawer(body: Row(children: const [
+                ? _buildScaffoldHaveDrawer(body: const Row(children: [
                     SizedBox(
                       width: ResponsiveUtils.defaultSizeLeftMenuMobile,
                       child: DriveSidebarPanel(),
@@ -399,9 +440,11 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                     }
                   }),
             mobile: Get.currentRoute == AppRoutes.contacts
-                ? _buildScaffoldHaveDrawer(body: ContactsListView())
+                ? _buildScaffoldHaveDrawer(body: const ContactsListView())
+                : Get.currentRoute == AppRoutes.calendar
+                ? _buildScaffoldHaveDrawer(body: const CalendarListView())
                 : Get.currentRoute == AppRoutes.drive
-                ? _buildScaffoldHaveDrawer(body: DriveListView())
+                ? _buildScaffoldHaveDrawer(body: const DriveListView())
                 : Obx(() {
                     switch (controller.dashboardRoute.value) {
                       case DashboardRoutes.thread:
@@ -461,6 +504,8 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
           width: ResponsiveUtils.mobileLeftMenuSize,
           child: Get.currentRoute == AppRoutes.contacts
               ? const ContactsSidebarPanel()
+              : Get.currentRoute == AppRoutes.calendar
+                  ? const CalendarSidebarPanel()
               : Get.currentRoute == AppRoutes.drive
                   ? const DriveSidebarPanel()
                   : MailboxView(),
@@ -469,6 +514,8 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
           width: ResponsiveUtils.defaultSizeLeftMenuMobile,
           child: Get.currentRoute == AppRoutes.contacts
               ? const ContactsSidebarPanel()
+              : Get.currentRoute == AppRoutes.calendar
+                  ? const CalendarSidebarPanel()
               : Get.currentRoute == AppRoutes.drive
                   ? const DriveSidebarPanel()
                   : MailboxView(),

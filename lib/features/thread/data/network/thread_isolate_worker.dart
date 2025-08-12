@@ -100,7 +100,8 @@ class ThreadIsolateWorker {
         filter: EmailFilterCondition(inMailbox: args.mailboxId, before: lastEmail?.receivedAt),
         properties: Properties({
           EmailProperty.id,
-          EmailProperty.receivedAt
+          EmailProperty.receivedAt,
+          EmailProperty.mailboxIds,
         }),
       );
 
@@ -108,17 +109,22 @@ class ThreadIsolateWorker {
       if (lastEmail != null) {
         newEmailList = newEmailList.where((email) => email.id != lastEmail!.id).toList();
       }
+      // Safety guard: ensure we only delete emails that are in the targeted mailbox
+      newEmailList = newEmailList
+          .where((email) => (email.mailboxIds?.containsKey(args.mailboxId) ?? false))
+          .toList();
 
       log('ThreadIsolateWorker::_emptyMailboxFolderAction(): ${newEmailList.length}');
 
       if (newEmailList.isNotEmpty) {
         lastEmail = newEmailList.last;
         hasEmails = true;
-        final listEmailIdDeleted = await args.emailAPI.deleteMultipleEmailsPermanently(
+        final deleteResult = await args.emailAPI.deleteMultipleEmailsPermanently(
           args.session,
           args.accountId,
-          newEmailList.listEmailIds);
-        emailListCompleted.addAll(listEmailIdDeleted.emailIdsSuccess);
+          newEmailList.listEmailIds,
+        );
+        emailListCompleted.addAll(deleteResult.emailIdsSuccess);
         sendPort.send(emailListCompleted);
       } else {
         hasEmails = false;
@@ -149,7 +155,8 @@ class ThreadIsolateWorker {
         filter: EmailFilterCondition(inMailbox: mailboxId, before: lastEmail?.receivedAt),
         properties: Properties({
           EmailProperty.id,
-          EmailProperty.receivedAt
+          EmailProperty.receivedAt,
+          EmailProperty.mailboxIds,
         }),
       );
 
@@ -157,17 +164,22 @@ class ThreadIsolateWorker {
       if (lastEmail != null) {
         newEmailList = newEmailList.where((email) => email.id != lastEmail!.id).toList();
       }
+      // Safety guard: ensure we only delete emails that are in the targeted mailbox
+      newEmailList = newEmailList
+          .where((email) => (email.mailboxIds?.containsKey(mailboxId) ?? false))
+          .toList();
 
       log('ThreadIsolateWorker::_emptyMailboxFolderOnWeb(): ${newEmailList.length}');
 
       if (newEmailList.isNotEmpty) {
         lastEmail = newEmailList.last;
         hasEmails = true;
-        final listEmailIdDeleted = await _emailAPI.deleteMultipleEmailsPermanently(
+        final deleteResult = await _emailAPI.deleteMultipleEmailsPermanently(
           session,
           accountId,
-          newEmailList.listEmailIds);
-        emailListCompleted.addAll(listEmailIdDeleted.emailIdsSuccess);
+          newEmailList.listEmailIds,
+        );
+        emailListCompleted.addAll(deleteResult.emailIdsSuccess);
 
         onProgressController.add(Right<Failure, Success>(EmptyingFolderState(
           mailboxId, emailListCompleted.length, totalEmails
