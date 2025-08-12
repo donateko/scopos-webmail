@@ -108,15 +108,18 @@ class EmailTileBuilder extends StatelessWidget with BaseEmailItemTile {
                       buildCalendarEventIcon(context: context, presentationEmail: presentationEmail),
                     if (presentationEmail.isMarkAsImportant && isSenderImportantFlagEnabled)
                       buildMarkAsImportantIcon(context),
-                    Expanded(child: buildEmailTitle(
-                      context,
-                      presentationEmail,
-                      isSearchEmailRunning,
-                      searchQuery)),
                     buildMailboxContain(
                       context,
                       isSearchEmailRunning,
                       presentationEmail),
+                    Expanded(child: Padding(
+                      padding: const EdgeInsetsDirectional.only(start: 8),
+                      child: buildEmailTitle(
+                        context,
+                        presentationEmail,
+                        isSearchEmailRunning,
+                        searchQuery),
+                    )),
                     if (presentationEmail.hasStarred)
                       Padding(
                         padding: const EdgeInsetsDirectional.only(start: 8),

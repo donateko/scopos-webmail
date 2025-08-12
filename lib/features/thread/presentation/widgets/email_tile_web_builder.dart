@@ -369,28 +369,42 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
 
   Widget _buildSubjectAndContent() {
     return LayoutBuilder(builder: (context, constraints) {
+      // Single-line header: icons + chips + title + snippet
       return Row(children: [
         if (widget.presentationEmail.hasCalendarEvent)
           buildCalendarEventIcon(context: context, presentationEmail: widget.presentationEmail),
         if (widget.presentationEmail.isMarkAsImportant && widget.isSenderImportantFlagEnabled)
           buildMarkAsImportantIcon(context),
-        if (widget.presentationEmail.getEmailTitle().isNotEmpty)
-            Container(
-              constraints: BoxConstraints(maxWidth: constraints.maxWidth / 2),
-              padding: const EdgeInsetsDirectional.only(end: 12),
+        Flexible(
+          flex: 0,
+          child: buildMailboxContain(
+            context,
+            widget.isSearchEmailRunning,
+            widget.presentationEmail,
+          ),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Row(children: [
+            Flexible(
+              flex: 0,
               child: buildEmailTitle(
                 context,
                 widget.presentationEmail,
                 widget.isSearchEmailRunning,
-                widget.searchQuery
-              )),
-        Expanded(
-          child: buildEmailPartialContent(
-            context,
-            widget.presentationEmail,
-            widget.isSearchEmailRunning,
-            widget.searchQuery
-          ),
+                widget.searchQuery,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: buildEmailPartialContent(
+                context,
+                widget.presentationEmail,
+                widget.isSearchEmailRunning,
+                widget.searchQuery,
+              ),
+            ),
+          ]),
         ),
       ]);
     });

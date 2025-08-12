@@ -165,6 +165,10 @@ extension EmailActionTypeExtension on EmailActionType {
         return imagePaths.icReply;
       case EmailActionType.moveToMailbox:
         return imagePaths.icMoveEmail;
+      case EmailActionType.addLabel:
+        return imagePaths.icMoveEmail;
+      case EmailActionType.removeLabel:
+        return imagePaths.icDelete;
       case EmailActionType.markAsStarred:
         return imagePaths.icStar;
       case EmailActionType.unMarkAsStarred:
@@ -209,6 +213,10 @@ extension EmailActionTypeExtension on EmailActionType {
         return appLocalizations.replyToList;
       case EmailActionType.moveToMailbox:
         return appLocalizations.move_message;
+      case EmailActionType.addLabel:
+        return 'Add label';
+      case EmailActionType.removeLabel:
+        return 'Remove label';
       case EmailActionType.markAsStarred:
         return appLocalizations.mark_as_starred;
       case EmailActionType.unMarkAsStarred:

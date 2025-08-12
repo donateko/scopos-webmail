@@ -18,6 +18,7 @@ import 'package:jmap_dart_client/jmap/core/properties/properties.dart';
 import 'package:jmap_dart_client/jmap/core/session/session.dart';
 import 'package:jmap_dart_client/jmap/core/user_name.dart';
 import 'package:jmap_dart_client/jmap/mail/email/email.dart';
+import 'package:jmap_dart_client/jmap/mail/mailbox/mailbox.dart';
 import 'package:jmap_dart_client/jmap/mail/email/keyword_identifier.dart';
 import 'package:model/account/account_request.dart';
 import 'package:model/download/download_task_id.dart';
@@ -237,6 +238,70 @@ class EmailHiveCacheDataSourceImpl extends EmailDataSource {
       storedEmails[i] = storedEmails[i].updatedEmail(
         newMailboxIds: {moveRequest.destinationMailboxId: true},
       );
+    }
+    await _emailCacheManager.storeMultipleEmails(
+      accountId,
+      session.username,
+      storedEmails.map((email) => email.toEmailCache()).toList(),
+    );
+    return (
+      emailIdsSuccess: emailIds,
+      mapErrors: <Id, SetError>{}
+    );
+  }
+
+  @override
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
+  })> addEmailsToMailbox(
+    Session session,
+    AccountId accountId,
+    List<EmailId> emailIds,
+    MailboxId destinationMailboxId,
+  ) async {
+    final cacheEmails = await _emailCacheManager.getMultipleStoredEmails(
+      accountId,
+      session.username,
+      emailIds,
+    );
+    final storedEmails = cacheEmails.map((emailCache) => emailCache.toEmail()).toList();
+    for (int i = 0; i < storedEmails.length; i++) {
+      storedEmails[i] = storedEmails[i].updatedEmail(
+        newMailboxIds: {destinationMailboxId: true},
+      );
+    }
+    await _emailCacheManager.storeMultipleEmails(
+      accountId,
+      session.username,
+      storedEmails.map((email) => email.toEmailCache()).toList(),
+    );
+    return (
+      emailIdsSuccess: emailIds,
+      mapErrors: <Id, SetError>{}
+    );
+  }
+
+  @override
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
+  })> removeEmailsFromMailbox(
+    Session session,
+    AccountId accountId,
+    List<EmailId> emailIds,
+    MailboxId mailboxId,
+  ) async {
+    final cacheEmails = await _emailCacheManager.getMultipleStoredEmails(
+      accountId,
+      session.username,
+      emailIds,
+    );
+    final storedEmails = cacheEmails.map((emailCache) => emailCache.toEmail()).toList();
+    for (int i = 0; i < storedEmails.length; i++) {
+      final map = Map<MailboxId, bool>.from(storedEmails[i].mailboxIds ?? {});
+      map.remove(mailboxId);
+      storedEmails[i] = storedEmails[i].updatedEmail(newMailboxIds: map);
     }
     await _emailCacheManager.storeMultipleEmails(
       accountId,

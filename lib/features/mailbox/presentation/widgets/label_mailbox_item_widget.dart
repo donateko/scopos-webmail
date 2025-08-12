@@ -9,8 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:model/extensions/presentation_mailbox_extension.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/extensions/presentation_mailbox_extension.dart';
+import 'package:model/mailbox/presentation_mailbox.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/model/mailbox_node.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/styles/label_mailbox_item_widget_styles.dart';
+import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/styles/trailing_mailbox_item_widget_styles.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/utils/mailbox_method_action_define.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/widgets/empty_mailbox_popup_dialog_widget.dart';
@@ -48,6 +50,7 @@ class _LabelMailboxItemWidgetState extends State<LabelMailboxItemWidget> {
 
   final _responsiveUtils = Get.find<ResponsiveUtils>();
   final _imagePaths = Get.find<ImagePaths>();
+  final _dashboard = Get.find<MailboxDashBoardController>();
   
   bool _popupVisible = false;
   bool _morePopupMenuVisible = false;
@@ -61,6 +64,17 @@ class _LabelMailboxItemWidgetState extends State<LabelMailboxItemWidget> {
 
     final nameWithExpandIcon = Row(
       children: [
+        // color dot (from mailbox item or dashboard map)
+        if ((widget.mailboxNode.item.isPersonal && !widget.mailboxNode.item.isDefault))
+          Container(
+            width: 10,
+            height: 10,
+            margin: const EdgeInsetsDirectional.only(end: 8, top: 6, bottom: 6),
+            decoration: BoxDecoration(
+              color: _resolveLabelColor(widget.mailboxNode.item),
+              shape: BoxShape.circle,
+            ),
+          ),
         if (widget.mailboxNode.hasChildren())
           Flexible(child: displayNameWidget)
         else
@@ -188,6 +202,14 @@ class _LabelMailboxItemWidgetState extends State<LabelMailboxItemWidget> {
     } else {
       return childWidget;
     }
+  }
+
+  Color _resolveLabelColor(PresentationMailbox mailbox) {
+    final hex = mailbox.colorHex ?? _dashboard.mapMailboxById[mailbox.id]?.colorHex;
+    if (hex == null) {
+      return const Color(0xFFDEE2E6); // default light gray dot when no color set
+    }
+    return Color(hex);
   }
 
   void _onPopupVisibleChange(bool visible) {

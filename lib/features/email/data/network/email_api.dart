@@ -534,6 +534,137 @@ class EmailAPI with HandleSetErrorMixin {
   Future<({
     List<EmailId> emailIdsSuccess,
     Map<Id, SetError> mapErrors,
+  })> addEmailsToMailbox({
+    required Session session,
+    required AccountId accountId,
+    required List<EmailId> emailIds,
+    required MailboxId destinationMailboxId,
+  }) async {
+    final maxObjects = _getMaxObjectsInSetMethod(session, accountId);
+    final totalEmails = emailIds.length;
+    final maxBatches = min(totalEmails, maxObjects);
+
+    final List<EmailId> updatedEmailIds = List.empty(growable: true);
+    final Map<Id, SetError> mapErrors = <Id, SetError>{};
+
+    for (int start = 0; start < totalEmails; start += maxBatches) {
+      int end = (start + maxBatches < totalEmails)
+          ? start + maxBatches
+          : totalEmails;
+      final currentEmailIds = emailIds.sublist(start, end);
+
+      final setEmailMethod = SetEmailMethod(accountId)
+        ..addUpdates(currentEmailIds.generateMapUpdateObjectAddToMailbox(destinationMailboxId));
+
+      final requestBuilder = JmapRequestBuilder(_httpClient, ProcessingInvocation());
+      final setEmailInvocation = requestBuilder.invocation(setEmailMethod);
+      final capabilities = setEmailMethod.requiredCapabilities
+          .toCapabilitiesSupportTeamMailboxes(session, accountId);
+
+      final response = await (requestBuilder
+          ..usings(capabilities))
+        .build()
+        .execute();
+
+      final setEmailResponse = response.parse<SetEmailResponse>(
+        setEmailInvocation.methodCallId,
+        SetEmailResponse.deserialize,
+      );
+
+      final listEmailIds = setEmailResponse?.updated?.keys.toEmailIds() ?? [];
+      final mapSetErrors = handleSetResponse([setEmailResponse]);
+      updatedEmailIds.addAll(listEmailIds);
+      mapErrors.addAll(mapSetErrors);
+    }
+
+    return (emailIdsSuccess: updatedEmailIds, mapErrors: mapErrors);
+  }
+
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
+  })> removeEmailsFromMailbox({
+    required Session session,
+    required AccountId accountId,
+    required List<EmailId> emailIds,
+    required MailboxId mailboxId,
+  }) async {
+    final maxObjects = _getMaxObjectsInSetMethod(session, accountId);
+    final totalEmails = emailIds.length;
+    final maxBatches = min(totalEmails, maxObjects);
+
+    final List<EmailId> updatedEmailIds = List.empty(growable: true);
+    final Map<Id, SetError> mapErrors = <Id, SetError>{};
+
+    for (int start = 0; start < totalEmails; start += maxBatches) {
+      int end = (start + maxBatches < totalEmails)
+          ? start + maxBatches
+          : totalEmails;
+      final currentEmailIds = emailIds.sublist(start, end);
+
+      final setEmailMethod = SetEmailMethod(accountId)
+        ..addUpdates(currentEmailIds.generateMapUpdateObjectRemoveFromMailbox(mailboxId));
+
+      final requestBuilder = JmapRequestBuilder(_httpClient, ProcessingInvocation());
+      final setEmailInvocation = requestBuilder.invocation(setEmailMethod);
+      final capabilities = setEmailMethod.requiredCapabilities
+          .toCapabilitiesSupportTeamMailboxes(session, accountId);
+
+      final response = await (requestBuilder
+          ..usings(capabilities))
+        .build()
+        .execute();
+
+      final setEmailResponse = response.parse<SetEmailResponse>(
+        setEmailInvocation.methodCallId,
+        SetEmailResponse.deserialize,
+      );
+
+      final listEmailIds = setEmailResponse?.updated?.keys.toEmailIds() ?? [];
+      final mapSetErrors = handleSetResponse([setEmailResponse]);
+      updatedEmailIds.addAll(listEmailIds);
+      mapErrors.addAll(mapSetErrors);
+    }
+
+    return (emailIdsSuccess: updatedEmailIds, mapErrors: mapErrors);
+  }
+
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
+  })> updateEmailLabelsSingle({
+    required Session session,
+    required AccountId accountId,
+    required EmailId emailId,
+    required List<MailboxId> add,
+    required List<MailboxId> remove,
+  }) async {
+    final setEmailMethod = SetEmailMethod(accountId)
+      ..addUpdates({
+        emailId.id: PatchObject({
+          for (final m in add) m.generatePath(): true,
+          for (final m in remove) m.generatePath(): null,
+        })
+      });
+
+    final requestBuilder = JmapRequestBuilder(_httpClient, ProcessingInvocation());
+    final setEmailInvocation = requestBuilder.invocation(setEmailMethod);
+    final capabilities = setEmailMethod.requiredCapabilities
+        .toCapabilitiesSupportTeamMailboxes(session, accountId);
+
+    final response = await (requestBuilder..usings(capabilities)).build().execute();
+    final setEmailResponse = response.parse<SetEmailResponse>(
+      setEmailInvocation.methodCallId,
+      SetEmailResponse.deserialize,
+    );
+    final updated = setEmailResponse?.updated?.keys.toEmailIds().toList() ?? <EmailId>[];
+    final errors = handleSetResponse([setEmailResponse]);
+    return (emailIdsSuccess: updated, mapErrors: errors);
+  }
+
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
   })> _moveEmailsBetweenMailboxes({
     required Session session,
     required AccountId accountId,

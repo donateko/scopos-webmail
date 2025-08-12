@@ -41,10 +41,14 @@ import 'package:tmail_ui_user/features/push_notification/presentation/websocket/
 import 'package:tmail_ui_user/features/search/email/presentation/search_email_bindings.dart';
 import 'package:tmail_ui_user/features/thread/domain/constants/thread_constants.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/email_filter.dart';
+import 'package:tmail_ui_user/features/destination_picker/presentation/model/destination_picker_arguments.dart';
+import 'package:tmail_ui_user/features/mailbox/presentation/model/mailbox_actions.dart';
+import 'package:tmail_ui_user/main/routes/dialog_router.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/filter_message_option.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/get_email_request.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/search_query.dart';
 import 'package:tmail_ui_user/features/thread/domain/state/clean_and_get_all_email_state.dart';
+import 'package:tmail_ui_user/features/email/data/network/email_api.dart';
 import 'package:tmail_ui_user/features/thread/domain/state/get_all_email_state.dart';
 import 'package:tmail_ui_user/features/thread/domain/state/get_email_by_id_state.dart';
 import 'package:tmail_ui_user/features/thread/domain/state/load_more_emails_state.dart';
@@ -1122,6 +1126,15 @@ class ThreadController extends BaseController with EmailActionController {
           moveSelectedMultipleEmailToMailbox(selectionEmail, mailboxContainCurrent);
         }
         break;
+      case EmailActionType.addLabel:
+        cancelSelectEmail();
+        final mailboxContainCurrent = searchController.isSearchEmailRunning
+            ? selectionEmail.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+            : selectedMailbox;
+        if (mailboxContainCurrent != null) {
+          _addLabelToMultipleEmails(selectionEmail);
+        }
+        break;
       case EmailActionType.moveToTrash:
         cancelSelectEmail();
         final mailboxContainCurrent = searchController.isSearchEmailRunning
@@ -1197,6 +1210,9 @@ class ThreadController extends BaseController with EmailActionController {
       case EmailActionType.moveToMailbox:
         moveToMailbox(selectedEmail, mailboxContain: mailboxContain);
         break;
+      case EmailActionType.addLabel:
+        _addLabelToEmail(selectedEmail);
+        break;
       case EmailActionType.moveToTrash:
         moveToTrash(selectedEmail, mailboxContain: mailboxContain);
         break;
@@ -1224,6 +1240,90 @@ class ThreadController extends BaseController with EmailActionController {
         break;
       default:
         break;
+    }
+  }
+
+  void _addLabelToEmail(PresentationEmail email) async {
+    final accountId = mailboxDashBoardController.accountId.value;
+    final session = mailboxDashBoardController.sessionCurrent;
+    final currentMailbox = mailboxDashBoardController.selectedMailbox.value;
+
+    if (accountId == null || session == null) return;
+
+    final preselected = email.mailboxIds?.entries
+      .where((e) => e.value == true)
+      .map((e) => e.key)
+      .toList();
+
+    final arguments = DestinationPickerArguments(
+      accountId,
+      MailboxActions.assignLabels,
+      session,
+      mailboxIdSelected: currentMailbox?.mailboxId,
+      preselectedLabelIds: preselected,
+    );
+
+    final destinationMailbox = PlatformInfo.isWeb
+      ? await DialogRouter.pushGeneralDialog(routeName: AppRoutes.destinationPicker, arguments: arguments)
+      : await push(AppRoutes.destinationPicker, arguments: arguments);
+
+    if (destinationMailbox is List<MailboxId>) {
+      // apply delta in a single Email/set request per email to avoid concurrent modification errors
+      final current = Set<MailboxId>.from(email.mailboxIds?.entries.where((e)=>e.value).map((e)=>e.key) ?? const []);
+      final selected = Set<MailboxId>.from(destinationMailbox);
+      final toAdd = selected.difference(current).toList();
+      final toRemove = current.difference(selected).toList();
+
+      if (toAdd.isEmpty && toRemove.isEmpty) return;
+
+      final emailApi = Get.find<EmailAPI>();
+      final result = await emailApi.updateEmailLabelsSingle(
+        session: session,
+        accountId: accountId,
+        emailId: email.id!,
+        add: toAdd,
+        remove: toRemove,
+      );
+
+      if (result.emailIdsSuccess.contains(email.id!)) {
+        // refresh local email labels
+        final newMap = Map<MailboxId, bool>.from(email.mailboxIds ?? {});
+        for (final id in toAdd) { newMap[id] = true; }
+        for (final id in toRemove) { newMap.remove(id); }
+        final updated = email.copyWith(mailboxIds: newMap);
+        final idx = mailboxDashBoardController.emailsInCurrentMailbox.indexWhere((e)=> e.id == email.id);
+        if (idx >= 0) mailboxDashBoardController.emailsInCurrentMailbox[idx] = updated;
+        mailboxDashBoardController.emailsInCurrentMailbox.refresh();
+      }
+    } else if (destinationMailbox is PresentationMailbox) {
+      mailboxDashBoardController.addLabelToEmails(session, accountId, [email.id!], destinationMailbox.id);
+    }
+  }
+
+  void _addLabelToMultipleEmails(List<PresentationEmail> emails) async {
+    final accountId = mailboxDashBoardController.accountId.value;
+    final session = mailboxDashBoardController.sessionCurrent;
+    if (accountId == null || session == null) return;
+
+    final arguments = DestinationPickerArguments(
+      accountId,
+      MailboxActions.assignLabels,
+      session,
+      mailboxIdSelected: selectedMailbox?.mailboxId,
+    );
+
+    final destinationMailbox = PlatformInfo.isWeb
+      ? await DialogRouter.pushGeneralDialog(routeName: AppRoutes.destinationPicker, arguments: arguments)
+      : await push(AppRoutes.destinationPicker, arguments: arguments);
+
+    if (destinationMailbox is PresentationMailbox) {
+      final ids = emails.where((e) => e.id != null).map((e) => e.id!).toList();
+      mailboxDashBoardController.addLabelToEmails(
+        session,
+        accountId,
+        ids,
+        destinationMailbox.id,
+      );
     }
   }
 

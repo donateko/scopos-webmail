@@ -121,52 +121,63 @@ class _WebTabletBodyEmailItemWidgetState
                             _buildDateTimeForMobileTabletScreen(context),
                         ]),
                         const SizedBox(height: 2),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (widget.presentationEmail.hasCalendarEvent)
-                              buildCalendarEventIcon(
-                                context: context,
-                                presentationEmail: widget.presentationEmail,
-                              ),
-                            if (widget.presentationEmail.isMarkAsImportant &&
-                                widget.isSenderImportantFlagEnabled)
-                              buildMarkAsImportantIcon(context),
-                            Expanded(
-                              child: buildEmailTitle(
-                                context,
-                                widget.presentationEmail,
-                                widget.isSearchEmailRunning,
-                                widget.searchQuery,
-                              ),
+                        // Single-row header on tablet
+                        // On tablet align labels to the right side of the header
+                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          if (widget.presentationEmail.hasCalendarEvent)
+                            buildCalendarEventIcon(
+                              context: context,
+                              presentationEmail: widget.presentationEmail,
                             ),
-                            buildMailboxContain(
-                              context,
-                              widget.isSearchEmailRunning,
-                              widget.presentationEmail,
-                            ),
-                            if (widget.presentationEmail.hasStarred)
-                              Padding(
-                                padding: const EdgeInsetsDirectional.only(
-                                  start: 8,
+                          if (widget.presentationEmail.isMarkAsImportant && widget.isSenderImportantFlagEnabled)
+                            buildMarkAsImportantIcon(context),
+                          Expanded(
+                            child: Row(children: [
+                              Expanded(
+                                child: Row(children: [
+                                  Expanded(
+                                    child: buildEmailTitle(
+                                      context,
+                                      widget.presentationEmail,
+                                      widget.isSearchEmailRunning,
+                                      widget.searchQuery,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: buildEmailPartialContent(
+                                      context,
+                                      widget.presentationEmail,
+                                      widget.isSearchEmailRunning,
+                                      widget.searchQuery,
+                                    ),
+                                  ),
+                                ]),
+                              ),
+                              const SizedBox(width: 8),
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(maxWidth: 160),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: buildMailboxContain(
+                                    context,
+                                    widget.isSearchEmailRunning,
+                                    widget.presentationEmail,
+                                  ),
                                 ),
-                                child: buildIconStar(),
-                              )
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: buildEmailPartialContent(
-                                context,
-                                widget.presentationEmail,
-                                widget.isSearchEmailRunning,
-                                widget.searchQuery,
                               ),
-                            ),
-                          ],
-                        ),
+                            ]),
+                          ),
+                          if (widget.presentationEmail.hasStarred)
+                            Flexible(
+                              flex: 0,
+                              child: Padding(
+                                padding: const EdgeInsetsDirectional.only(start: 8),
+                                child: buildIconStar(),
+                              ),
+                            )
+                        ]),
+                        const SizedBox(height: 2),
                       ],
                     ),
                   )
@@ -230,6 +241,19 @@ class _WebTabletBodyEmailItemWidgetState
                             onTapActionCallback: () =>
                                 widget.emailActionClick?.call(
                               EmailActionType.moveToMailbox,
+                              widget.presentationEmail,
+                            ),
+                          ),
+                          TMailButtonWidget.fromIcon(
+                            icon: _imagePaths.icMoveEmail,
+                            iconColor: ItemEmailTileStyles.actionIconHoverColor,
+                            iconSize: _getIconSize(),
+                            padding: _getPaddingIcon(),
+                            backgroundColor: Colors.transparent,
+                            tooltipMessage: 'Add label',
+                            onTapActionCallback: () =>
+                                widget.emailActionClick?.call(
+                              EmailActionType.addLabel,
                               widget.presentationEmail,
                             ),
                           ),

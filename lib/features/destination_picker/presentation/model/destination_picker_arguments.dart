@@ -9,18 +9,20 @@ class DestinationPickerArguments with EquatableMixin {
   final AccountId accountId;
   final MailboxActions mailboxAction;
   final MailboxId? mailboxIdSelected;
+  final List<MailboxId>? preselectedLabelIds; // for assignLabels
   final Session? session;
 
   DestinationPickerArguments(
     this.accountId, 
     this.mailboxAction, 
     this.session,
-    {this.mailboxIdSelected});
+    {this.mailboxIdSelected, this.preselectedLabelIds});
 
   @override
   List<Object?> get props => [
     accountId, 
     mailboxAction, 
     mailboxIdSelected,
+    preselectedLabelIds,
     session];
 }

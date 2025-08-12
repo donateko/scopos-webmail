@@ -109,6 +109,17 @@ class TopBarThreadSelection extends StatelessWidget{
          )
        ),
        TMailButtonWidget.fromIcon(
+         icon: imagePaths.icMoveEmail,
+         iconSize: TopBarThreadSelectionStyle.iconSize,
+         iconColor: TopBarThreadSelectionStyle.iconColor,
+         tooltipMessage: 'Add label',
+         backgroundColor: Colors.transparent,
+         onTapActionCallback: () => onEmailActionTypeAction?.call(
+           List.from(listEmail),
+           EmailActionType.addLabel,
+         ),
+       ),
+       TMailButtonWidget.fromIcon(
          icon: isAllSpam ? imagePaths.icNotSpam : imagePaths.icSpam,
          backgroundColor: Colors.transparent,
          iconSize: TopBarThreadSelectionStyle.iconSize,

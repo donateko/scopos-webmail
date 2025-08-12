@@ -17,6 +17,7 @@ import 'package:jmap_dart_client/jmap/core/properties/properties.dart';
 import 'package:jmap_dart_client/jmap/core/session/session.dart';
 import 'package:jmap_dart_client/jmap/core/user_name.dart';
 import 'package:jmap_dart_client/jmap/mail/email/email.dart';
+import 'package:jmap_dart_client/jmap/mail/mailbox/mailbox.dart';
 import 'package:model/account/account_request.dart';
 import 'package:model/download/download_task_id.dart';
 import 'package:model/email/attachment.dart';
@@ -137,6 +138,32 @@ class EmailSessionStorageDatasourceImpl extends EmailDataSource {
 
   @override
   Future<({List<EmailId> emailIdsSuccess, Map<Id, SetError> mapErrors})> moveToMailbox(Session session, AccountId accountId, MoveToMailboxRequest moveRequest) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
+  })> addEmailsToMailbox(
+    Session session,
+    AccountId accountId,
+    List<EmailId> emailIds,
+    MailboxId destinationMailboxId,
+  ) {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<({
+    List<EmailId> emailIdsSuccess,
+    Map<Id, SetError> mapErrors,
+  })> removeEmailsFromMailbox(
+    Session session,
+    AccountId accountId,
+    List<EmailId> emailIds,
+    MailboxId mailboxId,
+  ) {
     throw UnimplementedError();
   }
 

@@ -35,6 +35,7 @@ import 'package:tmail_ui_user/features/mailbox_creator/domain/state/verify_name_
 import 'package:tmail_ui_user/features/mailbox_creator/domain/usecases/verify_name_interactor.dart';
 import 'package:tmail_ui_user/features/mailbox_creator/presentation/extensions/validator_failure_extension.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/search_query.dart';
+import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
 import 'package:tmail_ui_user/features/thread/presentation/model/search_state.dart';
 import 'package:tmail_ui_user/features/thread/presentation/model/search_status.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
@@ -51,6 +52,9 @@ class DestinationPickerController extends BaseMailboxController {
   final searchQuery = SearchQuery.initial().obs;
   final destinationScreenType = DestinationScreenType.destinationPicker.obs;
   final mailboxDestination = Rxn<PresentationMailbox>();
+  // Multiple selections for assignLabels
+  final selectedLabels = <MailboxId>{}.obs;
+  final _initialSelectedLabels = <MailboxId>{};
   final newNameMailbox = Rxn<String>();
 
   DestinationPickerArguments? arguments;
@@ -64,6 +68,10 @@ class DestinationPickerController extends BaseMailboxController {
   final TextEditingController nameInputController = TextEditingController();
   final TextEditingController searchInputController = TextEditingController();
   final destinationListScrollController = ScrollController();
+  // Temp color chosen in create-new-folder flow (nullable to avoid sentinel color)
+  final Rxn<Color> _tempSelectedColor = Rxn<Color>();
+  set tempSelectedColor(Color? color) => _tempSelectedColor.value = color;
+  Rxn<Color> get tempSelectedColorRx => _tempSelectedColor;
 
   DestinationPickerController(
     this._searchMailboxInteractor,
@@ -95,6 +103,10 @@ class DestinationPickerController extends BaseMailboxController {
       mailboxIdSelected = arguments!.mailboxIdSelected;
       accountId = arguments!.accountId;
       _session = arguments!.session;
+      if (arguments!.preselectedLabelIds != null) {
+        selectedLabels.addAll(arguments!.preselectedLabelIds!);
+        _initialSelectedLabels.addAll(arguments!.preselectedLabelIds!);
+      }
       getAllMailboxAction();
     }
   }
@@ -123,6 +135,22 @@ class DestinationPickerController extends BaseMailboxController {
     } else if (success is CreateNewMailboxSuccess) {
       _createNewMailboxSuccess(success);
     }
+  }
+
+  bool get canApply {
+    if (mailboxAction.value == MailboxActions.assignLabels) {
+      return !_setEquals(selectedLabels, _initialSelectedLabels);
+    } else {
+      return mailboxDestination.value != null;
+    }
+  }
+
+  bool _setEquals(Set<MailboxId> a, Set<MailboxId> b) {
+    if (a.length != b.length) return false;
+    for (final id in a) {
+      if (!b.contains(id)) return false;
+    }
+    return true;
   }
 
   @override
@@ -278,14 +306,8 @@ class DestinationPickerController extends BaseMailboxController {
   }
 
   void openCreateNewMailboxView(BuildContext context) async {
-    if (mailboxDestination.value == null) {
-      appToast.showToastErrorMessage(
-        currentOverlayContext!,
-        AppLocalizations.of(context).toastMessageErrorNotSelectedFolderWhenCreateNewMailbox);
-    } else {
-      destinationScreenType.value = DestinationScreenType.createNewMailbox;
-      _createListMailboxNameAsStringInMailboxLocation();
-    }
+    destinationScreenType.value = DestinationScreenType.createNewMailbox;
+    _createListMailboxNameAsStringInMailboxLocation();
   }
 
   void _dispatchCreateNewMailboxFolder(
@@ -306,6 +328,14 @@ class DestinationPickerController extends BaseMailboxController {
     } else {
       getAllMailboxAction();
     }
+    // Persist color for the created mailbox
+    final picked = _tempSelectedColor.value;
+    if (picked != null) {
+      // Apply color through dashboard controller
+      final dash = Get.find<MailboxDashBoardController>();
+      dash.setLabelColor(success.newMailbox.id!, picked);
+      _tempSelectedColor.value = null;
+    }
   }
 
   void _createNewMailboxFailure(CreateNewMailboxFailure failure) {
@@ -323,22 +353,30 @@ class DestinationPickerController extends BaseMailboxController {
       PresentationMailbox? presentationMailbox,
       {MailboxNode? mailboxNode}
   ) {
-    if (mailboxDestination.value == presentationMailbox) {
-      return;
-    }
-    mailboxDestination.value = presentationMailbox;
-    if (presentationMailbox == null ||
-        presentationMailbox.id == PresentationMailbox.unifiedMailbox.id) {
-      unAllSelectedMailboxNode();
+    if (mailboxAction.value == MailboxActions.assignLabels) {
+      // toggle selection in multi-select mode
+      if (presentationMailbox != null) {
+        if (selectedLabels.contains(presentationMailbox.id)) {
+          selectedLabels.remove(presentationMailbox.id);
+        } else {
+          selectedLabels.add(presentationMailbox.id);
+        }
+      }
     } else {
-      if (mailboxNode != null) {
+      if (mailboxDestination.value == presentationMailbox) return;
+      mailboxDestination.value = presentationMailbox;
+      if (presentationMailbox == null || presentationMailbox.id == PresentationMailbox.unifiedMailbox.id) {
         unAllSelectedMailboxNode();
-        selectMailboxNode(mailboxNode);
       } else {
-        final matchedMailboxNode = findMailboxNodeById(presentationMailbox.id);
-        if (matchedMailboxNode != null) {
+        if (mailboxNode != null) {
           unAllSelectedMailboxNode();
-          selectMailboxNode(matchedMailboxNode);
+          selectMailboxNode(mailboxNode);
+        } else {
+      final matchedMailboxNode = findMailboxNodeById(presentationMailbox.id);
+          if (matchedMailboxNode != null) {
+            unAllSelectedMailboxNode();
+            selectMailboxNode(matchedMailboxNode);
+          }
         }
       }
     }
@@ -347,13 +385,23 @@ class DestinationPickerController extends BaseMailboxController {
   void dispatchSelectMailboxDestination(BuildContext context) {
     KeyboardUtils.hideKeyboard(context);
 
-    if (mailboxDestination.value == null) {
-      appToast.showToastErrorMessage(
-        currentOverlayContext!,
-        AppLocalizations.of(context).toastMessageErrorNotSelectedFolderWhenCreateNewMailbox);
-      return;
+    if (mailboxAction.value == MailboxActions.assignLabels) {
+      if (selectedLabels.isEmpty) {
+        appToast.showToastErrorMessage(
+          currentOverlayContext!,
+          AppLocalizations.of(context).toastMessageErrorNotSelectedFolderWhenCreateNewMailbox);
+        return;
+      }
+      popBack(result: selectedLabels.toList());
+    } else {
+      if (mailboxDestination.value == null) {
+        appToast.showToastErrorMessage(
+          currentOverlayContext!,
+          AppLocalizations.of(context).toastMessageErrorNotSelectedFolderWhenCreateNewMailbox);
+        return;
+      }
+      popBack(result: mailboxDestination.value);
     }
-    popBack(result: mailboxDestination.value);
   }
 
   void createNewMailboxAction(BuildContext context) {

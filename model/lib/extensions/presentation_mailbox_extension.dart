@@ -103,7 +103,8 @@ extension PresentationMailboxExtension on PresentationMailbox {
       state: state,
       namespace: namespace,
       displayName: displayName,
-      rights: rights
+      rights: rights,
+      colorHex: colorHex,
     );
   }
 
@@ -125,7 +126,8 @@ extension PresentationMailboxExtension on PresentationMailbox {
       state: state,
       namespace: namespace,
       displayName: displayName,
-      rights: rights
+      rights: rights,
+      colorHex: colorHex,
     );
   }
 
@@ -147,7 +149,8 @@ extension PresentationMailboxExtension on PresentationMailbox {
       state: newMailboxState,
       namespace: namespace,
       displayName: displayName,
-      rights: rights
+      rights: rights,
+      colorHex: colorHex,
     );
   }
 
@@ -187,7 +190,8 @@ extension PresentationMailboxExtension on PresentationMailbox {
       state: state,
       namespace: namespace,
       displayName: displayName,
-      rights: rights
+      rights: rights,
+      colorHex: colorHex,
     );
   }
 
@@ -209,7 +213,8 @@ extension PresentationMailboxExtension on PresentationMailbox {
       state: state,
       namespace: namespace,
       displayName: displayName,
-      rights: rights
+      rights: rights,
+      colorHex: colorHex,
     );
   }
 }

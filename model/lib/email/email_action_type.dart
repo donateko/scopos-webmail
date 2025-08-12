@@ -30,5 +30,7 @@ enum EmailActionType {
   composeFromUnsubscribeMailtoLink,
   archiveMessage,
   printAll,
-  downloadMessageAsEML
+  downloadMessageAsEML,
+  addLabel,
+  removeLabel
 }

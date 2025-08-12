@@ -23,6 +23,20 @@ extension ListEmailIdExtension on List<EmailId> {
     };
   }
 
+  Map<Id, PatchObject> generateMapUpdateObjectAddToMailbox(MailboxId destinationMailboxId) {
+    return {
+      for (var emailId in this)
+        emailId.id: destinationMailboxId.generateActionPath()
+    };
+  }
+
+  Map<Id, PatchObject> generateMapUpdateObjectRemoveFromMailbox(MailboxId mailboxId) {
+    return {
+      for (var emailId in this)
+        emailId.id: mailboxId.generateRemoveFromMailboxActionPath()
+    };
+  }
+
   Map<Id, PatchObject> generateMapUpdateObjectMarkAsStar(MarkStarAction markStarAction) {
     return {
       for (var emailId in this)

@@ -30,6 +30,7 @@ class MailboxCreatorController extends BaseController {
 
   final selectedMailbox = Rxn<PresentationMailbox>();
   final newNameMailbox = Rxn<String>();
+  final Rxn<Color> selectedColor = Rxn<Color>();
   bool _createdMailbox = false;
 
   final FocusNode nameInputFocusNode = FocusNode();
@@ -47,6 +48,7 @@ class MailboxCreatorController extends BaseController {
   MailboxCreatorController(this._verifyNameInteractor);
 
   void setNewNameMailbox(String newName) => newNameMailbox.value = newName;
+  void setSelectedColor(Color? color) => selectedColor.value = color;
 
   @override
   void onInit() {
@@ -178,7 +180,9 @@ class MailboxCreatorController extends BaseController {
     if (nameMailbox != null && nameMailbox.isNotEmpty && _createdMailbox) {
       final newMailboxArguments = NewMailboxArguments(
         MailboxName(nameMailbox),
-        mailboxLocation: selectedMailbox.value);
+        mailboxLocation: selectedMailbox.value,
+        color: selectedColor.value,
+      );
       popBack(result: newMailboxArguments);
     }
   }

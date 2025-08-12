@@ -14,6 +14,8 @@ import 'package:tmail_ui_user/features/mailbox/presentation/model/mailbox_action
 import 'package:tmail_ui_user/features/mailbox/presentation/utils/mailbox_method_action_define.dart';
 import 'package:tmail_ui_user/features/search/mailbox/presentation/utils/search_mailbox_utils.dart';
 import 'package:tmail_ui_user/main/utils/app_utils.dart';
+import 'package:get/get.dart';
+import 'package:tmail_ui_user/features/destination_picker/presentation/destination_picker_controller.dart';
 
 class DestinationPickerSearchMailboxItemBuilder extends StatelessWidget {
 
@@ -93,15 +95,30 @@ class DestinationPickerSearchMailboxItemBuilder extends StatelessWidget {
   }
 
   Widget _buildTitleItem(BuildContext context) {
-    return Text(
-      _presentationMailbox.getDisplayName(context),
-      maxLines: 1,
-      overflow: CommonTextStyle.defaultTextOverFlow,
-      softWrap: CommonTextStyle.defaultSoftWrap,
-      style: ThemeUtils.defaultTextStyleInterFont.copyWith(
-        fontSize: 15,
-        color: Colors.black
-      ),
+    final color = _presentationMailbox.colorHex != null ? Color(_presentationMailbox.colorHex!) : null;
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (color != null)
+          Container(
+            width: 10,
+            height: 10,
+            margin: const EdgeInsetsDirectional.only(end: 6, top: 4, bottom: 4),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+        Expanded(
+          child: Text(
+            _presentationMailbox.getDisplayName(context),
+            maxLines: 1,
+            overflow: CommonTextStyle.defaultTextOverFlow,
+            softWrap: CommonTextStyle.defaultSoftWrap,
+            style: ThemeUtils.defaultTextStyleInterFont.copyWith(
+              fontSize: 15,
+              color: Colors.black
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -136,7 +153,7 @@ class DestinationPickerSearchMailboxItemBuilder extends StatelessWidget {
   }
 
   Widget _buildSelectedIcon(BuildContext context) {
-    if (_isSelectActionNoValid) {
+    if (_isSelectActionNoValid || _isAssignLabelSelected) {
       return Padding(
         padding: EdgeInsets.only(
           right: AppUtils.isDirectionRTL(context) ? 0 : 8,
@@ -152,6 +169,12 @@ class DestinationPickerSearchMailboxItemBuilder extends StatelessWidget {
     } else {
       return const SizedBox.shrink();
     }
+  }
+
+  bool get _isAssignLabelSelected {
+    if (mailboxActions != MailboxActions.assignLabels) return false;
+    final controller = Get.find<DestinationPickerController>();
+    return controller.selectedLabels.contains(_presentationMailbox.id);
   }
 
   bool get _isSelectActionNoValid => _presentationMailbox.id == mailboxIdAlreadySelected &&

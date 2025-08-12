@@ -125,6 +125,7 @@ class MailboxController extends BaseMailboxController
   final foldersExpandMode = Rx(ExpandMode.EXPAND);
 
   MailboxId? _newFolderId;
+  Color? _pendingNewFolderColor;
   NavigationRouter? _navigationRouter;
   WebSocketQueueHandler? _webSocketQueueHandler;
 
@@ -866,6 +867,11 @@ class MailboxController extends BaseMailboxController
             parentId: result.mailboxLocation?.id,
           ),
         );
+        // Apply color if chosen after the new mailbox actually exists
+        if (result.color != null) {
+          // Save desired color until we know the created id
+          _pendingNewFolderColor = result.color;
+        }
       }
     }
   }
@@ -883,6 +889,10 @@ class MailboxController extends BaseMailboxController
         leadingSVGIcon: imagePaths.icFolderMailbox);
 
       _newFolderId = success.newMailbox.id;
+      if (_pendingNewFolderColor != null) {
+        mailboxDashBoardController.setLabelColor(_newFolderId!, _pendingNewFolderColor!);
+        _pendingNewFolderColor = null;
+      }
     }
   }
 
@@ -1282,9 +1292,34 @@ class MailboxController extends BaseMailboxController
       case MailboxActions.recoverDeletedMessages:
         mailboxDashBoardController.gotoEmailRecovery();
         break;
+      case MailboxActions.setLabelColor:
+        _openSetLabelColorDialog(context, mailbox);
+        break;
       default:
         break;
     }
+  }
+
+  void _openSetLabelColorDialog(BuildContext context, PresentationMailbox mailbox) {
+    final current = ValueNotifier<Color>(mailbox.colorHex != null ? Color(mailbox.colorHex!) : Colors.black);
+    (ColorPickerDialogBuilder(
+      current,
+      title: 'Label color',
+      textActionSetColor: 'Set color',
+      textActionCancel: 'Cancel',
+      textActionResetDefault: 'Reset',
+      setColorActionCallback: (color) {
+        Navigator.of(context).pop();
+        if (color != null) {
+          mailboxDashBoardController.setLabelColor(mailbox.id, color);
+        }
+      },
+      cancelActionCallback: () => Navigator.of(context).pop(),
+      resetToDefaultActionCallback: () {
+        Navigator.of(context).pop();
+        mailboxDashBoardController.setLabelColor(mailbox.id, Colors.transparent);
+      },
+    )).show();
   }
 
   void _invokeMovingMailboxAction(

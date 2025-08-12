@@ -40,10 +40,15 @@ class TMailServerSettingOptions with EquatableMixin {
   @JsonKey(name: 'language')
   final String? language;
 
+  // Map of mailboxId -> hex color string (e.g., #FF0000) to sync label colors across devices
+  @JsonKey(name: 'labels.colors')
+  final Map<String, String>? labelColors;
+
   TMailServerSettingOptions({
     this.alwaysReadReceipts,
     this.displaySenderPriority,
     this.language,
+    this.labelColors,
   });
 
   factory TMailServerSettingOptions.fromJson(Map<String, dynamic> json) =>
@@ -55,11 +60,13 @@ class TMailServerSettingOptions with EquatableMixin {
     bool? alwaysReadReceipts,
     bool? displaySenderPriority,
     String? language,
+    Map<String, String>? labelColors,
   }) {
     return TMailServerSettingOptions(
       alwaysReadReceipts: alwaysReadReceipts ?? this.alwaysReadReceipts,
       displaySenderPriority: displaySenderPriority ?? this.displaySenderPriority,
       language: language ?? this.language,
+      labelColors: labelColors ?? this.labelColors,
     );
   }
 
@@ -68,5 +75,6 @@ class TMailServerSettingOptions with EquatableMixin {
     alwaysReadReceipts,
     displaySenderPriority,
     language,
+    labelColors,
   ];
 }

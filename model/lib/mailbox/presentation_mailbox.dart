@@ -49,6 +49,7 @@ class PresentationMailbox with EquatableMixin {
   final Namespace? namespace;
   final String? displayName;
   final Map<String, List<String>?>? rights;
+  final int? colorHex; // persisted locally for label color
 
   PresentationMailbox(
     this.id,
@@ -68,7 +69,8 @@ class PresentationMailbox with EquatableMixin {
       this.state = MailboxState.activated,
       this.namespace,
       this.displayName,
-      this.rights
+      this.rights,
+      this.colorHex,
     }
   );
 
@@ -90,7 +92,8 @@ class PresentationMailbox with EquatableMixin {
     state,
     namespace,
     displayName,
-    rights
+    rights,
+    colorHex
   ];
 
   PresentationMailbox copyWith({
@@ -110,6 +113,7 @@ class PresentationMailbox with EquatableMixin {
     MailboxState? state,
     Namespace? namespace,
     String? displayName,
+    int? colorHex,
   }) {
     return PresentationMailbox(
       id ?? this.id,
@@ -128,6 +132,8 @@ class PresentationMailbox with EquatableMixin {
       state: state ?? this.state,
       namespace: namespace ?? this.namespace,
       displayName: displayName ?? this.displayName,
+      rights: rights,
+      colorHex: colorHex ?? this.colorHex,
     );
   }
 }

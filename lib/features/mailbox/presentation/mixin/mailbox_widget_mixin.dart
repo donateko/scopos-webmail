@@ -51,6 +51,7 @@ mixin MailboxWidgetMixin {
         MailboxActions.openInNewTab,
       MailboxActions.newSubfolder,
       MailboxActions.createFilter,
+      MailboxActions.setLabelColor,
       if (mailbox.countUnReadEmailsAsString.isNotEmpty)
         MailboxActions.markAsRead,
       MailboxActions.move,

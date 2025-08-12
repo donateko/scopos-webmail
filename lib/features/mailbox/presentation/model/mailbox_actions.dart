@@ -7,6 +7,8 @@ enum MailboxActions {
   create,
   moveEmail,
   select,
+  assignLabels,
+  setLabelColor,
   delete,
   rename,
   move,
@@ -37,6 +39,10 @@ extension MailboxActionsExtension on MailboxActions {
       case MailboxActions.moveEmail:
       case MailboxActions.move:
         return AppLocalizations.of(context).moveTo;
+      case MailboxActions.assignLabels:
+        return 'Add label';
+      case MailboxActions.setLabelColor:
+        return 'Label color';
       case MailboxActions.select:
       case MailboxActions.selectForRuleAction:
         return AppLocalizations.of(context).selectFolder;
@@ -92,6 +98,8 @@ extension MailboxActionsExtension on MailboxActions {
     switch(this) {
       case MailboxActions.openInNewTab:
         return imagePaths.icOpenInNewTab;
+      case MailboxActions.setLabelColor:
+        return imagePaths.icStyleColor;
       case MailboxActions.copySubaddress:
         return imagePaths.icCopy;
       case MailboxActions.newSubfolder:
@@ -174,6 +182,7 @@ extension MailboxActionsExtension on MailboxActions {
       case MailboxActions.move:
       case MailboxActions.select:
       case MailboxActions.selectForRuleAction:
+      case MailboxActions.assignLabels:
         return true;
       default:
         return false;
@@ -186,6 +195,8 @@ extension MailboxActionsExtension on MailboxActions {
       case MailboxActions.move:
       case MailboxActions.select:
         return true;
+      case MailboxActions.assignLabels:
+        return false;
       default:
         return false;
     }
@@ -197,6 +208,7 @@ extension MailboxActionsExtension on MailboxActions {
       case MailboxActions.move:
       case MailboxActions.select:
       case MailboxActions.selectForRuleAction:
+      case MailboxActions.assignLabels:
         return false;
       default:
         return true;

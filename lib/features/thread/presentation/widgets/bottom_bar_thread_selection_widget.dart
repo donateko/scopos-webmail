@@ -124,6 +124,29 @@ class BottomBarThreadSelectionWidget extends StatelessWidget{
                   },
                 ),
               ),
+          if (_currentMailbox?.isDrafts == false)
+            Expanded(
+              child: TMailButtonWidget(
+                key: const Key('add_label_selected_email_button'),
+                text: 'Add label',
+                icon: _imagePaths.icMoveEmail,
+                borderRadius: 0,
+                iconSize: 20,
+                iconColor: AppColor.steelGrayA540,
+                textAlign: TextAlign.center,
+                flexibleText: true,
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+                backgroundColor: Colors.transparent,
+                textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
+                  fontSize: 12,
+                  color: AppColor.steelGrayA540,
+                ),
+                verticalDirection: _verticalDirection(context),
+                onTapActionCallback: () {
+                  onPressEmailSelectionActionClick?.call(EmailActionType.addLabel, _listSelectionEmail);
+                },
+              ),
+            ),
             if (_currentMailbox?.isDrafts == false)
               Expanded(
                 child: TMailButtonWidget(

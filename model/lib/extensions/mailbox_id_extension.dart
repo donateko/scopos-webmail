@@ -34,5 +34,11 @@ extension MailboxIdExtension on MailboxId {
     });
   }
 
+  PatchObject generateRemoveFromMailboxActionPath() {
+    return PatchObject({
+      generatePath(): null,
+    });
+  }
+
   String get asString => id.value;
 }

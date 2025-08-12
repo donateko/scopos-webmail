@@ -2,6 +2,7 @@ import 'package:core/presentation/extensions/color_extension.dart';
 import 'package:core/presentation/utils/style_utils.dart';
 import 'package:core/presentation/utils/theme_utils.dart';
 import 'package:core/presentation/views/text/text_field_builder.dart';
+import 'package:core/presentation/views/dialog/color_picker_dialog_builder.dart';
 import 'package:core/utils/app_logger.dart';
 import 'package:core/utils/direction_utils.dart';
 import 'package:core/utils/platform_info.dart';
@@ -71,7 +72,8 @@ class MailboxCreatorView extends GetWidget<MailboxCreatorController> {
                             child: Column(children: [
                               _buildAppBar(context),
                               const Divider(color: AppColor.colorDividerDestinationPicker, height: 1),
-                              _buildCreateMailboxNameInput(context),
+                               _buildCreateMailboxNameInput(context),
+                               _buildColorPickerRow(context),
                               _buildMailboxLocation(context),
                             ]),
                           )
@@ -115,6 +117,57 @@ class MailboxCreatorView extends GetWidget<MailboxCreatorController> {
           ..setErrorText(controller.getErrorInputNameString(context)))
         .build(),
       ))
+    );
+  }
+
+  Widget _buildColorPickerRow(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 24, right: 24, bottom: 8),
+      child: Row(children: [
+        Text(
+          'Label color',
+          style: ThemeUtils.defaultTextStyleInterFont.copyWith(
+            fontSize: 13,
+            color: AppColor.colorHintSearchBar,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        const Spacer(),
+        InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          onTap: () async {
+            final current = ValueNotifier<Color>(controller.selectedColor.value ?? Colors.black);
+            await ColorPickerDialogBuilder(
+              current,
+              title: 'Label color',
+              textActionSetColor: 'Set color',
+              textActionCancel: 'Cancel',
+              textActionResetDefault: 'Reset',
+              cancelActionCallback: () => Get.back(),
+              resetToDefaultActionCallback: () {
+                controller.setSelectedColor(null);
+                Get.back();
+              },
+              setColorActionCallback: (color) {
+                controller.setSelectedColor(color);
+                Get.back();
+              },
+            ).show();
+          },
+          child: Obx(() {
+            final color = controller.selectedColor.value ?? Colors.black;
+            return Container(
+              width: 24,
+              height: 24,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black12),
+              ),
+            );
+          }),
+        )
+      ]),
     );
   }
 

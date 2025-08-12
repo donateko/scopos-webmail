@@ -20,6 +20,7 @@ import 'package:tmail_ui_user/features/mailbox/presentation/extensions/presentat
 import 'package:tmail_ui_user/features/thread/domain/model/search_query.dart';
 import 'package:tmail_ui_user/features/thread/presentation/styles/item_email_tile_styles.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
+import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
 
 typedef OnPressEmailActionClick = void Function(EmailActionType, PresentationEmail);
 typedef OnMoreActionClick = Future<void> Function(PresentationEmail, RelativeRect?);
@@ -28,34 +29,154 @@ mixin BaseEmailItemTile {
 
   final responsiveUtils = Get.find<ResponsiveUtils>();
   final imagePaths = Get.find<ImagePaths>();
+  final mailboxDashBoardController = Get.find<MailboxDashBoardController>();
 
   Widget buildMailboxContain(
     BuildContext context,
     bool isSearchEmailRunning,
     PresentationEmail email
   ) {
-    if (hasMailboxLabel(isSearchEmailRunning, email)) {
-      return Container(
+    // Show chips in unified and system folders (Inbox/Sent/Trash...), hide only
+    // when browsing a personal folder (user-created label) and not searching.
+    // Show label chips for personal folders (labels) only.
+    // - Never show system/default mailboxes (Inbox/Sent/Trash...)
+    // - Do not show the current container mailbox (when viewing inside that folder)
+
+    // Show chips on all list views (when allowed), but skip the current folder chip itself
+
+    // Do not show label chip for the mailbox currently being viewed
+
+    final chips = <Widget>[];
+    final allLabelNames = <String>[];
+    final selected = mailboxDashBoardController.selectedMailbox.value;
+    final inSpecificMailbox = selected != null && selected.id != PresentationMailbox.unifiedMailbox.id;
+    final mailboxIds = email.mailboxIds;
+    if (mailboxIds != null && mailboxIds.isNotEmpty == true) {
+      final entries = mailboxIds.entries.where((e) => e.value == true);
+      for (final entry in entries) {
+        final mailbox = mailboxDashBoardController.mapMailboxById[entry.key];
+        if (mailbox == null) continue;
+        // Skip current container mailbox only when viewing inside that specific folder
+        if (inSpecificMailbox && mailbox.id == selected.id) continue;
+        // Skip system/default mailbox chips (Inbox, Sent, Trash, etc.)
+        if (mailbox.isDefault) continue;
+        final display = mailbox.getDisplayName(context);
+        if (display.isEmpty) continue;
+        allLabelNames.add(display);
+        final chipColor = mailbox.colorHex != null ? Color(mailbox.colorHex!) : AppColor.backgroundCounterMailboxColor;
+        // Compute perceived background after mixing with white (since we render translucently on white)
+        const double fill = 0.25; // should match container fill strength
+        final bgColor = Color.lerp(Colors.white, chipColor, fill)!;
+        final isBgLight = bgColor.computeLuminance() >= 0.55;
+        chips.add(Container(
           margin: const EdgeInsetsDirectional.only(start: 8),
           padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
-          constraints: const BoxConstraints(maxWidth: 100),
-          decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(100)),
-              color: AppColor.backgroundCounterMailboxColor),
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            color: bgColor,
+            border: Border.all(color: chipColor.withOpacity(0.6)),
+          ),
           child: TextOverflowBuilder(
-            email.mailboxContain?.getDisplayName(context) ?? '',
+            display,
             style: ThemeUtils.defaultTextStyleInterFont.copyWith(
               fontFamily: ConstantsUI.fontApp,
               fontSize: 10,
-              color: AppColor.emailMailboxContainColor,
+              color: isBgLight ? Colors.black : Colors.white,
               height: 24 / 10,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w600,
             ),
-          )
-      );
-    } else {
-      return const SizedBox.shrink();
+          ),
+        ));
+      }
     }
+    int maxVisible = 3;
+    if (responsiveUtils.isMobile(context)) {
+      maxVisible = 1;
+    } else if (responsiveUtils.isTablet(context)) {
+      maxVisible = 2;
+    }
+
+    List<Widget> visibleChips = chips;
+    if (chips.length > maxVisible) {
+      final hidden = chips.length - maxVisible;
+      visibleChips = chips.take(maxVisible).toList(growable: true);
+      visibleChips.add(_buildMoreLabelsChip(context, hidden, allLabelNames));
+    }
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(mainAxisSize: MainAxisSize.min, children: visibleChips),
+    );
+  }
+
+  Widget _buildMoreLabelsChip(
+    BuildContext context,
+    int hiddenCount,
+    List<String> allLabels,
+  ) {
+    final Color chipColor = AppColor.backgroundCounterMailboxColor;
+    final Color bgColor = Color.lerp(Colors.white, chipColor, 0.25)!;
+    final bool isBgLight = bgColor.computeLuminance() >= 0.55;
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(AppLocalizations.of(context).showAll),
+            content: SingleChildScrollView(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: allLabels.map((name) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(100)),
+                      color: bgColor,
+                      border: Border.all(color: chipColor.withOpacity(0.6)),
+                    ),
+                    child: Text(
+                      name,
+                      style: ThemeUtils.defaultTextStyleInterFont.copyWith(
+                        fontFamily: ConstantsUI.fontApp,
+                        fontSize: 12,
+                        color: isBgLight ? Colors.black : Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: Text(AppLocalizations.of(context).close),
+              ),
+            ],
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsetsDirectional.only(start: 8),
+        padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(100)),
+          color: bgColor,
+          border: Border.all(color: chipColor.withOpacity(0.6)),
+        ),
+        child: Text(
+          '+$hiddenCount',
+          style: ThemeUtils.defaultTextStyleInterFont.copyWith(
+            fontFamily: ConstantsUI.fontApp,
+            fontSize: 10,
+            color: isBgLight ? Colors.black : Colors.white,
+            height: 24 / 10,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
   }
 
   bool isSearchEnabled(bool isSearchEmailRunning, SearchQuery? query) {

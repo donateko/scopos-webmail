@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:core/core.dart';
@@ -66,6 +67,7 @@ import 'package:tmail_ui_user/features/email/domain/usecases/get_restored_delete
 import 'package:tmail_ui_user/features/email/domain/usecases/mark_as_email_read_interactor.dart';
 import 'package:tmail_ui_user/features/email/domain/usecases/mark_as_star_email_interactor.dart';
 import 'package:tmail_ui_user/features/email/domain/usecases/move_to_mailbox_interactor.dart';
+import 'package:tmail_ui_user/features/email/domain/repository/email_repository.dart';
 import 'package:tmail_ui_user/features/email/domain/usecases/restore_deleted_message_interactor.dart';
 import 'package:tmail_ui_user/features/email/domain/usecases/unsubscribe_email_interactor.dart';
 import 'package:tmail_ui_user/features/email/presentation/action/email_ui_action.dart';
@@ -159,6 +161,7 @@ import 'package:tmail_ui_user/features/sending_queue/domain/usecases/update_send
 import 'package:tmail_ui_user/features/sending_queue/presentation/model/sending_email_arguments.dart';
 import 'package:tmail_ui_user/features/server_settings/domain/state/get_server_setting_state.dart';
 import 'package:tmail_ui_user/features/server_settings/domain/usecases/get_server_setting_interactor.dart';
+import 'package:tmail_ui_user/features/server_settings/domain/usecases/update_server_setting_interactor.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/filter_message_option.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/search_query.dart';
 import 'package:tmail_ui_user/features/thread/domain/state/empty_spam_folder_state.dart';
@@ -221,6 +224,7 @@ class MailboxDashBoardController extends ReloadableController
   final GetIdentityCacheOnWebInteractor _getIdentityCacheOnWebInteractor;
   final MarkAsEmailReadInteractor _markAsEmailReadInteractor;
   final MarkAsStarEmailInteractor _markAsStarEmailInteractor;
+  // New: use repository directly via interactors below or add dedicated interactors later
   final MarkAsMultipleEmailReadInteractor _markAsMultipleEmailReadInteractor;
   final MarkAsStarMultipleEmailInteractor _markAsStarMultipleEmailInteractor;
   final MoveMultipleEmailToMailboxInteractor _moveMultipleEmailToMailboxInteractor;
@@ -247,6 +251,7 @@ class MailboxDashBoardController extends ReloadableController
   GetAutoCompleteInteractor? _getAutoCompleteInteractor;
   IOSNotificationManager? _iosNotificationManager;
   GetServerSettingInteractor? getServerSettingInteractor;
+  UpdateServerSettingInteractor? updateServerSettingInteractor;
   CreateNewEmailRuleFilterInteractor? createNewEmailRuleFilterInteractor;
   SaveLanguageInteractor? saveLanguageInteractor;
 
@@ -279,6 +284,7 @@ class MailboxDashBoardController extends ReloadableController
   final isContextMenuOpened = RxBool(false);
   final isPopupMenuOpened = RxBool(false);
   final ownEmailAddress = RxString('');
+  final Map<String, int> _labelColors = {}; // mailboxId -> colorHex
 
   Session? sessionCurrent;
   Map<Role, MailboxId> mapDefaultMailboxIdByRole = {};
@@ -366,7 +372,50 @@ class MailboxDashBoardController extends ReloadableController
     }
     _handleArguments();
     _loadAppGrid();
+    _loadLabelColorsFromPrefs();
     super.onReady();
+  }
+
+  Future<void> _loadLabelColorsFromPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    final raw = prefs.getString('label_colors');
+    if (raw == null) return;
+    final map = jsonDecode(raw) as Map<String, dynamic>;
+    _labelColors
+      ..clear()
+      ..addAll(map.map((k, v) => MapEntry(k, v as int)));
+    // apply to presentation mailboxes
+    mapMailboxById.updateAll((id, m) {
+      final hex = _labelColors[id.id.value];
+      return m.copyWith(colorHex: hex);
+    });
+  }
+
+  Future<void> _persistLabelColors() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('label_colors', jsonEncode(_labelColors));
+  }
+
+  void setLabelColor(MailboxId mailboxId, Color color) {
+    final value = color.value;
+    _labelColors[mailboxId.id.value] = value;
+    mapMailboxById.update(mailboxId, (m) => m.copyWith(colorHex: value), ifAbsent: () => mapMailboxById[mailboxId] ?? PresentationMailbox(mailboxId));
+    _persistLabelColors();
+    // Push to server settings for cross-device sync if capability is supported
+    if (isServerSettingsCapabilitySupported && accountId.value != null && getServerSettingInteractor != null) {
+      getServerSettingInteractor!.execute(accountId.value!).first.then((either) {
+        either.fold((_) {}, (success) {
+          if (success is GetServerSettingSuccess && updateServerSettingInteractor != null) {
+            final current = success.settingOption;
+            final map = Map<String, String>.from(current.labelColors ?? {});
+            map[mailboxId.id.value] = '#${(value & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
+            final newOpt = current.copyWith(labelColors: map);
+            consumeState(updateServerSettingInteractor!.execute(accountId.value!, newOpt));
+          }
+        });
+      });
+    }
+    emailsInCurrentMailbox.refresh();
   }
 
   void _handleComposerCache() async {
@@ -473,6 +522,18 @@ class MailboxDashBoardController extends ReloadableController
     } else if (success is GetServerSettingSuccess) {
       isSenderImportantFlagEnabled.value = success.settingOption.isDisplaySenderPriority;
       initializeAppLanguage(success);
+      // Load label colors from server settings and apply to mapMailboxById
+      final serverColors = success.settingOption.labelColors;
+      if (serverColors != null && serverColors.isNotEmpty) {
+        _labelColors
+          ..clear()
+          ..addAll(serverColors.map((k, v) => MapEntry(k, int.parse(v.replaceFirst('#', '0xFF')))));
+        mapMailboxById.updateAll((id, m) {
+          final hex = _labelColors[id.id.value];
+          return m.copyWith(colorHex: hex);
+        });
+        emailsInCurrentMailbox.refresh();
+      }
     } else if (success is ClearMailboxSuccess) {
       clearMailboxSuccess(success);
     } else if (success is CreateNewRuleFilterSuccess) {
@@ -848,7 +909,15 @@ class MailboxDashBoardController extends ReloadableController
   }
 
   void setMapMailboxById(Map<MailboxId, PresentationMailbox> newMapMailboxById) {
-    mapMailboxById = newMapMailboxById;
+    // apply stored label colors to incoming map
+    if (_labelColors.isNotEmpty) {
+      mapMailboxById = newMapMailboxById.map((id, m) {
+        final hex = _labelColors[id.id.value];
+        return MapEntry(id, hex != null ? m.copyWith(colorHex: hex) : m);
+      });
+    } else {
+      mapMailboxById = newMapMailboxById;
+    }
   }
 
   void setOutboxMailbox(PresentationMailbox? newOutbox) {
@@ -1054,6 +1123,77 @@ class MailboxDashBoardController extends ReloadableController
         textColor: Colors.white,
         actionIcon: SvgPicture.asset(imagePaths.icUndo));
     }
+  }
+
+  void addLabelToEmails(
+    Session session,
+    AccountId accountId,
+    List<EmailId> emailIds,
+    MailboxId destinationMailboxId,
+  ) {
+    // Use repository through EmailRepositoryImpl via Get.find
+    final emailRepository = Get.find<EmailRepository>();
+    consumeState(Stream.fromFuture(() async {
+      final result = await emailRepository.addEmailsToMailbox(
+        session,
+        accountId,
+        emailIds,
+        destinationMailboxId,
+      );
+      for (final email in emailsInCurrentMailbox) {
+        if (email.id != null && result.emailIdsSuccess.contains(email.id)) {
+          final newMap = Map<MailboxId, bool>.from(email.mailboxIds ?? {});
+          newMap[destinationMailboxId] = true;
+          final updated = email.copyWith(mailboxIds: newMap);
+          final index = emailsInCurrentMailbox.indexWhere((e) => e.id == email.id);
+          if (index >= 0) emailsInCurrentMailbox[index] = updated;
+        }
+      }
+      emailsInCurrentMailbox.refresh();
+      if (currentOverlayContext != null) {
+        appToast.showToastMessage(
+          currentOverlayContext!,
+          'Label added',
+          leadingSVGIcon: imagePaths.icToastSuccessMessage,
+        );
+      }
+      return Right<Failure, Success>(UIState.idle);
+    }()));
+  }
+
+  void removeLabelFromEmails(
+    Session session,
+    AccountId accountId,
+    List<EmailId> emailIds,
+    MailboxId mailboxId,
+  ) {
+    final emailRepository = Get.find<EmailRepository>();
+    consumeState(Stream.fromFuture(() async {
+      final result = await emailRepository.removeEmailsFromMailbox(
+        session,
+        accountId,
+        emailIds,
+        mailboxId,
+      );
+      for (final email in emailsInCurrentMailbox) {
+        if (email.id != null && result.emailIdsSuccess.contains(email.id)) {
+          final newMap = Map<MailboxId, bool>.from(email.mailboxIds ?? {});
+          newMap.remove(mailboxId);
+          final updated = email.copyWith(mailboxIds: newMap);
+          final index = emailsInCurrentMailbox.indexWhere((e) => e.id == email.id);
+          if (index >= 0) emailsInCurrentMailbox[index] = updated;
+        }
+      }
+      emailsInCurrentMailbox.refresh();
+      if (currentOverlayContext != null) {
+        appToast.showToastMessage(
+          currentOverlayContext!,
+          'Label removed',
+          leadingSVGIcon: imagePaths.icToastSuccessMessage,
+        );
+      }
+      return Right<Failure, Success>(UIState.idle);
+    }()));
   }
 
   void _revertedToOriginalMailbox(

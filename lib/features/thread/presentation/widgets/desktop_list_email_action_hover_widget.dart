@@ -39,12 +39,13 @@ class _DesktopListEmailActionHoverWidgetState
     extends State<DesktopListEmailActionHoverWidget> with BaseEmailItemTile {
   final _imagePaths = Get.find<ImagePaths>();
 
-  bool _popupMenuVisible = false;
+  // kept for potential future use
 
   @override
   Widget build(BuildContext context) {
     final listActionWidget = [
-      if (widget.isHovered) ...[
+      // Always show action icons (not only on hover)
+      ...[
         TMailButtonWidget.fromIcon(
           icon: _imagePaths.icOpenInNewTab,
           iconColor: ItemEmailTileStyles.actionIconHoverColor,
@@ -92,6 +93,19 @@ class _DesktopListEmailActionHoverWidgetState
               widget.presentationEmail,
             ),
           ),
+          TMailButtonWidget.fromIcon(
+            icon: _imagePaths.icMoveEmail,
+            iconColor: ItemEmailTileStyles.actionIconHoverColor,
+            iconSize: _getIconSize(),
+            padding: _getPaddingIcon(),
+            margin: _getMarginIcon(),
+            backgroundColor: Colors.transparent,
+            tooltipMessage: 'Add label',
+            onTapActionCallback: () => widget.emailActionClick?.call(
+              EmailActionType.addLabel,
+              widget.presentationEmail,
+            ),
+          ),
         ],
         TMailButtonWidget.fromIcon(
           icon: _imagePaths.icDeleteComposer,
@@ -111,42 +125,16 @@ class _DesktopListEmailActionHoverWidgetState
           ),
         ),
       ],
-      if (_shouldShowPopupMenu) ...[
-        TMailButtonWidget.fromIcon(
-          icon: _imagePaths.icMoreVertical,
-          iconColor: ItemEmailTileStyles.actionIconHoverColor,
-          iconSize: _getIconSize(),
-          padding: _getPaddingIcon(),
-          margin: _getMarginIcon(),
-          backgroundColor: _popupMenuVisible
-              ? Theme.of(context).colorScheme.outline.withValues(alpha: 0.08)
-              : Colors.transparent,
-          tooltipMessage: AppLocalizations.of(context).more,
-          onTapActionAtPositionCallback: (position) {
-            _onPopupMenuVisibleChange(true);
-
-            widget.onMoreActionClick
-                ?.call(widget.presentationEmail, position)
-                .whenComplete(() => _onPopupMenuVisibleChange(false));
-          },
-        ),
-        const SizedBox(width: 16),
-      ] else ...[
-        buildMailboxContain(
-          context,
-          widget.isSearchEmailRunning,
-          widget.presentationEmail,
-        ),
-        if (widget.presentationEmail.hasAttachment == true)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(start: 8),
-            child: buildIconAttachment(),
-          ),
+      // Keep date/attachment on the right
+      if (widget.presentationEmail.hasAttachment == true)
         Padding(
-          padding: const EdgeInsetsDirectional.only(end: 20, start: 8),
-          child: buildDateTime(context, widget.presentationEmail),
+          padding: const EdgeInsetsDirectional.only(start: 8),
+          child: buildIconAttachment(),
         ),
-      ]
+      Padding(
+        padding: const EdgeInsetsDirectional.only(end: 20, start: 8),
+        child: buildDateTime(context, widget.presentationEmail),
+      ),
     ];
 
     if (listActionWidget.isEmpty) return const SizedBox.shrink();
@@ -164,13 +152,5 @@ class _DesktopListEmailActionHoverWidgetState
     return const EdgeInsetsDirectional.only(start: 11);
   }
 
-  bool get _shouldShowPopupMenu => widget.isHovered || _popupMenuVisible;
-
-  void _onPopupMenuVisibleChange(bool visible) {
-    if (_popupMenuVisible != visible && mounted) {
-      setState(() {
-        _popupMenuVisible = visible;
-      });
-    }
-  }
+  // Popup menu is no longer used (actions are always visible)
 }
