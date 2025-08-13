@@ -390,9 +390,17 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
         const SizedBox(width: 8),
         Expanded(
           child: Row(children: [
-            // Removed count badge in subject/content row as requested
-            Expanded(
+            Flexible(
               child: buildEmailTitle(
+                context,
+                widget.presentationEmail,
+                widget.isSearchEmailRunning,
+                widget.searchQuery,
+              ),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: buildEmailPartialContent(
                 context,
                 widget.presentationEmail,
                 widget.isSearchEmailRunning,

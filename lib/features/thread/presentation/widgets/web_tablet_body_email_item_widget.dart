@@ -132,38 +132,43 @@ class _WebTabletBodyEmailItemWidgetState
                           if (widget.presentationEmail.isMarkAsImportant && widget.isSenderImportantFlagEnabled)
                             buildMarkAsImportantIcon(context),
                           Expanded(
-                            child: Row(children: [
-                              Expanded(
-                                child: Row(children: [
-                                  Expanded(
-                                    child: Row(children: [
-                                      // Removed count badge in title row as requested
-                                      // Title next, flexible
-                                      Expanded(
-                                        child: buildEmailTitle(
-                                          context,
-                                          widget.presentationEmail,
-                                          widget.isSearchEmailRunning,
-                                          widget.searchQuery,
-                                        ),
-                                      ),
-                                    ]),
-                                  ),
-                                  // Remove snippet on list (title only)
-                                ]),
-                              ),
-                              const SizedBox(width: 4),
-                               ConstrainedBox(
-                                constraints: const BoxConstraints(maxWidth: 90),
-                                child: Align(
-                                  alignment: Alignment.centerRight,
-                                  child: buildMailboxContain(
+                            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                              Row(children: [
+                                Expanded(
+                                  child: buildEmailTitle(
                                     context,
-                                    widget.isSearchEmailRunning,
                                     widget.presentationEmail,
+                                    widget.isSearchEmailRunning,
+                                    widget.searchQuery,
                                   ),
                                 ),
-                              ),
+                              ]),
+                              const SizedBox(height: 2),
+                              Row(children: [
+                                Expanded(
+                                  child: buildEmailPartialContent(
+                                    context,
+                                    widget.presentationEmail,
+                                    widget.isSearchEmailRunning,
+                                    widget.searchQuery,
+                                  ),
+                                ),
+                              ]),
+                              const SizedBox(height: 2),
+                              Row(children: [
+                                const SizedBox(width: 4),
+                                ConstrainedBox(
+                                  constraints: const BoxConstraints(maxWidth: 90),
+                                  child: Align(
+                                    alignment: Alignment.centerRight,
+                                    child: buildMailboxContain(
+                                      context,
+                                      widget.isSearchEmailRunning,
+                                      widget.presentationEmail,
+                                    ),
+                                  ),
+                                ),
+                              ]),
                             ]),
                           ),
                           if (widget.presentationEmail.hasStarred)
