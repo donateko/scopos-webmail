@@ -452,9 +452,7 @@ class SingleEmailController extends BaseController with AppLoaderMixin {
 
     _createSingleEmailView(currentEmail!.id!);
 
-    if (!currentEmail!.hasRead) {
-      markAsEmailRead(currentEmail!, ReadActions.markAsRead, MarkReadAction.tap);
-    }
+    // Do not auto mark-as-read here; thread-level controller handles marking
 
     if (mailboxDashBoardController.listIdentities.isEmpty) {
       _getAllIdentities();

@@ -12,6 +12,9 @@ import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 import 'package:core/presentation/utils/responsive_utils.dart';
 import 'package:tmail_ui_user/features/calendar/data/network/caldav_api.dart';
 import 'package:tmail_ui_user/features/calendar/presentation/calendar_list_controller.dart';
+import 'package:jmap_dart_client/jmap/mail/email/email_address.dart';
+import 'package:tmail_ui_user/features/manage_account/presentation/forward/widgets/autocomplete_contact_text_field_with_tags.dart';
+import 'package:tmail_ui_user/features/home/domain/extensions/session_extensions.dart';
 
 class CalendarSidebarPanel extends StatelessWidget {
   const CalendarSidebarPanel({super.key});
@@ -97,6 +100,7 @@ void _openCreateEventDialog(BuildContext context) {
   final locationCtrl = TextEditingController();
   final descriptionCtrl = TextEditingController();
   final attendeesCtrl = TextEditingController();
+  final attendeesInputCtrl = TextEditingController();
   DateTime? start = DateTime.now();
   DateTime? end = DateTime.now().add(const Duration(hours: 1));
   int? reminderMinutes;
@@ -147,7 +151,15 @@ void _openCreateEventDialog(BuildContext context) {
                 TextField(controller: summaryCtrl, decoration: const InputDecoration(labelText: 'Title')),
                 TextField(controller: locationCtrl, decoration: const InputDecoration(labelText: 'Location')),
                 TextField(controller: descriptionCtrl, decoration: const InputDecoration(labelText: 'Description')),
-                TextField(controller: attendeesCtrl, decoration: const InputDecoration(labelText: 'Attendees (comma-separated emails)')),
+                AutocompleteContactTextFieldWithTags(
+                  listEmailAddress: const <EmailAddress>[],
+                  internalDomain: (Get.find<MailboxDashBoardController>().sessionCurrent?.internalDomain) ?? '',
+                  labelText: 'Attendees',
+                  controller: attendeesInputCtrl,
+                  minInputLengthAutocomplete: Get.find<MailboxDashBoardController>().minInputLengthAutocomplete,
+                  onSuggestionCallback: (q,{int? limit}) => Get.find<MailboxDashBoardController>().getContactSuggestion(q),
+                  onAddContactCallback: (list){ attendeesCtrl.text = list.map((e)=> e.email ?? '').where((e)=> e.isNotEmpty).join(', '); },
+                ),
                 const SizedBox(height: 12),
                 Wrap(
                   spacing: 8,

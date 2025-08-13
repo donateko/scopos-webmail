@@ -21,14 +21,17 @@ extension PresentationMailboxExtension on PresentationMailbox {
 
   bool get isChildOfTeamMailboxes => !isPersonal && hasParentId();
 
+  // Display counts per thread to match ThreadId grouping
   String get countUnReadEmailsAsString {
-    if (countUnreadEmails <= 0) return '';
-    return countUnreadEmails <= 999 ? '$countUnreadEmails' : '999+';
+    if (countUnreadThreads <= 0) return '';
+    return countUnreadThreads <= 999 ? '$countUnreadThreads' : '999+';
   }
 
   int get countUnreadEmails => unreadEmails?.value.value.toInt() ?? 0;
-
   int get countTotalEmails => totalEmails?.value.value.toInt() ?? 0;
+
+  int get countUnreadThreads => unreadThreads?.value.value.toInt() ?? 0;
+  int get countTotalThreads => totalThreads?.value.value.toInt() ?? 0;
 
   bool get isInbox => role == PresentationMailbox.roleInbox;
 
@@ -52,15 +55,15 @@ extension PresentationMailboxExtension on PresentationMailbox {
 
   bool get isSubaddressingAllowed => rights != null && rights?[anyoneIdentifier]?.contains(postingRight) == true;
 
-  bool get allowedToDisplayCountOfUnreadEmails => !(isTrash || isSpam || isDrafts || isTemplates || isSent) && countUnreadEmails > 0;
+  bool get allowedToDisplayCountOfUnreadEmails => !(isTrash || isSpam || isDrafts || isTemplates || isSent) && countUnreadThreads > 0;
 
-  bool get allowedToDisplayCountOfTotalEmails => (isTrash || isSpam || isDrafts) && countTotalEmails > 0;
+  bool get allowedToDisplayCountOfTotalEmails => (isTrash || isSpam || isDrafts) && countTotalThreads > 0;
 
   bool get allowedHasEmptyAction => (isTrash || isSpam) && countTotalEmails > 0;
 
   String get countTotalEmailsAsString {
-    if (countTotalEmails <= 0) return '';
-    return countTotalEmails <= 999 ? '$countTotalEmails' : '999+';
+    if (countTotalThreads <= 0) return '';
+    return countTotalThreads <= 999 ? '$countTotalThreads' : '999+';
   }
 
   String get emailTeamMailBoxes {

@@ -96,11 +96,14 @@ class MailboxTree with EquatableMixin {
   bool updateMailboxUnreadCountById(MailboxId mailboxId, int unreadCount) {
     final matchedNode = findNode((node) => node.item.id == mailboxId);
     if (matchedNode != null) {
-      final currentUnreadCount = matchedNode.item.unreadEmails?.value.value ?? 0;
+      // Adjust unreadThreads when grouping by ThreadId
+      final currentUnreadCount = matchedNode.item.unreadThreads?.value.value
+        ?? matchedNode.item.unreadEmails?.value.value
+        ?? 0;
       final updatedUnreadCount = currentUnreadCount + unreadCount;
       if (updatedUnreadCount < 0) return true;
       matchedNode.item = matchedNode.item.copyWith(
-        unreadEmails: UnreadEmails(UnsignedInt(updatedUnreadCount)),
+        unreadThreads: UnreadThreads(UnsignedInt(updatedUnreadCount)),
       );
       return true;
     }
@@ -110,11 +113,14 @@ class MailboxTree with EquatableMixin {
   bool updateMailboxTotalEmailsCountById(MailboxId mailboxId, int totalEmailsCount) {
     final matchedNode = findNode((node) => node.item.id == mailboxId);
     if (matchedNode != null) {
-      final currentTotalEmailsCount = matchedNode.item.totalEmails?.value.value ?? 0;
+      // Adjust totalThreads when grouping by ThreadId
+      final currentTotalEmailsCount = matchedNode.item.totalThreads?.value.value
+        ?? matchedNode.item.totalEmails?.value.value
+        ?? 0;
       final updatedTotalEmailsCount = currentTotalEmailsCount + totalEmailsCount;
       if (updatedTotalEmailsCount < 0) return true;
       matchedNode.item = matchedNode.item.copyWith(
-        totalEmails: TotalEmails(UnsignedInt(updatedTotalEmailsCount)),
+        totalThreads: TotalThreads(UnsignedInt(updatedTotalEmailsCount)),
       );
       return true;
     }

@@ -269,7 +269,7 @@ class EmailAPI with HandleSetErrorMixin {
     final maxBatches = min(totalEmails, maxObjects);
 
     final List<EmailId> updatedEmailIds = List.empty(growable: true);
-    final Map<Id, SetError> mapErrors = <Id, SetError>{};
+    final Map<Id, SetError> allErrors = <Id, SetError>{};
 
     for (int start = 0; start < totalEmails; start += maxBatches) {
       int end = (start + maxBatches < totalEmails)
@@ -302,13 +302,26 @@ class EmailAPI with HandleSetErrorMixin {
       );
 
       final listEmailIds = setEmailResponse?.updated?.keys.toEmailIds() ?? [];
-      final mapErrors = handleSetResponse([setEmailResponse]);
+      final batchErrors = handleSetResponse([setEmailResponse]);
+
+      // Treat benign "No changes found in request" as success (race or already in desired state)
+      final noChangeIds = batchErrors.entries
+          .where((e) => e.value.type == SetError.invalidProperties &&
+              (e.value.description?.contains('No changes found in request') == true))
+          .map((e) => EmailId(e.key))
+          .toList();
 
       updatedEmailIds.addAll(listEmailIds);
-      mapErrors.addAll(mapErrors);
+      updatedEmailIds.addAll(noChangeIds);
+
+      // Accumulate only meaningful errors
+      batchErrors.removeWhere((_, err) =>
+          err.type == SetError.invalidProperties &&
+          (err.description?.contains('No changes found in request') == true));
+      allErrors.addAll(batchErrors);
     }
 
-    return (emailIdsSuccess: updatedEmailIds, mapErrors: mapErrors);
+    return (emailIdsSuccess: updatedEmailIds, mapErrors: allErrors);
   }
 
   Future<List<DownloadTaskId>> downloadAttachments(

@@ -5,6 +5,11 @@ import 'package:core/presentation/resources/image_paths.dart';
 import 'package:core/presentation/utils/responsive_utils.dart';
 import 'package:core/presentation/views/button/tmail_button_widget.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
+import 'package:jmap_dart_client/jmap/mail/email/email_address.dart';
+import 'package:tmail_ui_user/main/utils/app_config.dart';
+import 'package:tmail_ui_user/features/manage_account/presentation/forward/widgets/autocomplete_contact_text_field_with_tags.dart';
+import 'package:tmail_ui_user/features/composer/presentation/composer_controller.dart';
+import 'package:tmail_ui_user/features/home/domain/extensions/session_extensions.dart';
 import 'package:tmail_ui_user/features/calendar/presentation/calendar_list_controller.dart';
 import 'package:tmail_ui_user/features/calendar/presentation/model/calendar_event_item.dart';
 import 'package:tmail_ui_user/features/calendar/data/network/caldav_api.dart';
@@ -71,7 +76,7 @@ class _CalendarResponsiveGrid extends StatefulWidget {
 }
 
 class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
-  DateTime anchor = DateTime(DateTime.now().year, DateTime.now().month, 1);
+  DateTime anchor = DateTime.now();
   String viewMode = 'month'; // month | week | day
 
   List<DateTime> _daysInMonth(DateTime month) {
@@ -505,6 +510,7 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
     final locationCtrl = TextEditingController(text: ev.location ?? '');
     final descriptionCtrl = TextEditingController();
     final attendeesCtrl = TextEditingController(text: ev.attendees.join(', '));
+    final attendeesInputCtrl = TextEditingController();
     DateTime start = ev.start ?? DateTime.now();
     DateTime end = ev.end ?? start.add(const Duration(hours: 1));
     String? selectedColor = ev.colorHex;
@@ -544,7 +550,21 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
             TextField(controller: summaryCtrl, decoration: const InputDecoration(labelText: 'Title')),
             TextField(controller: locationCtrl, decoration: const InputDecoration(labelText: 'Location')),
             TextField(controller: descriptionCtrl, decoration: const InputDecoration(labelText: 'Description')),
-            TextField(controller: attendeesCtrl, decoration: const InputDecoration(labelText: 'Attendees (comma-separated emails)')),
+            AutocompleteContactTextFieldWithTags(
+              listEmailAddress: ev.attendees.map((e)=> EmailAddress(null, e)).toList(),
+              internalDomain: (Get.find<MailboxDashBoardController>().sessionCurrent?.internalDomain) ?? '',
+              labelText: 'Attendees',
+              controller: attendeesInputCtrl,
+              minInputLengthAutocomplete: Get.find<MailboxDashBoardController>().minInputLengthAutocomplete,
+              onSuggestionCallback: (q,{int? limit}) {
+                final l = limit ?? AppConfig.defaultLimitAutocomplete;
+                if (Get.isRegistered<ComposerController>()) {
+                  return Get.find<ComposerController>().getAutoCompleteSuggestion(q, limit: l);
+                }
+                return Get.find<MailboxDashBoardController>().getContactSuggestion(q);
+              },
+              onAddContactCallback: (list){ attendeesCtrl.text = list.map((e)=> e.email ?? '').where((e)=> e.isNotEmpty).join(', '); },
+            ),
             const SizedBox(height: 8),
             _buildColorPicker(selectedColor, (c) => setState(() => selectedColor = c)),
             const SizedBox(height: 8),
@@ -607,6 +627,7 @@ void _openCreateEventDialogForDay(BuildContext context, DateTime day) {
   final locationCtrl = TextEditingController();
   final descriptionCtrl = TextEditingController();
   final attendeesCtrl = TextEditingController();
+  final attendeesInputCtrl = TextEditingController();
   DateTime start = DateTime(day.year, day.month, day.day, 9, 0);
   DateTime end = start.add(const Duration(hours: 1));
   int? reminderMinutes;
@@ -638,7 +659,21 @@ void _openCreateEventDialogForDay(BuildContext context, DateTime day) {
                 TextField(controller: summaryCtrl, decoration: const InputDecoration(labelText: 'Title')),
                 TextField(controller: locationCtrl, decoration: const InputDecoration(labelText: 'Location')),
                 TextField(controller: descriptionCtrl, decoration: const InputDecoration(labelText: 'Description')),
-                TextField(controller: attendeesCtrl, decoration: const InputDecoration(labelText: 'Attendees (comma-separated emails)')),
+                 AutocompleteContactTextFieldWithTags(
+                  listEmailAddress: const <EmailAddress>[],
+                  internalDomain: (Get.find<MailboxDashBoardController>().sessionCurrent?.internalDomain) ?? '',
+                   labelText: 'Attendees',
+                   controller: attendeesInputCtrl,
+                   minInputLengthAutocomplete: Get.find<MailboxDashBoardController>().minInputLengthAutocomplete,
+                   onSuggestionCallback: (q,{int? limit}) {
+                     final l = limit ?? AppConfig.defaultLimitAutocomplete;
+                     if (Get.isRegistered<ComposerController>()) {
+                       return Get.find<ComposerController>().getAutoCompleteSuggestion(q, limit: l);
+                     }
+                     return Get.find<MailboxDashBoardController>().getContactSuggestion(q);
+                   },
+                  onAddContactCallback: (list){ attendeesCtrl.text = list.map((e)=> e.email ?? '').where((e)=> e.isNotEmpty).join(', '); },
+                 ),
                 const SizedBox(height: 8),
                 // Color picker (same palette as edit dialog)
                 Wrap(

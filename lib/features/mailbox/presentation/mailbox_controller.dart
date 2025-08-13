@@ -415,11 +415,41 @@ class MailboxController extends BaseMailboxController
     int? unreadCount,
   }) {
     if (affectedMailboxId == null) return;
+    // If the affected mailbox is currently selected, recompute unreadThreads by ThreadId
+    // to avoid flicker when multiple emails in the same thread change state.
+    if (selectedMailbox?.id == affectedMailboxId) {
+      final newUnreadThreads = _computeUnreadThreadCountForSelectedMailbox(affectedMailboxId);
+      final currentNode = mailboxDashBoardController.mapMailboxById[affectedMailboxId];
+      final currentUnreadThreads = currentNode?.unreadThreads?.value.value
+        ?? currentNode?.unreadEmails?.value.value
+        ?? 0;
+      final delta = newUnreadThreads - currentUnreadThreads;
+      if (delta != 0) {
+        updateUnreadCountOfMailboxById(affectedMailboxId, unreadChanges: delta.toInt());
+      }
+      return;
+    }
 
+    // Fallback for non-selected mailboxes: approximate delta using email counts
     updateUnreadCountOfMailboxById(
       affectedMailboxId,
       unreadChanges: (unreadCount ?? 0) - (readCount ?? 0),
     );
+  }
+
+  int _computeUnreadThreadCountForSelectedMailbox(MailboxId mailboxId) {
+    final emails = mailboxDashBoardController.emailsInCurrentMailbox;
+    if (emails.isEmpty) return 0;
+    final Set<String> unreadThreadKeys = <String>{};
+    for (final e in emails) {
+      final inMailbox = e.mailboxIds?.containsKey(mailboxId) == true;
+      if (!inMailbox) continue;
+      final isUnread = e.hasRead == false;
+      if (!isUnread) continue;
+      final key = e.threadId?.id.value ?? e.id?.id.value;
+      if (key != null) unreadThreadKeys.add(key);
+    }
+    return unreadThreadKeys.length;
   }
 
   void _handleMarkMailboxAsRead({

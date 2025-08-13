@@ -182,7 +182,6 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/action/thread_
 import 'package:tmail_ui_user/main/deep_links/deep_link_data.dart';
 import 'package:tmail_ui_user/main/deep_links/deep_links_manager.dart';
 import 'package:tmail_ui_user/main/deep_links/open_app_deep_link_data.dart';
-import 'package:tmail_ui_user/main/error/capability_validator.dart';
 import 'package:tmail_ui_user/main/exceptions/remote_exception.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 import 'package:tmail_ui_user/main/routes/app_routes.dart';
@@ -1304,7 +1303,8 @@ class MailboxDashBoardController extends ReloadableController
 
   void _markAsReadSelectedMultipleEmailSuccess(ReadActions readActions, List<EmailId> emailIds) {
     updateEmailFlagByEmailIds(emailIds, readAction: readActions);
-    if (currentContext != null && currentOverlayContext != null) {
+    // Suppress toast when marking as read due to opening/auto-read flow
+    if (currentContext != null && currentOverlayContext != null && readActions == ReadActions.markAsUnread) {
       final message = readActions == ReadActions.markAsUnread
         ? AppLocalizations.of(currentContext!).marked_message_toast(AppLocalizations.of(currentContext!).unread)
         : AppLocalizations.of(currentContext!).marked_message_toast(AppLocalizations.of(currentContext!).read);
@@ -1326,6 +1326,7 @@ class MailboxDashBoardController extends ReloadableController
     );
     if (currentContext != null &&
         currentOverlayContext != null &&
+        // Only show toast for explicit swipe action, not tap/open auto-read
         success.markReadAction == MarkReadAction.swipeOnThread) {
       final message = success.readActions == ReadActions.markAsUnread
         ? AppLocalizations.of(currentContext!).markedSingleMessageToast(AppLocalizations.of(currentContext!).unread.toLowerCase())

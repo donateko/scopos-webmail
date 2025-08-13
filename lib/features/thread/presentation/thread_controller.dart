@@ -524,7 +524,15 @@ class ThreadController extends BaseController with EmailActionController {
       return;
     }
     mailboxDashBoardController.setCurrentEmailState(success.currentEmailState);
-    log('ThreadController::_refreshChangesAllEmailSuccess: COUNT = ${success.emailList.length}');
+    // Count by unique ThreadId (fallback to EmailId when ThreadId is absent)
+    final uniqueThreadIds = <String>{
+      for (final e in success.emailList)
+        if (e.threadId?.id.value != null)
+          e.threadId!.id.value
+        else if (e.id?.id.value != null)
+          e.id!.id.value
+    };
+    log('ThreadController::_refreshChangesAllEmailSuccess: THREAD_COUNT = ${uniqueThreadIds.length} | EMAIL_COUNT = ${success.emailList.length}');
     final emailsBeforeChanges = mailboxDashBoardController.emailsInCurrentMailbox;
     final emailsAfterChanges = success.emailList;
     final newListEmail = emailsAfterChanges.combine(emailsBeforeChanges);
@@ -894,8 +902,27 @@ class ThreadController extends BaseController with EmailActionController {
   }
 
   void setSelectAllEmailAction() {
-    final newEmailList = mailboxDashBoardController.emailsInCurrentMailbox
-      .map((email) => email.toSelectedEmail(selectMode: SelectMode.ACTIVE))
+    final emails = mailboxDashBoardController.emailsInCurrentMailbox;
+    // When grouping by ThreadId is enabled, select one representative per thread
+    final Map<String, PresentationEmail> representativeByThread = {};
+    for (final e in emails) {
+      final key = e.threadId?.id.value ?? e.id?.id.value ?? '';
+      final current = representativeByThread[key];
+      if (current == null) {
+        representativeByThread[key] = e;
+      } else {
+        final currentTs = current.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+        final newTs = e.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+        if (newTs.isAfter(currentTs)) representativeByThread[key] = e;
+      }
+    }
+    final selectedIds = representativeByThread.values
+      .map((e) => e.id)
+      .whereType<EmailId>()
+      .toSet();
+    final newEmailList = emails
+      .map((email) => email.toSelectedEmail(
+        selectMode: selectedIds.contains(email.id) ? SelectMode.ACTIVE : SelectMode.INACTIVE))
       .toList();
     mailboxDashBoardController.updateEmailList(newEmailList);
     mailboxDashBoardController.currentSelectMode.value = SelectMode.ACTIVE;
@@ -1100,59 +1127,61 @@ class ThreadController extends BaseController with EmailActionController {
     EmailActionType actionType,
     List<PresentationEmail> selectionEmail
   ) {
+    // Expand selection to full threads when grouping is enabled
+    final expandedByThread = _expandSelectionToThreads(selectionEmail);
     switch(actionType) {
       case EmailActionType.markAsRead:
         cancelSelectEmail();
-        markAsReadSelectedMultipleEmail(selectionEmail, ReadActions.markAsRead);
+        markAsReadSelectedMultipleEmail(expandedByThread, ReadActions.markAsRead);
         break;
       case EmailActionType.markAsUnread:
         cancelSelectEmail();
-        markAsReadSelectedMultipleEmail(selectionEmail, ReadActions.markAsUnread);
+        markAsReadSelectedMultipleEmail(expandedByThread, ReadActions.markAsUnread);
         break;
       case EmailActionType.markAsStarred:
         cancelSelectEmail();
-        markAsStarSelectedMultipleEmail(selectionEmail, MarkStarAction.markStar);
+        markAsStarSelectedMultipleEmail(expandedByThread, MarkStarAction.markStar);
         break;
       case EmailActionType.unMarkAsStarred:
         cancelSelectEmail();
-        markAsStarSelectedMultipleEmail(selectionEmail, MarkStarAction.unMarkStar);
+        markAsStarSelectedMultipleEmail(expandedByThread, MarkStarAction.unMarkStar);
         break;
       case EmailActionType.moveToMailbox:
         cancelSelectEmail();
         final mailboxContainCurrent = searchController.isSearchEmailRunning
-            ? selectionEmail.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+            ? expandedByThread.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
             : selectedMailbox;
         if (mailboxContainCurrent != null) {
-          moveSelectedMultipleEmailToMailbox(selectionEmail, mailboxContainCurrent);
+          moveSelectedMultipleEmailToMailbox(expandedByThread, mailboxContainCurrent);
         }
         break;
       case EmailActionType.addLabel:
         cancelSelectEmail();
         final mailboxContainCurrent = searchController.isSearchEmailRunning
-            ? selectionEmail.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+            ? expandedByThread.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
             : selectedMailbox;
         if (mailboxContainCurrent != null) {
-          _addLabelToMultipleEmails(selectionEmail);
+          _addLabelToMultipleEmails(expandedByThread);
         }
         break;
       case EmailActionType.moveToTrash:
         cancelSelectEmail();
         final mailboxContainCurrent = searchController.isSearchEmailRunning
-            ? selectionEmail.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+            ? expandedByThread.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
             : selectedMailbox;
         if (mailboxContainCurrent != null) {
-          moveSelectedMultipleEmailToTrash(selectionEmail, mailboxContainCurrent);
+          moveSelectedMultipleEmailToTrash(expandedByThread, mailboxContainCurrent);
         }
         break;
       case EmailActionType.deletePermanently:
         final mailboxContainCurrent = searchController.isSearchEmailRunning
-            ? selectionEmail.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+            ? expandedByThread.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
             : selectedMailbox;
         if (mailboxContainCurrent != null && currentContext != null) {
           deleteSelectionEmailsPermanently(
             currentContext!,
             DeleteActionType.multiple,
-            listEmails: selectionEmail,
+            listEmails: expandedByThread,
             mailboxCurrent: mailboxContainCurrent,
             onCancelSelectionEmail: () => cancelSelectEmail());
         }
@@ -1160,10 +1189,10 @@ class ThreadController extends BaseController with EmailActionController {
       case EmailActionType.moveToSpam:
         cancelSelectEmail();
         final mailboxContainCurrent = searchController.isSearchEmailRunning
-            ? selectionEmail.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+            ? expandedByThread.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
             : selectedMailbox;
         if (mailboxContainCurrent != null) {
-          moveSelectedMultipleEmailToSpam(selectionEmail, mailboxContainCurrent);
+          moveSelectedMultipleEmailToSpam(expandedByThread, mailboxContainCurrent);
         }
         break;
       case EmailActionType.unSpam:
@@ -1173,6 +1202,33 @@ class ThreadController extends BaseController with EmailActionController {
       default:
         break;
     }
+  }
+
+  List<PresentationEmail> _expandSelectionToThreads(List<PresentationEmail> selected) {
+    if (selected.isEmpty) return selected;
+    final Set<ThreadId> threadIds = selected
+      .map((e) => e.threadId)
+      .whereType<ThreadId>()
+      .toSet();
+    if (threadIds.isEmpty) return selected;
+    final all = mailboxDashBoardController.emailsInCurrentMailbox
+      .where((e) => e.threadId != null && threadIds.contains(e.threadId))
+      .toList();
+    // ensure unique by EmailId
+    final seen = <String>{};
+    final result = <PresentationEmail>[];
+    for (final e in all) {
+      final id = e.id?.id.value;
+      if (id != null && !seen.contains(id)) {
+        seen.add(id);
+        result.add(e);
+      }
+    }
+    // Keep items without threadId too
+    for (final e in selected) {
+      if (e.threadId == null) result.add(e);
+    }
+    return result;
   }
 
   void handleEmailActionType(
@@ -1189,6 +1245,8 @@ class ThreadController extends BaseController with EmailActionController {
         } else if (mailboxContain?.isTemplates == true) {
           editAsNewEmail(selectedEmail, savedEmailTemplateId: selectedEmail.id);
         } else {
+          // Mark all emails in this thread as read when opening
+          _markEntireThreadAsReadIfNeeded(selectedEmail);
           previewEmail(selectedEmail);
         }
         break;
@@ -1196,50 +1254,167 @@ class ThreadController extends BaseController with EmailActionController {
         selectEmail(selectedEmail);
         break;
       case EmailActionType.markAsRead:
-        markAsEmailRead(selectedEmail, ReadActions.markAsRead, MarkReadAction.tap);
+        _applyToEntireThread(selectedEmail, (emails) =>
+          markAsReadSelectedMultipleEmail(emails, ReadActions.markAsRead));
         break;
       case EmailActionType.markAsUnread:
-        markAsEmailRead(selectedEmail, ReadActions.markAsUnread, MarkReadAction.tap);
+        _applyToEntireThread(selectedEmail, (emails) =>
+          markAsReadSelectedMultipleEmail(emails, ReadActions.markAsUnread));
         break;
       case EmailActionType.markAsStarred:
-        markAsStarEmail(selectedEmail, MarkStarAction.markStar);
+        _applyToEntireThread(selectedEmail, (emails) =>
+          markAsStarSelectedMultipleEmail(emails, MarkStarAction.markStar));
         break;
       case EmailActionType.unMarkAsStarred:
-        markAsStarEmail(selectedEmail, MarkStarAction.unMarkStar);
+        _applyToEntireThread(selectedEmail, (emails) =>
+          markAsStarSelectedMultipleEmail(emails, MarkStarAction.unMarkStar));
         break;
       case EmailActionType.moveToMailbox:
-        moveToMailbox(selectedEmail, mailboxContain: mailboxContain);
+        _moveEntireThreadToMailbox(selectedEmail);
         break;
       case EmailActionType.addLabel:
         _addLabelToEmail(selectedEmail);
         break;
       case EmailActionType.moveToTrash:
-        moveToTrash(selectedEmail, mailboxContain: mailboxContain);
+        _applyToEntireThreadWithMailbox(selectedEmail, (emails, mailboxCurrent) =>
+          moveSelectedMultipleEmailToTrash(emails, mailboxCurrent));
         break;
       case EmailActionType.deletePermanently:
         if (currentContext != null) {
-          deleteEmailPermanently(currentContext!, selectedEmail);
+          _deleteEntireThread(currentContext!, selectedEmail, permanently: true);
         }
         break;
       case EmailActionType.moveToSpam:
-        moveToSpam(selectedEmail, mailboxContain: mailboxContain);
+        _applyToEntireThreadWithMailbox(selectedEmail, (emails, mailboxCurrent) =>
+          moveSelectedMultipleEmailToSpam(emails, mailboxCurrent));
         break;
       case EmailActionType.unSpam:
-        unSpam(selectedEmail);
+        _applyToEntireThread(selectedEmail, (emails) =>
+          unSpamSelectedMultipleEmail(emails));
         break;
       case EmailActionType.openInNewTab:
         openEmailInNewTabAction(selectedEmail);
         break;
       case EmailActionType.archiveMessage:
-        if (currentContext != null) {
-          archiveMessage(currentContext!, selectedEmail);
-        }
+        _applyToEntireThread(selectedEmail, (emails) {
+          if (currentContext != null) {
+            // Archive only first to keep behavior consistent if archive is per-email; optionally loop.
+            archiveMessage(currentContext!, emails.first);
+          }
+        });
         break;
       case EmailActionType.editAsNewEmail:
         editAsNewEmail(selectedEmail);
         break;
       default:
         break;
+    }
+  }
+
+  void _deleteEntireThread(BuildContext context, PresentationEmail anyEmailInThread, {required bool permanently}) {
+    final threadId = anyEmailInThread.threadId;
+    if (threadId == null) {
+      // Fallback to single email if thread not available
+      if (permanently) {
+        deleteEmailPermanently(context, anyEmailInThread);
+      } else {
+        moveToTrash(anyEmailInThread, mailboxContain: anyEmailInThread.mailboxContain);
+      }
+      return;
+    }
+
+    // Collect all emails in current list with same threadId; if some are missing, we still delete what we have
+    final emailsInThread = mailboxDashBoardController.emailsInCurrentMailbox
+      .where((e) => e.threadId == threadId)
+      .toList();
+    if (emailsInThread.isEmpty) {
+      // Fallback
+      if (permanently) {
+        deleteEmailPermanently(context, anyEmailInThread);
+      } else {
+        moveToTrash(anyEmailInThread, mailboxContain: anyEmailInThread.mailboxContain);
+      }
+      return;
+    }
+
+    if (permanently) {
+      deleteSelectionEmailsPermanently(
+        context,
+        DeleteActionType.multiple,
+        listEmails: emailsInThread,
+        mailboxCurrent: anyEmailInThread.mailboxContain,
+        onCancelSelectionEmail: () {},
+      );
+    } else {
+      final mailboxContainCurrent = searchController.isSearchEmailRunning
+          ? emailsInThread.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+          : selectedMailbox;
+      if (mailboxContainCurrent != null) {
+        moveSelectedMultipleEmailToTrash(emailsInThread, mailboxContainCurrent);
+      }
+    }
+  }
+
+  void _markEntireThreadAsReadIfNeeded(PresentationEmail anyEmailInThread) {
+    final threadId = anyEmailInThread.threadId;
+    if (threadId == null) return;
+    final unreadInThread = mailboxDashBoardController.emailsInCurrentMailbox
+      .where((e) => e.threadId == threadId && !e.hasRead)
+      .toList();
+    if (unreadInThread.isEmpty) return;
+    markAsReadSelectedMultipleEmail(unreadInThread, ReadActions.markAsRead);
+  }
+
+  List<PresentationEmail> _collectThreadEmails(PresentationEmail anyEmailInThread) {
+    final threadId = anyEmailInThread.threadId;
+    if (threadId == null) return [anyEmailInThread];
+    final emailsInThread = mailboxDashBoardController.emailsInCurrentMailbox
+      .where((e) => e.threadId == threadId)
+      .toList();
+    if (emailsInThread.isEmpty) return [anyEmailInThread];
+    return emailsInThread;
+  }
+
+  void _applyToEntireThread(PresentationEmail anyEmailInThread, void Function(List<PresentationEmail>) action) {
+    final emails = _collectThreadEmails(anyEmailInThread);
+    action(emails);
+  }
+
+  void _applyToEntireThreadWithMailbox(
+    PresentationEmail anyEmailInThread,
+    void Function(List<PresentationEmail> emails, PresentationMailbox mailboxCurrent) action,
+  ) {
+    final emails = _collectThreadEmails(anyEmailInThread);
+    final mailboxContainCurrent = searchController.isSearchEmailRunning
+      ? emails.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+      : selectedMailbox;
+    if (mailboxContainCurrent != null) {
+      action(emails, mailboxContainCurrent);
+    }
+  }
+
+  Future<void> _moveEntireThreadToMailbox(PresentationEmail anyEmailInThread) async {
+    final emails = _collectThreadEmails(anyEmailInThread);
+    final mailboxContainCurrent = searchController.isSearchEmailRunning
+      ? emails.getCurrentMailboxContain(mailboxDashBoardController.mapMailboxById)
+      : selectedMailbox;
+    final accountId = mailboxDashBoardController.accountId.value;
+    final session = mailboxDashBoardController.sessionCurrent;
+    if (mailboxContainCurrent == null || accountId == null) return;
+
+    final arguments = DestinationPickerArguments(
+      accountId,
+      MailboxActions.moveEmail,
+      session,
+      mailboxIdSelected: mailboxContainCurrent.mailboxId,
+    );
+
+    final destinationMailbox = PlatformInfo.isWeb
+      ? await DialogRouter.pushGeneralDialog(routeName: AppRoutes.destinationPicker, arguments: arguments)
+      : await push(AppRoutes.destinationPicker, arguments: arguments);
+
+    if (destinationMailbox is PresentationMailbox) {
+      moveSelectedMultipleEmailToMailbox(emails, mailboxContainCurrent);
     }
   }
 

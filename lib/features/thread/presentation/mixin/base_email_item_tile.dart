@@ -330,9 +330,17 @@ mixin BaseEmailItemTile {
     }
 
     final cleanedTitle = cleanSubject(email.getEmailTitle());
+    // Debug suffix to differentiate threads with same title
+    String debugSuffix = '';
+    try {
+      final tid = email.threadId?.id.value;
+      if (tid != null && tid.length >= 6) {
+        debugSuffix = '  [${tid.substring(0,6)}]';
+      }
+    } catch (_) {}
     if (isSearchEnabled(isSearchEmailRunning, query)) {
       return RichTextBuilder(
-        textOrigin: cleanedTitle,
+        textOrigin: '$cleanedTitle$debugSuffix',
         wordToStyle: query?.value ?? '',
         preMarkedText: email.sanitizedSearchSnippetSubject,
         ensureHighlightVisible: true,
@@ -348,7 +356,7 @@ mixin BaseEmailItemTile {
       );
     } else {
       return TextOverflowBuilder(
-        cleanedTitle,
+        '$cleanedTitle$debugSuffix',
         style: Theme.of(context).textTheme.bodySmall?.copyWith(
           color: buildTextColorForReadEmail(email),
           fontWeight: buildFontForReadEmail(email),

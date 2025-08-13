@@ -249,7 +249,9 @@ class ThreadView extends GetWidget<ThreadController>
                               visible: controller.openingEmail.isFalse,
                               child: _buildResultListEmail(
                                 context,
-                                controller.mailboxDashBoardController.emailsInCurrentMailbox,
+                                _groupEmailsByThread(
+                                  controller.mailboxDashBoardController.emailsInCurrentMailbox,
+                                ),
                               )
                             );
                           })
@@ -287,7 +289,28 @@ class ThreadView extends GetWidget<ThreadController>
     );
   }
 
-  // Grouping disabled per request: show every email item individually.
+  List<PresentationEmail> _groupEmailsByThread(List<PresentationEmail> emails) {
+    // Group strictly by ThreadId; fallback to EmailId when thread is absent.
+    final Map<String, List<PresentationEmail>> byThread = {};
+    for (final e in emails) {
+      final key = e.threadId?.id.value ?? e.id?.id.value ?? UniqueKey().toString();
+      final list = byThread.putIfAbsent(key, () => <PresentationEmail>[]);
+      list.add(e);
+    }
+
+    // Pick the latest email as representative for each thread
+    final List<PresentationEmail> representatives = [];
+    byThread.forEach((_, list) {
+      list.sort((a, b) => (b.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0))
+          .compareTo(a.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0)));
+      representatives.add(list.first);
+    });
+
+    // Preserve overall ordering by latest received date
+    representatives.sort((a, b) => (b.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0))
+        .compareTo(a.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0)));
+    return representatives;
+  }
 
   bool _supportVerticalDivider(BuildContext context) {
     if (PlatformInfo.isWeb) {

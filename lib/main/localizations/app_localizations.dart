@@ -1248,7 +1248,7 @@ class AppLocalizations {
   }
 
   String get add_or_switch_account {
-    return Intl.message('Add Account/Switch Account',
+return Intl.message('Switch Account',
         name: 'add_or_switch_account');
   }
 

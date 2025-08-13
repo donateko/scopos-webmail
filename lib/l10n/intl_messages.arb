@@ -1226,7 +1226,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "add_or_switch_account": "Add Account/Switch Account",
+  "add_or_switch_account": "Switch Account",
   "@add_or_switch_account": {
     "type": "text",
     "placeholders_order": [],

@@ -39,6 +39,7 @@ class AutocompleteContactTextFieldWithTags extends StatefulWidget {
   final OnExceptionAddListContactCallbackAction? onExceptionCallback;
   final String internalDomain;
   final int minInputLengthAutocomplete;
+  final String? labelText;
 
   const AutocompleteContactTextFieldWithTags({
     Key? key,
@@ -50,6 +51,7 @@ class AutocompleteContactTextFieldWithTags extends StatefulWidget {
     this.onSuggestionCallback,
     this.onAddContactCallback,
     this.onExceptionCallback,
+    this.labelText,
   }) : super(key: key);
 
   @override
@@ -131,7 +133,11 @@ class _AutocompleteContactTextFieldWithTagsState extends State<AutocompleteConta
         fontWeight: FontWeight.w500),
       inputDecoration: InputDecoration(
         border: InputBorder.none,
-        hintText: AppLocalizations.of(context).hintInputAutocompleteContact,
+        labelText: widget.labelText,
+        floatingLabelBehavior: FloatingLabelBehavior.auto,
+        hintText: widget.labelText == null
+          ? AppLocalizations.of(context).hintInputAutocompleteContact
+          : null,
         hintStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
           fontWeight: FontWeight.w500,
           color: AppColor.colorSettingExplanation,
