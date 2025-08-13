@@ -77,21 +77,7 @@ class EmailTileBuilder extends StatelessWidget with BaseEmailItemTile {
                     width: 9,
                     height: 9,
                     fit: BoxFit.fill)),
-          // Show count only when > 1 (no badge for single message)
-          ...((){
-            final c = computeThreadCount(presentationEmail);
-            if (c > 1) {
-              return [
-                buildThreadCountBadge(
-                  context,
-                  c,
-                  forceVisible: false,
-                ),
-                const SizedBox(width: 4),
-              ];
-            }
-            return <Widget>[];
-          })(),
+          // Removed count badge in title as requested
           Expanded(
               child: buildInformationSender(
                   context,
@@ -124,21 +110,7 @@ class EmailTileBuilder extends StatelessWidget with BaseEmailItemTile {
                       buildCalendarEventIcon(context: context, presentationEmail: presentationEmail),
                     if (presentationEmail.isMarkAsImportant && isSenderImportantFlagEnabled)
                       buildMarkAsImportantIcon(context),
-                    // Count first when there are replies (>1)
-                    ...((){
-                      final c = computeThreadCount(presentationEmail);
-                      if (c > 1) {
-                        return [
-                          buildThreadCountBadge(
-                            context,
-                            c,
-                            forceVisible: false,
-                          ),
-                          const SizedBox(width: 4),
-                        ];
-                      }
-                      return <Widget>[];
-                    })(),
+                    // Removed count badge in subtitle/title row as requested
                     // Title expands
                     Expanded(
                       child: buildEmailTitle(

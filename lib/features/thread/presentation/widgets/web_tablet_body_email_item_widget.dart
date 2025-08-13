@@ -137,16 +137,7 @@ class _WebTabletBodyEmailItemWidgetState
                                 child: Row(children: [
                                   Expanded(
                                     child: Row(children: [
-                                      ...((){
-                                        final c = computeThreadCount(widget.presentationEmail);
-                                        if (c > 1) {
-                                          return [
-                                            buildThreadCountBadge(context, c),
-                                            const SizedBox(width: 6),
-                                          ];
-                                        }
-                                        return <Widget>[];
-                                      })(),
+                                      // Removed count badge in title row as requested
                                       // Title next, flexible
                                       Expanded(
                                         child: buildEmailTitle(

@@ -34,7 +34,6 @@ import 'package:tmail_ui_user/features/thread/domain/state/search_email_state.da
 import 'package:tmail_ui_user/features/thread/presentation/extensions/handle_open_context_menu_filter_email_action_extension.dart';
 import 'package:tmail_ui_user/features/thread/presentation/extensions/handle_pull_to_refresh_list_email_extension.dart';
 import 'package:tmail_ui_user/features/thread/presentation/extensions/handle_select_message_filter_extension.dart';
-import 'package:tmail_ui_user/features/thread/presentation/model/delete_action_type.dart';
 import 'package:tmail_ui_user/features/thread/presentation/model/loading_more_status.dart';
 import 'package:tmail_ui_user/features/thread/presentation/styles/item_email_tile_styles.dart';
 import 'package:tmail_ui_user/features/thread/presentation/styles/scroll_to_top_button_widget_styles.dart';
@@ -248,12 +247,10 @@ class ThreadView extends GetWidget<ThreadController>
                           child: Obx(() {
                             return Visibility(
                               visible: controller.openingEmail.isFalse,
-                          child: _buildResultListEmail(
-                            context,
-                            _groupEmailsByThread(
-                              controller.mailboxDashBoardController.emailsInCurrentMailbox,
-                            ),
-                          )
+                              child: _buildResultListEmail(
+                                context,
+                                controller.mailboxDashBoardController.emailsInCurrentMailbox,
+                              )
                             );
                           })
                         )
@@ -290,27 +287,7 @@ class ThreadView extends GetWidget<ThreadController>
     );
   }
 
-  List<PresentationEmail> _groupEmailsByThread(List<PresentationEmail> emails) {
-    // Group by threadId; for threads, keep the latest email as the representative item
-    final Map<String, List<PresentationEmail>> byThread = {};
-    for (final e in emails) {
-      final key = e.threadId?.id.value ?? e.id?.id.value ?? UniqueKey().toString();
-      final list = byThread.putIfAbsent(key, () => <PresentationEmail>[]);
-      list.add(e);
-    }
-
-    final List<PresentationEmail> representatives = [];
-    byThread.forEach((_, list) {
-      list.sort((a, b) => (b.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0))
-          .compareTo(a.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0)));
-      representatives.add(list.first);
-    });
-
-    // Preserve original ordering by received date desc similar to current listing
-    representatives.sort((a, b) => (b.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0))
-        .compareTo(a.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0)));
-    return representatives;
-  }
+  // Grouping disabled per request: show every email item individually.
 
   bool _supportVerticalDivider(BuildContext context) {
     if (PlatformInfo.isWeb) {

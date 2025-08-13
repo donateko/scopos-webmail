@@ -130,16 +130,7 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ...((){
-                          final c = computeThreadCount(widget.presentationEmail);
-                          if (c > 1) {
-                            return [
-                              buildThreadCountBadge(context, c),
-                              const SizedBox(width: 4),
-                            ];
-                          }
-                          return <Widget>[];
-                        })(),
+                        // Removed count badge in title row as requested
                         if (widget.presentationEmail.hasCalendarEvent)
                           buildCalendarEventIcon(
                             context: context,
@@ -399,16 +390,7 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
         const SizedBox(width: 8),
         Expanded(
           child: Row(children: [
-            ...((){
-              final c = computeThreadCount(widget.presentationEmail);
-              if (c > 1) {
-                return [
-                  buildThreadCountBadge(context, c),
-                  const SizedBox(width: 6),
-                ];
-              }
-              return <Widget>[];
-            })(),
+            // Removed count badge in subject/content row as requested
             Expanded(
               child: buildEmailTitle(
                 context,

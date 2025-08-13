@@ -19,6 +19,7 @@ import 'package:model/mailbox/presentation_mailbox.dart';
 import 'package:tmail_ui_user/features/mailbox/presentation/extensions/presentation_mailbox_extension.dart';
 import 'package:tmail_ui_user/features/thread/domain/model/search_query.dart';
 import 'package:tmail_ui_user/features/thread/presentation/styles/item_email_tile_styles.dart';
+import 'package:tmail_ui_user/features/thread/presentation/services/thread_count_provider.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
 
@@ -32,10 +33,64 @@ mixin BaseEmailItemTile {
   final mailboxDashBoardController = Get.find<MailboxDashBoardController>();
 
   int computeThreadCount(PresentationEmail email) {
-    final list = mailboxDashBoardController.emailsInCurrentMailbox;
     final threadKey = email.threadId?.id.value;
-    if (threadKey == null || list.isEmpty) return 1;
-    return list.where((e) => e.threadId?.id.value == threadKey).length;
+    if (threadKey == null) return 1;
+
+    // Build source from both current mailbox list and search results to avoid
+    // undercounting when part of the thread lives in Sent or other folders.
+    final combined = <PresentationEmail>{}
+      ..addAll(mailboxDashBoardController.emailsInCurrentMailbox)
+      ..addAll(mailboxDashBoardController.listResultSearch);
+
+    // If we have a selected email and it belongs to the same thread, ensure it
+    // is counted even if not present in the combined lists.
+    final selected = mailboxDashBoardController.selectedEmail.value;
+    if (selected != null && selected.threadId?.id.value == threadKey) {
+      combined.add(selected);
+    }
+
+    // Count unique EmailIds by threadId across combined sources.
+    final ids = <String>{};
+    for (final e in combined) {
+      if (e.threadId?.id.value == threadKey && e.id != null) {
+        ids.add(e.id!.id.value);
+      }
+    }
+    final localCount = ids.isEmpty ? 1 : ids.length;
+    return localCount;
+  }
+
+  /// Reactive, cross-mailbox badge that updates when authoritative count arrives.
+  Widget buildThreadCountBadgeReactive(BuildContext context, PresentationEmail email) {
+    try {
+      if (email.threadId != null) {
+        final provider = Get.put(ThreadCountProvider(), permanent: true);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          provider.ensure(email.threadId!);
+        });
+      }
+    } catch (_) {}
+
+    return Obx(() {
+      int count = computeThreadCount(email);
+      try {
+        if (email.threadId != null) {
+          final provider = Get.find<ThreadCountProvider>();
+          final authoritative = provider.counts[email.threadId!];
+          if (authoritative != null && authoritative >= count) {
+            count = authoritative;
+          }
+        }
+      } catch (_) {}
+
+      if (count > 1) {
+        return Row(mainAxisSize: MainAxisSize.min, children: [
+          buildThreadCountBadge(context, count),
+          const SizedBox(width: 4),
+        ]);
+      }
+      return const SizedBox.shrink();
+    });
   }
 
   Widget buildThreadCountBadge(BuildContext context, int count, {bool forceVisible = false}) {
@@ -270,12 +325,8 @@ mixin BaseEmailItemTile {
     SearchQuery? query
   ) {
     String cleanSubject(String subject) {
-      if (subject.isEmpty) return subject;
-      // Remove leading reply/forward prefixes like RE:, Re[3]:, Fwd:
-      final prefixRegex = RegExp(r'^(?:(re(?:\[\d+\])?|fw|fwd):\s*)+', caseSensitive: false);
-      final result = subject.replaceFirst(prefixRegex, '');
-      // Keep any thread information markers as requested
-      return result.trim();
+      // Restore original behavior: do not strip RE / RE[X] / Fwd prefixes
+      return subject;
     }
 
     final cleanedTitle = cleanSubject(email.getEmailTitle());
