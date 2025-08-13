@@ -26,7 +26,7 @@ class ApplicationLogoWidthTextWidget extends StatelessWidget {
       icon: PlatformInfo.isWeb && AppConfig.isSaasPlatForm
         ? _imagePaths.icLogoWithTextBeta
         : _imagePaths.icLogoWithText,
-      iconSize: iconSize ?? 33,
+  iconSize: iconSize ?? 48,
       padding: EdgeInsets.zero,
       margin: margin,
       backgroundColor: Colors.transparent,

@@ -36,7 +36,7 @@ class MailboxAppBar extends StatelessWidget {
       height: 50,
       child: Row(
         children: [
-          ApplicationLogoWidthTextWidget(iconSize: 22),
+          ApplicationLogoWidthTextWidget(iconSize: 38),
           const Spacer(),
           if (openContactSupportAction != null)
             ContactSupportIcon(
