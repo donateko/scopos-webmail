@@ -489,40 +489,53 @@ class MailboxController extends BaseMailboxController
     required MailboxId destinationMailboxId,
     required Map<EmailId, bool> emailIdsWithReadStatus,
   }) {
-    // Update changes in original mailboxes
-    for (var originalMailboxIdWithEmailIds in originalMailboxIdsWithEmailIds.entries) {
-      final originalMailboxId = originalMailboxIdWithEmailIds.key;
-      final emailsMovedCount = originalMailboxIdWithEmailIds.value.length;
-      final unreadEmailMovedCount = originalMailboxIdWithEmailIds.value
-          .where((emailId) => emailIdsWithReadStatus[emailId] == false)
-          .length;
-      updateMailboxTotalEmailsCountById(
-        originalMailboxId,
-        -emailsMovedCount,
-      );
-      updateUnreadCountOfMailboxById(
-        originalMailboxId,
-        unreadChanges: -unreadEmailMovedCount,
-      );
+    // Build a quick lookup from EmailId to PresentationEmail for the current mailbox
+    final Map<EmailId, PresentationEmail> emailById = {
+      for (final e in mailboxDashBoardController.emailsInCurrentMailbox)
+        if (e.id != null) e.id!: e
+    };
+
+    // Helper to count distinct threads for a set of emailIds
+    int _countDistinctThreads(Iterable<EmailId> ids) {
+      final Set<String> keys = <String>{};
+      for (final id in ids) {
+        final email = emailById[id];
+        if (email == null) continue;
+        final key = email.threadId?.id.value ?? email.id?.id.value;
+        if (key != null) keys.add(key);
+      }
+      return keys.length;
     }
 
-    // Update changes in destination mailbox
-    updateMailboxTotalEmailsCountById(
-      destinationMailboxId,
-      originalMailboxIdsWithEmailIds.entries.fold(
-        0,
-        (sum, entry) => sum + entry.value.length,
-      ),
-    );
-    updateUnreadCountOfMailboxById(
-      destinationMailboxId,
-      unreadChanges: originalMailboxIdsWithEmailIds
-        .values
-        .fold(
-          0,
-          (sum, emails) => sum + emails.where((emailId) => emailIdsWithReadStatus[emailId] == false).length
-        ),
-    );
+    int _countDistinctUnreadThreads(Iterable<EmailId> ids) {
+      final Set<String> keys = <String>{};
+      for (final id in ids) {
+        final email = emailById[id];
+        if (email == null) continue;
+        if (email.hasRead) continue;
+        final key = email.threadId?.id.value ?? email.id?.id.value;
+        if (key != null) keys.add(key);
+      }
+      return keys.length;
+    }
+
+    // Update changes in original mailboxes (thread-based deltas)
+    for (var originalMailboxIdWithEmailIds in originalMailboxIdsWithEmailIds.entries) {
+      final originalMailboxId = originalMailboxIdWithEmailIds.key;
+      final ids = originalMailboxIdWithEmailIds.value;
+      final movedThreads = _countDistinctThreads(ids);
+      final movedUnreadThreads = _countDistinctUnreadThreads(ids);
+
+      updateMailboxTotalEmailsCountById(originalMailboxId, -movedThreads);
+      updateUnreadCountOfMailboxById(originalMailboxId, unreadChanges: -movedUnreadThreads);
+    }
+
+    // Update destination mailbox (thread-based deltas using moved set)
+    final allMovedIds = originalMailboxIdsWithEmailIds.values.expand((e) => e);
+    final destThreads = _countDistinctThreads(allMovedIds);
+    final destUnreadThreads = _countDistinctUnreadThreads(allMovedIds);
+    updateMailboxTotalEmailsCountById(destinationMailboxId, destThreads);
+    updateUnreadCountOfMailboxById(destinationMailboxId, unreadChanges: destUnreadThreads);
   }
 
   void _initWebSocketQueueHandler() {
