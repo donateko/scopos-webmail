@@ -422,10 +422,11 @@ mixin BaseEmailItemTile {
                 fontWeight: FontWeight.w500,
                 color: AppColor.steelGray400,
               );
+          final hideCountInSent = mailbox?.isSent == true;
           return Text.rich(
             TextSpan(children: [
               TextSpan(text: nameText, style: baseStyle),
-              if (count > 1) TextSpan(text: ' $count', style: countStyle),
+              if (count > 1 && !hideCountInSent) TextSpan(text: ' $count', style: countStyle),
             ]),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
