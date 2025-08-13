@@ -109,6 +109,8 @@
     "placeholders": {}
   },
   "to_email_address_prefix": "Кому",
+  "me_label": "я",
+  "@me_label": {"type": "text", "placeholders_order": [], "placeholders": {}},
   "@to_email_address_prefix": {
     "type": "text",
     "placeholders_order": [],

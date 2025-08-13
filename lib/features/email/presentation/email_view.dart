@@ -36,6 +36,10 @@ import 'package:tmail_ui_user/features/manage_account/presentation/extensions/va
 import 'package:tmail_ui_user/features/manage_account/presentation/vacation/widgets/vacation_notification_message_widget.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 import 'package:tmail_ui_user/main/utils/app_utils.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_controller.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_bindings.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/widgets/thread_detail_collapsed_email.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/extension/toggle_thread_detail_collape_expand.dart';
 
 class EmailView extends GetWidget<SingleEmailController> {
 
@@ -147,6 +151,30 @@ class EmailView extends GetWidget<SingleEmailController> {
                   );
                 }),
               ),
+              // Embedded conversation accordion (older messages collapsed)
+              if (!isInsideThreadDetailView)
+                Obx(() {
+                  final threadId = controller.mailboxDashBoardController.selectedEmail.value?.threadId;
+                  final selectedId = controller.mailboxDashBoardController.selectedEmail.value?.id;
+                  if (threadId != null && selectedId != null) {
+                    // Lazy-load embedded thread once
+                    ThreadDetailController threadCtrl;
+                    if (Get.isRegistered<ThreadDetailController>()) {
+                      threadCtrl = Get.find<ThreadDetailController>();
+                    } else {
+                      ThreadDetailBindings().dependencies();
+                      threadCtrl = Get.find<ThreadDetailController>();
+                    }
+                    if (threadCtrl.emailIdsPresentation.isEmpty) {
+                      threadCtrl.loadThreadForEmbed(threadId: threadId, selectedEmailId: selectedId);
+                    }
+                  }
+                  return _buildEmbeddedConversation(
+                    context,
+                    currentEmail,
+                    scrollController: scrollController,
+                  );
+                }),
               Obx(() {
                 final emailLoaded = controller.currentEmailLoaded.value;
 
@@ -219,6 +247,83 @@ class EmailView extends GetWidget<SingleEmailController> {
 
   PresentationMailbox? _getMailboxContain(PresentationEmail currentEmail) {
     return currentEmail.findMailboxContain(controller.mailboxDashBoardController.mapMailboxById);
+  }
+
+  // Build a single-expand accordion of older messages under the main email view
+  Widget _buildEmbeddedConversation(
+    BuildContext context,
+    PresentationEmail currentEmail, {
+    ScrollController? scrollController,
+  }) {
+    // Ensure thread detail controller is available
+    if (!Get.isRegistered<ThreadDetailController>()) {
+      ThreadDetailBindings().dependencies();
+    }
+    final threadCtrl = Get.find<ThreadDetailController>();
+
+    // Only render when thread detail is enabled and we have multiple emails in thread
+    final threadMap = threadCtrl.emailIdsPresentation;
+    if (threadMap.isEmpty || threadMap.length == 1) {
+      return const SizedBox.shrink();
+    }
+
+    // Build items: latest (current) is already shown; show others as collapsed rows
+    final items = threadMap.entries
+        .where((e) => e.key != currentEmail.id)
+        .map((entry) => entry.value)
+        .whereType<PresentationEmail>()
+        .toList();
+
+    if (items.isEmpty) return const SizedBox.shrink();
+
+    return Column(
+      children: items.map((email) {
+        final isExpanded = email.emailInThreadStatus?.name == 'expanded';
+        if (!isExpanded) {
+          return ThreadDetailCollapsedEmail(
+            presentationEmail: email,
+            showSubject: false,
+            imagePaths: controller.imagePaths,
+            responsiveUtils: controller.responsiveUtils,
+            mailboxContain: email.findMailboxContain(
+              controller.mailboxDashBoardController.mapMailboxById,
+            ),
+            emailLoaded: null,
+            onEmailActionClick: (e, action) => controller.handleEmailAction(context, e, action),
+            onMoreActionClick: (e, position) => controller.emailActionReactor.handleMoreEmailAction(
+              mailboxContain: controller.getMailboxContain(e),
+              presentationEmail: e,
+              position: position,
+              responsiveUtils: controller.responsiveUtils,
+              imagePaths: controller.imagePaths,
+              username: controller.session?.username,
+              handleEmailAction: (em, a) => controller.handleEmailAction(context, em, a),
+              additionalActions: const [],
+              emailIsRead: e.hasRead,
+              openBottomSheetContextMenu: controller.mailboxDashBoardController.openBottomSheetContextMenu,
+              openPopupMenu: controller.mailboxDashBoardController.openPopupMenu,
+            ),
+            openEmailAddressDetailAction: (_, addr) => controller.openEmailAddressDialog(addr),
+            onToggleThreadDetailCollapseExpand: () {
+              threadCtrl.toggleThreadDetailCollapeExpand(email);
+            },
+          );
+        }
+        // Expanded older message uses the same EmailView widget
+        return Padding(
+          padding: const EdgeInsetsDirectional.only(bottom: 16),
+          child: EmailView(
+            key: GlobalObjectKey(email.id?.id.value ?? ''),
+            isInsideThreadDetailView: true,
+            emailId: email.id,
+            onToggleThreadDetailCollapseExpand: () {
+              threadCtrl.toggleThreadDetailCollapeExpand(email);
+            },
+            scrollController: scrollController,
+          ),
+        );
+      }).toList(),
+    );
   }
 
   Widget _buildEmailMessage({

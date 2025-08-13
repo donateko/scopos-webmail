@@ -194,6 +194,12 @@
     "placeholders_order": [],
     "placeholders": {}
   },
+  "me_label": "me",
+  "@me_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "unread_email_notification": "new",
   "@unread_email_notification": {
     "type": "text",

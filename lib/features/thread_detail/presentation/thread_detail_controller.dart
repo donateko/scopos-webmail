@@ -56,6 +56,8 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/extension/hand
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/mark_collapsed_email_star_success.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/mark_collapsed_email_unread_success.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/quick_create_rule_from_collapsed_email_success.dart';
+import 'package:tmail_ui_user/features/email/presentation/utils/email_utils.dart';
+import 'package:model/email/email_in_thread_status.dart';
 
 class ThreadDetailController extends BaseController {
   final GetThreadByIdInteractor _getEmailIdsByThreadIdInteractor;
@@ -195,6 +197,67 @@ class ThreadDetailController extends BaseController {
         );
       }
     });
+  }
+
+  // Load the thread model for embedding in the single email view (outside ThreadDetailed route)
+  Future<void> loadThreadForEmbed({required ThreadId threadId, required EmailId selectedEmailId}) async {
+    if (session == null || accountId == null || sentMailboxId == null || ownEmailAddress == null) return;
+
+    try {
+      // Step 1: fetch email ids for the thread
+      final eitherIds = await _getEmailIdsByThreadIdInteractor.execute(
+        threadId,
+        session!,
+        accountId!,
+        sentMailboxId!,
+        ownEmailAddress!,
+        selectedEmailId: selectedEmailId,
+      ).first;
+
+      await eitherIds.fold((_) async {}, (success) async {
+        if (success is GetThreadByIdSuccess && success.emailIds.isNotEmpty) {
+          // Initialize map with ids (selected email has data already in dashboard controller)
+          final selected = mailboxDashBoardController.selectedEmail.value;
+          emailIdsPresentation.clear();
+          for (final id in success.emailIds) {
+            if (id == selectedEmailId && selected != null) {
+              emailIdsPresentation[id] = selected;
+            } else {
+              emailIdsPresentation[id] = null;
+            }
+          }
+
+          // Step 2: load metadata for the rest
+          final idsToLoad = success.emailIds.where((id) => id != selectedEmailId).toList();
+          if (idsToLoad.isEmpty) return;
+
+          final eitherEmails = await getEmailsByIdsInteractor.execute(
+            session!,
+            accountId!,
+            idsToLoad,
+            properties: EmailUtils.getPropertiesForEmailGetMethod(session!, accountId!).union(additionalProperties),
+            updateCurrentThreadDetail: false,
+          ).first;
+
+          eitherEmails.fold((_) {}, (s) {
+            if (s is GetEmailsByIdsSuccess) {
+              for (final p in s.presentationEmails) {
+                if (p.id == null) continue;
+                final shouldCollapse = p.id != selectedEmailId;
+                emailIdsPresentation[p.id!] = p.copyWith(
+                  emailInThreadStatus: shouldCollapse
+                    ? EmailInThreadStatus.collapsed
+                    : EmailInThreadStatus.expanded,
+                );
+              }
+              currentExpandedEmailId.value = selectedEmailId;
+            }
+          });
+        }
+      });
+    } catch (_) {
+      // Silently ignore in embed mode
+    }
   }
 
   bool _validateLoadThread(ThreadId? threadId) {

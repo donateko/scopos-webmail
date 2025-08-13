@@ -461,6 +461,8 @@
     "placeholders": {}
   },
   "unread": "Non lu",
+  "me_label": "moi",
+  "@me_label": {"type": "text", "placeholders_order": [], "placeholders": {}},
   "@unread": {
     "type": "text",
     "placeholders_order": [],

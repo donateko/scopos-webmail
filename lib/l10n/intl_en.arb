@@ -508,6 +508,12 @@
     "placeholders": {}
   },
   "unread": "Unread",
+  "me_label": "me",
+  "@me_label": {
+    "type": "text",
+    "placeholders_order": [],
+    "placeholders": {}
+  },
   "@unread": {
     "type": "text",
     "placeholders_order": [],

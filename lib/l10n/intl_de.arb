@@ -514,6 +514,8 @@
     "placeholders": {}
   },
   "unread": "Ungelesen",
+  "me_label": "ich",
+  "@me_label": {"type": "text", "placeholders_order": [], "placeholders": {}},
   "@unread": {
     "type": "text",
     "placeholders_order": [],

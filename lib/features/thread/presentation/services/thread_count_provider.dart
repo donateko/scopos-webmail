@@ -9,6 +9,7 @@ class ThreadCountProvider extends GetxService {
   final counts = <ThreadId, int>{}.obs;
   final _pending = <ThreadId>{};
   final _fetchedAt = <ThreadId, DateTime>{};
+  final startedByMe = <ThreadId, bool>{}.obs;
 
   /// Ensure we have a recent count for [threadId]. Uses a small TTL to refresh
   /// after operations like delete/move.
@@ -21,7 +22,9 @@ class ThreadCountProvider extends GetxService {
 
     final dash = Get.find<MailboxDashBoardController>();
     final accountId = dash.accountId.value;
-    if (accountId == null) return;
+    final session = dash.sessionCurrent;
+    final own = dash.ownEmailAddress.value.toLowerCase();
+    if (accountId == null || session == null) return;
 
     final api = Get.find<ThreadDetailApi>();
     _pending.add(threadId);
@@ -31,6 +34,23 @@ class ThreadCountProvider extends GetxService {
       final unique = emailIds.map((e) => e.id.value).toSet();
       counts[threadId] = unique.length;
       _fetchedAt[threadId] = DateTime.now();
+
+      // Compute initiator (who sent the earliest message)
+      if (!startedByMe.containsKey(threadId) && emailIds.isNotEmpty) {
+        // Fetch minimal set: first and last ids to determine earliest
+        final candidates = <EmailId>{emailIds.first, emailIds.last}.toList();
+        api.getEmailsByIds(session, accountId, candidates).then((emails) {
+          if (emails.isEmpty) return;
+          emails.sort((a, b) {
+            final aTime = a.receivedAt?.value ?? a.sentAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+            final bTime = b.receivedAt?.value ?? b.sentAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+            return aTime.compareTo(bTime);
+          });
+          final earliest = emails.first;
+          final fromMine = earliest.from?.any((addr) => (addr.email ?? '').toLowerCase() == own) == true;
+          startedByMe[threadId] = fromMine;
+        }).catchError((_) {});
+      }
     }).catchError((_) {
       // Leave existing count as-is on error
     }).whenComplete(() {
@@ -41,6 +61,7 @@ class ThreadCountProvider extends GetxService {
   void invalidate(ThreadId threadId) {
     counts.remove(threadId);
     _fetchedAt.remove(threadId);
+    startedByMe.remove(threadId);
   }
 }
 

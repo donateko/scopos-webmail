@@ -27,12 +27,14 @@ extension HandleGetEmailsByIdsSuccess on ThreadDetailController {
         continue;
       }
 
-      if (presentationEmail.id == selectedEmailId) {
+      // Single-expand: expand only the latest (selected) and collapse others
+      final shouldExpand = presentationEmail.id == selectedEmailId;
+      if (shouldExpand) {
         EmailBindings(currentEmailId: presentationEmail.id).dependencies();
         currentExpandedEmailId.value = presentationEmail.id;
       }
       emailIdsPresentation[presentationEmail.id!] = presentationEmail.copyWith(
-        emailInThreadStatus: presentationEmail.id == selectedEmailId
+        emailInThreadStatus: shouldExpand
           ? EmailInThreadStatus.expanded
           : EmailInThreadStatus.collapsed,
       );

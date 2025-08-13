@@ -3349,6 +3349,13 @@ return Intl.message('Switch Account',
       name: 'maybe');
   }
 
+  String get me_label {
+    return Intl.message(
+      'me',
+      name: 'me_label'
+    );
+  }
+
   String get enterASubject {
     return Intl.message(
       'Enter a subject',

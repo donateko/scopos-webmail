@@ -25,11 +25,16 @@ extension ToggleThreadDetailCollapeExpand on ThreadDetailController {
     }
 
     EmailBindings(currentEmailId: presentationEmail.id).dependencies();
-    // Allow multiple emails expanded like an accordion list.
-    // Toggle only the tapped email to expanded and leave others untouched.
-    emailIdsPresentation[emailId] = presentationEmail.copyWith(
-      emailInThreadStatus: EmailInThreadStatus.expanded,
-    );
+    // Single-expand accordion behavior: collapse all others, expand only the tapped one
+    emailIdsPresentation.updateAll((key, value) {
+      if (key == emailId) {
+        return (value ?? presentationEmail).copyWith(
+          emailInThreadStatus: EmailInThreadStatus.expanded,
+        );
+      }
+      if (value == null) return null;
+      return value.copyWith(emailInThreadStatus: EmailInThreadStatus.collapsed);
+    });
     currentExpandedEmailId.value = emailId;
     threadDetailManager.currentMobilePageViewIndex.refresh();
   }

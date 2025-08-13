@@ -1,5 +1,6 @@
 
 import 'package:core/presentation/constants/constants_ui.dart';
+import 'package:collection/collection.dart';
 import 'package:core/presentation/extensions/color_extension.dart';
 import 'package:core/presentation/resources/image_paths.dart';
 import 'package:core/presentation/utils/responsive_utils.dart';
@@ -35,29 +36,18 @@ mixin BaseEmailItemTile {
   int computeThreadCount(PresentationEmail email) {
     final threadKey = email.threadId?.id.value;
     if (threadKey == null) return 1;
-
-    // Build source from both current mailbox list and search results to avoid
-    // undercounting when part of the thread lives in Sent or other folders.
-    final combined = <PresentationEmail>{}
-      ..addAll(mailboxDashBoardController.emailsInCurrentMailbox)
-      ..addAll(mailboxDashBoardController.listResultSearch);
-
-    // If we have a selected email and it belongs to the same thread, ensure it
-    // is counted even if not present in the combined lists.
-    final selected = mailboxDashBoardController.selectedEmail.value;
-    if (selected != null && selected.threadId?.id.value == threadKey) {
-      combined.add(selected);
-    }
-
-    // Count unique EmailIds by threadId across combined sources.
-    final ids = <String>{};
-    for (final e in combined) {
-      if (e.threadId?.id.value == threadKey && e.id != null) {
-        ids.add(e.id!.id.value);
+    try {
+      // Prefer authoritative provider when available
+      final provider = Get.put(ThreadCountProvider(), permanent: true);
+      provider.ensure(email.threadId!);
+      final authoritative = provider.counts[email.threadId!];
+      if (authoritative != null && authoritative > 0) {
+        return authoritative;
       }
-    }
-    final localCount = ids.isEmpty ? 1 : ids.length;
-    return localCount;
+    } catch (_) {}
+
+    // Fallback quick estimate: single item until provider fills
+    return 1;
   }
 
   /// Reactive, cross-mailbox badge that updates when authoritative count arrives.
@@ -277,11 +267,135 @@ mixin BaseEmailItemTile {
   }
 
   String informationSender(PresentationEmail email, PresentationMailbox? mailbox) {
-    if (mailbox?.isSent == true || mailbox?.isDrafts == true || mailbox?.isOutbox == true) {
+    // Inbox-like folders: show RecipientNameOrEmail, then ", me", then count (no badge)
+    final isComposerSide = mailbox?.isSent == true || mailbox?.isDrafts == true || mailbox?.isOutbox == true;
+    if (isComposerSide) {
       return email.recipientsName();
-    } else {
-      return email.getSenderName();
     }
+
+    // Gather combined view for thread-level heuristics
+    final String own = mailboxDashBoardController.ownEmailAddress.value.toLowerCase();
+    final threadKey = email.threadId?.id.value;
+    final combined = <PresentationEmail>{}
+      ..addAll(mailboxDashBoardController.emailsInCurrentMailbox)
+      ..addAll(mailboxDashBoardController.listResultSearch);
+    final selected = mailboxDashBoardController.selectedEmail.value;
+    if (selected != null && selected.threadId?.id.value == threadKey) {
+      combined.add(selected);
+    }
+
+    // Derive a counterpart display name (prefer displayName, else short email)
+    String counterpartName = '';
+    String resolveAddressName(String? nameOrDisplay, String? emailAddr) {
+      if (nameOrDisplay != null && nameOrDisplay.trim().isNotEmpty) return nameOrDisplay.trim();
+      return _shortenEmail(emailAddr ?? '');
+    }
+
+    bool isFromMe(PresentationEmail e) =>
+      e.from?.any((a) => (a.email ?? '').toLowerCase() == own) == true;
+
+    // Prefer the other party from the current email
+    final currentFromIsMe = isFromMe(email);
+    if (!currentFromIsMe) {
+      final fromAddr = email.from?.firstOrNull;
+      if (fromAddr != null && (fromAddr.email ?? '').toLowerCase() != own) {
+        // Use display name if present, else email
+        final name = (fromAddr.name ?? '').trim().isNotEmpty
+          ? (fromAddr.name ?? '')
+          : fromAddr.email ?? '';
+        counterpartName = resolveAddressName(name, fromAddr.email);
+      }
+    } else {
+      // When I sent the current email, show the first recipient (even if it's me)
+      final toOther = email.to?.firstOrNull;
+      if (toOther != null) {
+        final name = (toOther.name ?? '').trim().isNotEmpty
+          ? (toOther.name ?? '')
+          : toOther.email ?? '';
+        counterpartName = resolveAddressName(name, toOther.email);
+      }
+    }
+    if (counterpartName.isEmpty && threadKey != null) {
+      // Fallback to any email in thread not from me
+      final anyOther = combined
+          .where((e) => e.threadId?.id.value == threadKey)
+          .firstWhereOrNull((e) => !isFromMe(e));
+      if (anyOther != null) {
+        final from = anyOther.from?.firstOrNull;
+        final name = (from?.name ?? '').trim().isNotEmpty
+          ? (from?.name ?? '')
+          : from?.email ?? '';
+        counterpartName = resolveAddressName(name, from?.email);
+      }
+    }
+    if (counterpartName.isEmpty) {
+      // Last fallback: current sender name or shortened email
+      final from = email.from?.firstOrNull;
+      counterpartName = resolveAddressName(email.getSenderName(), from?.email);
+    }
+
+    // Participation marker
+    // Show ", me" when I have participated in the conversation (sent any message
+    // in this thread, including the very first email or any reply). This is
+    // more robust than relying on the $answered keyword alone.
+    // Show "me" when there are replies in the thread
+    bool meTagged = computeThreadCount(email) > 1;
+
+    // Keep count reactive via provider later
+
+    // Determine ordering using authoritative thread chronology when possible
+    bool iStarted = false;
+    try {
+      if (threadKey != null && email.threadId != null) {
+        final provider = Get.put(ThreadCountProvider(), permanent: true);
+        provider.ensure(email.threadId!);
+        final authoritative = provider.startedByMe[email.threadId!];
+        if (authoritative != null) {
+          iStarted = authoritative;
+        } else {
+          // Fallback quick heuristic until provider fetches
+          final emailsInThread = combined
+              .where((e) => e.threadId?.id.value == threadKey)
+              .toList()
+            ..sort((a, b) {
+              final aTime = a.receivedAt?.value ?? a.sentAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+              final bTime = b.receivedAt?.value ?? b.sentAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+              return aTime.compareTo(bTime);
+            });
+          if (emailsInThread.isNotEmpty) iStarted = isFromMe(emailsInThread.first);
+        }
+      }
+    } catch (_) {}
+
+    final ctx = Get.context;
+    final String meLabel = ctx != null ? AppLocalizations.of(ctx).me_label : 'me';
+    String head;
+    if (meTagged && iStarted) {
+      head = '$meLabel, $counterpartName';
+    } else if (meTagged) {
+      head = '$counterpartName, $meLabel';
+    } else {
+      head = counterpartName;
+    }
+    // Do not append count here; UI will render it separately with lighter style
+    return head;
+  }
+
+  String _shortenEmail(String email) {
+    if (email.isEmpty) return '';
+    final parts = email.split('@');
+    if (parts.length != 2) return email;
+    final local = parts[0];
+    final domain = parts[1];
+    final shortDomain = domain.length <= 10 ? domain : '${domain.substring(0, 10)}…';
+    String shortLocal;
+    if (local.length <= 10) {
+      shortLocal = local;
+    } else {
+      // Keep first 6 + … + last 2 for readability
+      shortLocal = '${local.substring(0, 6)}…${local.substring(local.length - 2)}';
+    }
+    return '$shortLocal@$shortDomain';
   }
 
   Widget buildInformationSender(
@@ -291,31 +405,47 @@ mixin BaseEmailItemTile {
     bool isSearchEmailRunning,
     SearchQuery? query
   ) {
-    if (isSearchEnabled(isSearchEmailRunning, query)) {
-      return RichTextBuilder(
-        textOrigin: informationSender(email, mailbox),
-        wordToStyle: query?.value ?? '',
-        styleOrigin: !email.hasRead
-          ? ThemeUtils.textStyleBodyContact(color: Colors.black)
-          : ThemeUtils.textStyleBodyBody2(color: AppColor.steelGray400),
-        styleWord: !email.hasRead
-          ? ThemeUtils.textStyleBodyContact(
-              color: Colors.black,
-              backgroundColor: Colors.amberAccent[200],
-            )
-          : ThemeUtils.textStyleBodyBody2(
-              color: AppColor.steelGray400,
-              backgroundColor: Colors.amberAccent[200],
-            ),
-      );
-    } else {
-      return TextOverflowBuilder(
-        informationSender(email, mailbox),
-        style: !email.hasRead
-          ? ThemeUtils.textStyleBodyContact(color: Colors.black)
-          : ThemeUtils.textStyleBodyBody2(color: AppColor.steelGray400)
-      );
+    // Make this reactive to authoritative thread count changes
+    if (email.threadId != null) {
+      try {
+        final provider = Get.put(ThreadCountProvider(), permanent: true);
+        provider.ensure(email.threadId!);
+        return Obx(() {
+          // Depend on provider's count to trigger rebuild when it updates
+          final count = provider.counts[email.threadId!] ?? computeThreadCount(email);
+          final nameText = informationSender(email, mailbox);
+          final baseStyle = !email.hasRead
+              ? ThemeUtils.textStyleBodyContact(color: Colors.black)
+              : ThemeUtils.textStyleBodyBody2(color: AppColor.steelGray400);
+          final countStyle = Theme.of(Get.context!).textTheme.bodySmall?.copyWith(
+        fontSize: 12,
+                fontWeight: FontWeight.w500,
+                color: AppColor.steelGray400,
+              );
+          return Text.rich(
+            TextSpan(children: [
+              TextSpan(text: nameText, style: baseStyle),
+              if (count > 1) TextSpan(text: ' $count', style: countStyle),
+            ]),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          );
+        });
+      } catch (_) {}
     }
+
+    // Non-reactive fallback (no thread id)
+    final nameText = informationSender(email, mailbox);
+    final baseStyle = !email.hasRead
+        ? ThemeUtils.textStyleBodyContact(color: Colors.black)
+        : ThemeUtils.textStyleBodyBody2(color: AppColor.steelGray400);
+    return Text.rich(
+      TextSpan(children: [
+        TextSpan(text: nameText, style: baseStyle),
+      ]),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 
   Widget buildEmailTitle(
