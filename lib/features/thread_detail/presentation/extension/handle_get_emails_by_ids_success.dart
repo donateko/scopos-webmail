@@ -41,6 +41,8 @@ extension HandleGetEmailsByIdsSuccess on ThreadDetailController {
     }
     threadDetailManager.currentMobilePageViewIndex.refresh();
 
+    // Metadata loaded
+
     if (_skipScrollJump(isLoadMore)) return;
     
     final currentExpandedEmailIndex = currentExpandedEmailId.value == null

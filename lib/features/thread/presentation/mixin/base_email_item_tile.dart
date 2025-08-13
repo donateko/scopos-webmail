@@ -334,6 +334,36 @@ mixin BaseEmailItemTile {
       counterpartName = resolveAddressName(email.getSenderName(), from?.email);
     }
 
+    // Smart truncation to keep ", me" and count visible on narrow rows
+    String _truncateDisplayName(String name) {
+      final trimmed = name.trim();
+      if (trimmed.isEmpty) return trimmed;
+      final words = trimmed.split(RegExp(r'\s+')).where((w) => w.isNotEmpty).toList();
+      // If long, keep only the first word; else allow up to two words
+      String candidate;
+      if (trimmed.length > 15) {
+        candidate = words.isNotEmpty ? words.first : trimmed;
+      } else {
+        candidate = words.length >= 2 ? '${words[0]} ${words[1]}' : words.first;
+      }
+      if (candidate.length > 15) {
+        candidate = candidate.substring(0, 15) + '…';
+      }
+      return candidate;
+    }
+
+    String _truncateEmailSimple(String emailStr) {
+      if (emailStr.length <= 10) return emailStr;
+      return emailStr.substring(0, 10) + '…';
+    }
+
+    bool _looksLikeEmail(String s) => s.contains('@');
+
+    // Apply truncation rules
+    counterpartName = _looksLikeEmail(counterpartName)
+        ? _truncateEmailSimple(counterpartName)
+        : _truncateDisplayName(counterpartName);
+
     // Participation marker
     // Show ", me" when I have participated in the conversation (sent any message
     // in this thread, including the very first email or any reply). This is

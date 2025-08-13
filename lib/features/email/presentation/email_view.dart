@@ -165,7 +165,11 @@ class EmailView extends GetWidget<SingleEmailController> {
                       ThreadDetailBindings().dependencies();
                       threadCtrl = Get.find<ThreadDetailController>();
                     }
-                    if (threadCtrl.emailIdsPresentation.isEmpty) {
+                    final hasSelected = threadCtrl.emailIdsPresentation.containsKey(selectedId);
+                    if (threadCtrl.emailIdsPresentation.isEmpty || !hasSelected) {
+                      if (!hasSelected && threadCtrl.emailIdsPresentation.isNotEmpty) {
+                        threadCtrl.reset();
+                      }
                       threadCtrl.loadThreadForEmbed(threadId: threadId, selectedEmailId: selectedId);
                     }
                   }
@@ -625,11 +629,11 @@ class EmailView extends GetWidget<SingleEmailController> {
 
       final emailContentWidget = Stack(
         children: [
-          OptionalScroll(
-            scrollEnabled: !isInsideThreadDetailView,
-            scrollPhysics : const ClampingScrollPhysics(),
-            child: _buildEmailMessage(
-              context: context,
+      OptionalScroll(
+        scrollEnabled: !isInsideThreadDetailView,
+        scrollPhysics : const ClampingScrollPhysics(),
+        child: _buildEmailMessage(
+          context: context,
               presentationEmail: currentEmail,
               bodyConstraints: constraints,
               scrollController: scrollController,
