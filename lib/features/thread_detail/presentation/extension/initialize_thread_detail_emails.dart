@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:jmap_dart_client/jmap/mail/email/email.dart';
 import 'package:tmail_ui_user/features/email/presentation/utils/email_utils.dart';
 import 'package:tmail_ui_user/features/home/data/exceptions/session_exceptions.dart';
+import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/model/dashboard_routes.dart';
 import 'package:tmail_ui_user/features/thread_detail/domain/state/get_emails_by_ids_state.dart';
 import 'package:tmail_ui_user/features/thread_detail/domain/state/get_thread_by_id_state.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_controller.dart';
@@ -20,12 +21,11 @@ extension InitializeThreadDetailEmails on ThreadDetailController {
       return;
     }
 
-    List<EmailId> emailIdsToLoadMetaData = [];
-    emailIdsToLoadMetaData = ThreadDetailPresentationUtils.getFirstLoadEmailIds(
-      emailIdsPresentation.keys.toList(),
-      selectedEmailId: selectedEmailId,
-    );
-    emailIdsToLoadMetaData.remove(selectedEmailId);
+    // Load metadata for ALL emails except the selected one (not just first load subset)
+    List<EmailId> emailIdsToLoadMetaData = emailIdsPresentation.keys
+        .where((emailId) => emailId != selectedEmailId)
+        .toList();
+
 
     if (accountId == null || session == null) {
       consumeState(Stream.value(Left(GetEmailsByIdsFailure(
@@ -34,7 +34,10 @@ extension InitializeThreadDetailEmails on ThreadDetailController {
       ))));
       return;
     }
-    if (_currentThreadOnlyContainsSelectedEmail(selectedEmailId)) return;
+    
+    final onlyContainsSelected = _currentThreadOnlyContainsSelectedEmail(selectedEmailId);
+    
+    if (onlyContainsSelected) return;
 
     consumeState(getEmailsByIdsInteractor.execute(
       session!,
@@ -58,8 +61,11 @@ extension InitializeThreadDetailEmails on ThreadDetailController {
     EmailId? selectedEmailId,
     bool updateCurrentThreadDetail = false,
   }) {
+    // Allow metadata loading when in threadDetailed route even if thread detail is disabled
+    final isInThreadDetailedRoute = mailboxDashBoardController.dashboardRoute.value == DashboardRoutes.threadDetailed;
+    
     return selectedEmailId == null ||
-        !isThreadDetailEnabled ||
+        (!isThreadDetailEnabled && !isInThreadDetailedRoute) ||
         !networkConnected ||
         updateCurrentThreadDetail;
   }

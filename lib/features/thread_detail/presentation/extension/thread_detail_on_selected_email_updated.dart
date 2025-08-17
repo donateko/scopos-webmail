@@ -52,12 +52,29 @@ extension ThreadDetailOnSelectedEmailUpdated on ThreadDetailController {
   }
 
   void _preloadSelectedEmail(PresentationEmail selectedEmail) {
-    consumeState(Stream.fromIterable([
-      Right(PreloadEmailIdsInThreadSuccess(
-        [selectedEmail.id!],
-        threadId: selectedEmail.threadId,
-      )),
-      Right(PreloadEmailsByIdsSuccess([selectedEmail])),
-    ]));
+    if (selectedEmail.threadId != null && 
+        session != null && 
+        accountId != null && 
+        sentMailboxId != null && 
+        ownEmailAddress != null) {
+      // Load the full thread instead of just preloading the selected email
+      consumeState(Stream.fromIterable([
+        Right(PreloadEmailsByIdsSuccess([selectedEmail])),
+      ]));
+      
+      // Then trigger full thread load
+      mailboxDashBoardController.dispatchThreadDetailUIAction(
+        LoadThreadDetailAfterSelectedEmailAction(selectedEmail.threadId!),
+      );
+    } else {
+      // Fallback to single email if thread info unavailable
+      consumeState(Stream.fromIterable([
+        Right(PreloadEmailIdsInThreadSuccess(
+          [selectedEmail.id!],
+          threadId: selectedEmail.threadId,
+        )),
+        Right(PreloadEmailsByIdsSuccess([selectedEmail])),
+      ]));
+    }
   }
 }

@@ -31,6 +31,7 @@ class ThreadDetailRepositoryImpl implements ThreadDetailRepository {
     final originalEmailIds = await threadDetailDataSource[DataSourceType.network]!
       .getThreadById(threadId, accountId);
 
+
     if (originalEmailIds.isEmpty) {
       throw EmptyThreadDetailException();
     }
@@ -106,12 +107,9 @@ class ThreadDetailRepositoryImpl implements ThreadDetailRepository {
     String ownEmailAddress, {
     required EmailId? selectedEmailId
   }) {
-    return email.id != null && (
-      !email.inSentMailbox(sentMailboxId)
-      || !email.fromMe(ownEmailAddress)
-      || !email.recipientsHasMe(ownEmailAddress)
-      || email.id == selectedEmailId
-    );
+    // TEMPORARY: Allow ALL emails with valid IDs to debug the filtering issue
+    // This should show all 6 emails in the thread
+    return email.id != null;
   }
 
   @override

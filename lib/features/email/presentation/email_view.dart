@@ -140,6 +140,31 @@ class EmailView extends GetWidget<SingleEmailController> {
                     return const SizedBox.shrink();
                   }
                 }),
+              // Trigger lazy load for embed and show map status
+              if (!isInsideThreadDetailView)
+                Builder(builder: (_) {
+                  final threadId = controller.mailboxDashBoardController.selectedEmail.value?.threadId;
+                  final selectedId = controller.mailboxDashBoardController.selectedEmail.value?.id;
+                  if (threadId != null && selectedId != null) {
+                    ThreadDetailController threadCtrl;
+                    if (Get.isRegistered<ThreadDetailController>()) {
+                      threadCtrl = Get.find<ThreadDetailController>();
+                    } else {
+                      ThreadDetailBindings().dependencies();
+                      threadCtrl = Get.find<ThreadDetailController>();
+                    }
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      final hasSelected = threadCtrl.emailIdsPresentation.containsKey(selectedId);
+                      final mapSize = threadCtrl.emailIdsPresentation.length;
+                      if (mapSize <= 1 || !hasSelected) {
+                        if (!hasSelected && mapSize > 0) threadCtrl.reset();
+                        threadCtrl.loadThreadForEmbed(threadId: threadId, selectedEmailId: selectedId);
+                      }
+                    });
+                  }
+                  return const SizedBox.shrink();
+                }),
+
               OptionalExpanded(
                 expandedEnabled: !isInsideThreadDetailView,
                 child: LayoutBuilder(builder: (context, constraints) {
@@ -156,6 +181,8 @@ class EmailView extends GetWidget<SingleEmailController> {
                 Obx(() {
                   final threadId = controller.mailboxDashBoardController.selectedEmail.value?.threadId;
                   final selectedId = controller.mailboxDashBoardController.selectedEmail.value?.id;
+                  
+                  
                   if (threadId != null && selectedId != null) {
                     // Lazy-load embedded thread once
                     ThreadDetailController threadCtrl;
@@ -265,66 +292,59 @@ class EmailView extends GetWidget<SingleEmailController> {
     }
     final threadCtrl = Get.find<ThreadDetailController>();
 
-    // Only render when thread detail is enabled and we have multiple emails in thread
+    // Only render when we have multiple emails in thread
     final threadMap = threadCtrl.emailIdsPresentation;
-    if (threadMap.isEmpty || threadMap.length == 1) {
+    
+    if (threadMap.isEmpty || threadMap.length <= 1) {
       return const SizedBox.shrink();
     }
 
-    // Build items: latest (current) is already shown; show others as collapsed rows
-    final items = threadMap.entries
-        .where((e) => e.key != currentEmail.id)
-        .map((entry) => entry.value)
-        .whereType<PresentationEmail>()
+    // Get all emails except the current (selected) one, sort chronologically
+    final threadEmails = threadMap.entries
+        .where((e) => e.key != currentEmail.id && e.value != null)
+        .map((entry) => entry.value!)
         .toList();
 
-    if (items.isEmpty) return const SizedBox.shrink();
+    if (threadEmails.isEmpty) return const SizedBox.shrink();
 
+    // Sort emails chronologically (oldest first)
+    threadEmails.sort((a, b) {
+      final aTime = a.receivedAt?.value ?? DateTime.now();
+      final bTime = b.receivedAt?.value ?? DateTime.now();
+      return aTime.compareTo(bTime);
+    });
+
+
+    // Show ALL other emails as collapsed (none should be expanded in embedded view)
     return Column(
-      children: items.map((email) {
-        final isExpanded = email.emailInThreadStatus?.name == 'expanded';
-        if (!isExpanded) {
-          return ThreadDetailCollapsedEmail(
-            presentationEmail: email,
-            showSubject: false,
-            imagePaths: controller.imagePaths,
-            responsiveUtils: controller.responsiveUtils,
-            mailboxContain: email.findMailboxContain(
-              controller.mailboxDashBoardController.mapMailboxById,
-            ),
-            emailLoaded: null,
-            onEmailActionClick: (e, action) => controller.handleEmailAction(context, e, action),
-            onMoreActionClick: (e, position) => controller.emailActionReactor.handleMoreEmailAction(
-              mailboxContain: controller.getMailboxContain(e),
-              presentationEmail: e,
-              position: position,
-              responsiveUtils: controller.responsiveUtils,
-              imagePaths: controller.imagePaths,
-              username: controller.session?.username,
-              handleEmailAction: (em, a) => controller.handleEmailAction(context, em, a),
-              additionalActions: const [],
-              emailIsRead: e.hasRead,
-              openBottomSheetContextMenu: controller.mailboxDashBoardController.openBottomSheetContextMenu,
-              openPopupMenu: controller.mailboxDashBoardController.openPopupMenu,
-            ),
-            openEmailAddressDetailAction: (_, addr) => controller.openEmailAddressDialog(addr),
-            onToggleThreadDetailCollapseExpand: () {
-              threadCtrl.toggleThreadDetailCollapeExpand(email);
-            },
-          );
-        }
-        // Expanded older message uses the same EmailView widget
-        return Padding(
-          padding: const EdgeInsetsDirectional.only(bottom: 16),
-          child: EmailView(
-            key: GlobalObjectKey(email.id?.id.value ?? ''),
-            isInsideThreadDetailView: true,
-            emailId: email.id,
-            onToggleThreadDetailCollapseExpand: () {
-              threadCtrl.toggleThreadDetailCollapeExpand(email);
-            },
-            scrollController: scrollController,
+      children: threadEmails.map((email) {
+        return ThreadDetailCollapsedEmail(
+          presentationEmail: email,
+          showSubject: false,
+          imagePaths: controller.imagePaths,
+          responsiveUtils: controller.responsiveUtils,
+          mailboxContain: email.findMailboxContain(
+            controller.mailboxDashBoardController.mapMailboxById,
           ),
+          emailLoaded: null,
+          onEmailActionClick: (e, action) => controller.handleEmailAction(context, e, action),
+          onMoreActionClick: (e, position) => controller.emailActionReactor.handleMoreEmailAction(
+            mailboxContain: controller.getMailboxContain(e),
+            presentationEmail: e,
+            position: position,
+            responsiveUtils: controller.responsiveUtils,
+            imagePaths: controller.imagePaths,
+            username: controller.session?.username,
+            handleEmailAction: (em, a) => controller.handleEmailAction(context, em, a),
+            additionalActions: const [],
+            emailIsRead: e.hasRead,
+            openBottomSheetContextMenu: controller.mailboxDashBoardController.openBottomSheetContextMenu,
+            openPopupMenu: controller.mailboxDashBoardController.openPopupMenu,
+          ),
+          openEmailAddressDetailAction: (_, addr) => controller.openEmailAddressDialog(addr),
+          onToggleThreadDetailCollapseExpand: () {
+            threadCtrl.toggleThreadDetailCollapeExpand(email);
+          },
         );
       }).toList(),
     );

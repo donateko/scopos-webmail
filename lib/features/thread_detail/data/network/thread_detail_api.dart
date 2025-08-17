@@ -10,6 +10,14 @@ import 'package:jmap_dart_client/jmap/mail/email/get/get_email_method.dart';
 import 'package:jmap_dart_client/jmap/mail/email/get/get_email_response.dart';
 import 'package:jmap_dart_client/jmap/thread/get/get_thread_method.dart';
 import 'package:jmap_dart_client/jmap/thread/get/get_thread_response.dart';
+import 'package:jmap_dart_client/jmap/mail/email/query/query_email_method.dart';
+import 'package:jmap_dart_client/jmap/mail/email/query/query_email_response.dart';
+import 'package:jmap_dart_client/jmap/mail/email/email_filter_condition.dart';
+import 'package:jmap_dart_client/jmap/core/properties/properties.dart' as jmap_props;
+import 'package:model/email/email_property.dart' as model_props;
+import 'package:jmap_dart_client/jmap/core/unsigned_int.dart' as jmap_int;
+import 'package:jmap_dart_client/jmap/mail/mailbox/mailbox.dart';
+import 'package:model/extensions/list_id_extension.dart';
 import 'package:model/extensions/session_extension.dart';
 import 'package:tmail_ui_user/features/thread/domain/constants/thread_constants.dart';
 import 'package:tmail_ui_user/main/error/capability_validator.dart';
@@ -38,9 +46,12 @@ class ThreadDetailApi {
       GetThreadResponse.deserialize,
     );
 
-    return getThreadResponse!.list.firstWhereOrNull(
+    final emailIds = getThreadResponse!.list.firstWhereOrNull(
       (thread) => thread.id == threadId,
     )!.emailIds;
+
+
+    return emailIds;
   }
 
   Future<List<Email>> getEmailsByIds(
@@ -86,5 +97,45 @@ class ThreadDetailApi {
     return listOfListEmails.reduce(
       (listAllEmails, nextListEmails) => listAllEmails..addAll(nextListEmails),
     );
+  }
+
+  // Query recent emails in a specific mailbox, then fetch their minimal metadata
+  Future<List<Email>> queryRecentEmailsInMailbox(
+    Session session,
+    AccountId accountId,
+    MailboxId mailboxId, {
+    int? limit,
+  }) async {
+    final jmapRequestBuilder = JmapRequestBuilder(
+      _httpClient,
+      ProcessingInvocation(),
+    );
+
+    final query = QueryEmailMethod(accountId)
+      ..addFilters(EmailFilterCondition(inMailbox: mailboxId));
+    if (limit != null) {
+      query.addLimit(jmap_int.UnsignedInt(limit));
+    }
+    final queryInvocation = jmapRequestBuilder.invocation(query);
+
+    final capabilities = query.requiredCapabilities
+        .toCapabilitiesSupportTeamMailboxes(session, accountId);
+
+    final result = await (jmapRequestBuilder..usings(capabilities)).build().execute();
+    final queryResponse = result.parse<QueryEmailResponse>(
+      queryInvocation.methodCallId,
+      QueryEmailResponse.deserialize,
+    );
+    final ids = queryResponse?.ids;
+    if (ids == null || ids.isEmpty) return const [];
+
+    // Fetch minimal metadata (id, threadId, receivedAt)
+    final props = jmap_props.Properties({
+      model_props.EmailProperty.id,
+      model_props.EmailProperty.threadId,
+      model_props.EmailProperty.receivedAt,
+    });
+
+    return await getEmailsByIds(session, accountId, ids.toEmailIds().toList(), properties: props);
   }
 }

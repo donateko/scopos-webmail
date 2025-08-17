@@ -24,6 +24,7 @@ class GetThreadByIdInteractor {
     bool updateCurrentThreadDetail = false,
   }) async* {
     try {
+      
       yield Right(GettingThreadById(
         updateCurrentThreadDetail: updateCurrentThreadDetail,
       ));
@@ -35,6 +36,7 @@ class GetThreadByIdInteractor {
         ownEmailAddress,
         selectedEmailId: selectedEmailId,
       );
+
 
       yield Right(GetThreadByIdSuccess(
         result,

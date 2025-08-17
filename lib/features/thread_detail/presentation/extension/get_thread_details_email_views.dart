@@ -11,6 +11,7 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/extension/thre
 import 'package:tmail_ui_user/features/thread_detail/domain/state/get_emails_by_ids_state.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/thread_detail_load_more_segments.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/toggle_thread_detail_collape_expand.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/extension/toggle_show_previous_messages.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_controller.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/widgets/thread_detail_collapsed_email.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/widgets/thread_detail_load_more_circle.dart';
@@ -20,10 +21,36 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
   List<Widget> getThreadDetailEmailViews() {
     final loadMoreSegments = Map<LoadMoreIndex, LoadMoreCount>.from(this.loadMoreSegments);
 
+
+    final widgets = <Widget>[];
+    
+    // Get collapsed emails (excluding the currently expanded one)
+    final collapsedEmails = emailIdsPresentation.entries
+        .where((entry) =>
+            entry.value?.emailInThreadStatus == EmailInThreadStatus.collapsed)
+        .toList();
+
+    // If we're not showing previous messages and there are collapsed emails, show the group bar
+    if (!showPreviousMessages.value && collapsedEmails.isNotEmpty) {
+      final mostRecentCollapsedEmail = collapsedEmails.last.value;
+      if (mostRecentCollapsedEmail != null) {
+        widgets.add(ThreadDetailCollapsedEmail(
+          presentationEmail: mostRecentCollapsedEmail,
+          showSubject: false,
+          imagePaths: imagePaths,
+          responsiveUtils: responsiveUtils,
+          collapsedCount: collapsedEmails.length,
+          onToggleThreadDetailCollapseExpand: toggleShowPreviousMessages,
+        ));
+      }
+    }
+
+    // Always show expanded emails and optionally show individual collapsed emails
     return emailIdsPresentation.entries.map((entry) {
       final emailId = entry.key;
       final presentationEmail = entry.value;
       final indexOfEmailId = emailIdsPresentation.keys.toList().indexOf(emailId);
+      
       if (presentationEmail == null) {
         if (loadMoreSegments[indexOfEmailId] == null) {
           return const SizedBox.shrink();
@@ -44,13 +71,12 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
         );
       }
 
-      if (presentationEmail.emailInThreadStatus == null) {
-        return const SizedBox.shrink();
-      }
-
       final isFirstEmailInThreadDetail = indexOfEmailId == 0;
 
-      if (presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed) {
+      // Show collapsed emails only if showPreviousMessages is true
+      if ((presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed ||
+          presentationEmail.emailInThreadStatus == null) && showPreviousMessages.value) {
+        
         return ThreadDetailCollapsedEmail(
           presentationEmail: presentationEmail.copyWith(
             subject: isFirstEmailInThreadDetail
@@ -101,15 +127,18 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
         );
       }
 
-      if (isFirstEmailInThreadDetail) {
+      // Show expanded emails
+      if (presentationEmail.emailInThreadStatus == EmailInThreadStatus.expanded) {
         return Padding(
           padding: const EdgeInsetsDirectional.only(bottom: 16),
           child: EmailView(
-            key: GlobalObjectKey('${presentationEmail.id?.id.value ?? ''}firstInThread'),
+            key: GlobalObjectKey('${presentationEmail.id?.id.value ?? ''}${isFirstEmailInThreadDetail ? 'firstInThread' : ''}'),
             isInsideThreadDetailView: true,
             emailId: presentationEmail.id,
-            isFirstEmailInThreadDetail: true,
-            threadSubject: emailIdsPresentation.values.last?.subject,
+            isFirstEmailInThreadDetail: isFirstEmailInThreadDetail,
+            threadSubject: isFirstEmailInThreadDetail
+                ? emailIdsPresentation.values.last?.subject
+                : null,
             onToggleThreadDetailCollapseExpand: () {
               toggleThreadDetailCollapeExpand(presentationEmail);
             },
@@ -118,19 +147,15 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
         );
       }
 
-      return Padding(
-        padding: const EdgeInsetsDirectional.only(bottom: 16),
-        child: EmailView(
-          key: GlobalObjectKey(presentationEmail.id?.id.value ?? ''),
-          isInsideThreadDetailView: true,
-          emailId: presentationEmail.id,
-          onToggleThreadDetailCollapseExpand: () {
-            // In accordion mode, tapping expanded email collapses only that one
-            toggleThreadDetailCollapeExpand(presentationEmail);
-          },
-          scrollController: scrollController,
-        ),
-      );
-    }).toList();
+      // Don't show collapsed emails if showPreviousMessages is false (they're grouped)
+      if (!showPreviousMessages.value && 
+          (presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed ||
+           presentationEmail.emailInThreadStatus == null)) {
+        return const SizedBox.shrink();
+      }
+
+      return const SizedBox.shrink();
+    }).where((widget) => widget is! SizedBox || (widget as SizedBox).child != null).toList()
+      ..insertAll(0, widgets); // Add the group bar at the top
   }
 }

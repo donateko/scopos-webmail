@@ -22,7 +22,8 @@ extension HandleRefreshThreadDetailAction on ThreadDetailController {
   ) {
     if (!isThreadDetailEnabled) {
       final currentEmailId = mailboxDashBoardController.selectedEmail.value?.id;
-      if (currentEmailId == null) return;
+      final currentThreadId = mailboxDashBoardController.selectedEmail.value?.threadId;
+      if (currentEmailId == null || currentThreadId == null) return;
 
       final updatedEmailIds = action
         .emailChangeResponse
@@ -30,11 +31,17 @@ extension HandleRefreshThreadDetailAction on ThreadDetailController {
         ?.listEmailIds ?? [];
 
       if (updatedEmailIds.contains(currentEmailId)) {
-        consumeState(Stream.value(Right(GetThreadByIdSuccess(
-          [currentEmailId],
+        // Instead of manually creating with just 1 email, 
+        // call the proper interactor to get ALL thread emails
+        consumeState(getThreadByIdInteractor.execute(
+          currentThreadId,
+          session!,
+          accountId!,
+          sentMailboxId!,
+          ownEmailAddress!,
+          selectedEmailId: currentEmailId,
           updateCurrentThreadDetail: true,
-          threadId: mailboxDashBoardController.selectedEmail.value?.threadId,
-        ))));
+        ));
       }
 
       return;

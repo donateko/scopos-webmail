@@ -25,10 +25,12 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
     this.onEmailActionClick,
     this.onMoreActionClick,
     this.onToggleThreadDetailCollapseExpand,
+    this.collapsedCount,
   });
 
   final PresentationEmail presentationEmail;
   final bool showSubject;
+  final int? collapsedCount;
   final ImagePaths imagePaths;
   final ResponsiveUtils responsiveUtils;
   final OnOpenEmailAddressDetailAction? openEmailAddressDetailAction;
@@ -42,6 +44,37 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (collapsedCount != null && collapsedCount! > 0) {
+      return Material(
+        color: Colors.white,
+        child: InkWell(
+          onTap: onToggleThreadDetailCollapseExpand,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            decoration: const BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                    color: AppColor.colorDividerEmailView, width: 0.5),
+                bottom: BorderSide(
+                    color: AppColor.colorDividerEmailView, width: 0.5),
+              ),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.history),
+                const SizedBox(width: 16),
+                Text(
+                  'Show $collapsedCount previous messages',
+                  style:
+                      ThemeUtils.textStyleBodyBody1(fontWeight: FontWeight.w600),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -84,8 +117,8 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
                 style: ThemeUtils.textStyleBodyBody1(
                   fontWeight: presentationEmail.hasRead
-                    ? FontWeight.normal
-                    : FontWeight.w600,
+                      ? FontWeight.normal
+                      : FontWeight.w600,
                   fontSize: presentationEmail.hasRead ? null : 15,
                 ).copyWith(
                   height: presentationEmail.hasRead ? 24 / 16 : 20 / 15,

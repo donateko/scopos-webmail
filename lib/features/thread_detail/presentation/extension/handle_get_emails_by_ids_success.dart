@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:model/email/presentation_email.dart';
 import 'package:tmail_ui_user/features/email/presentation/bindings/email_bindings.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/model/dashboard_routes.dart';
 import 'package:model/email/email_in_thread_status.dart';
@@ -9,36 +10,75 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_
 extension HandleGetEmailsByIdsSuccess on ThreadDetailController {
   void handleGetEmailsByIdsSuccess(GetEmailsByIdsSuccess success) {
     final currentRoute = mailboxDashBoardController.dashboardRoute.value;
-    if (currentRoute != DashboardRoutes.threadDetailed) {
+    // Allow processing for thread detailed route AND email detailed route (single email view)
+    // and when we have thread emails to process
+    final shouldProcessThreadEmails = currentRoute == DashboardRoutes.threadDetailed || 
+        currentRoute == DashboardRoutes.emailDetailed ||
+        success.presentationEmails.length > 1 ||
+        emailIdsPresentation.isNotEmpty;
+    
+    if (!shouldProcessThreadEmails) {
       return;
     }
 
     final selectedEmailId = mailboxDashBoardController.selectedEmail.value?.id;
     final isLoadMore = emailIdsPresentation.values.nonNulls.isNotEmpty;
     
+    // Find the chronologically latest email among ALL emails (including newly loaded ones)
+    PresentationEmail? latestEmail;
+    DateTime? latestTimestamp;
+    
+    // Check all emails in the presentation for the most recent timestamp
+    for (final entry in emailIdsPresentation.entries) {
+      final email = entry.value;
+      if (email?.receivedAt != null) {
+        final timestamp = email!.receivedAt!.value;
+        if (latestTimestamp == null || timestamp.isAfter(latestTimestamp)) {
+          latestTimestamp = timestamp;
+          latestEmail = email;
+        }
+      }
+    }
+    
+    // Also check the newly loaded emails
+    for (var email in success.presentationEmails) {
+      if (email.receivedAt != null) {
+        final timestamp = email.receivedAt!.value;
+        if (latestTimestamp == null || timestamp.isAfter(latestTimestamp)) {
+          latestTimestamp = timestamp;
+          latestEmail = email;
+        }
+      }
+    }
+
+    final latestEmailId = latestEmail?.id;
+
     for (var presentationEmail in success.presentationEmails) {
       if (presentationEmail.id == null) continue;
 
-      if (success.updateCurrentThreadDetail) {
-        emailIdsPresentation[presentationEmail.id!] = presentationEmail.copyWith(
-          emailInThreadStatus: emailIdsPresentation[presentationEmail.id!]
-            ?.emailInThreadStatus ?? EmailInThreadStatus.collapsed,
-        );
-        continue;
-      }
+      // Expand only the chronologically latest email, collapse all others
+      final shouldExpand = presentationEmail.id == latestEmailId;
+      final finalStatus = shouldExpand ? EmailInThreadStatus.expanded : EmailInThreadStatus.collapsed;
 
-      // Single-expand: expand only the latest (selected) and collapse others
-      final shouldExpand = presentationEmail.id == selectedEmailId;
+      emailIdsPresentation[presentationEmail.id!] = presentationEmail.copyWith(
+        emailInThreadStatus: finalStatus,
+      );
+
+      // If expanding this email, ensure its dependencies are injected
       if (shouldExpand) {
         EmailBindings(currentEmailId: presentationEmail.id).dependencies();
         currentExpandedEmailId.value = presentationEmail.id;
       }
-      emailIdsPresentation[presentationEmail.id!] = presentationEmail.copyWith(
-        emailInThreadStatus: shouldExpand
-          ? EmailInThreadStatus.expanded
-          : EmailInThreadStatus.collapsed,
-      );
     }
+
+    // Also update any existing emails that might need status change
+    emailIdsPresentation.updateAll((key, value) {
+      if (value == null) return null;
+      final shouldExpand = key == latestEmailId;
+      return value.copyWith(
+        emailInThreadStatus: shouldExpand ? EmailInThreadStatus.expanded : EmailInThreadStatus.collapsed,
+      );
+    });
     threadDetailManager.currentMobilePageViewIndex.refresh();
 
     // Metadata loaded

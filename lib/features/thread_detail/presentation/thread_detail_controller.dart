@@ -32,6 +32,7 @@ import 'package:tmail_ui_user/features/email/domain/usecases/mark_as_star_email_
 import 'package:tmail_ui_user/features/email/domain/usecases/print_email_interactor.dart';
 import 'package:tmail_ui_user/features/email/presentation/utils/email_action_reactor/email_action_reactor.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/controller/mailbox_dashboard_controller.dart';
+import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/model/dashboard_routes.dart';
 import 'package:tmail_ui_user/features/manage_account/domain/state/create_new_rule_filter_state.dart';
 import 'package:tmail_ui_user/features/manage_account/domain/usecases/create_new_email_rule_filter_interactor.dart';
 import 'package:tmail_ui_user/features/network_connection/presentation/network_connection_controller.dart'
@@ -51,12 +52,14 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/extension/init
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/thread_detail_on_selected_email_updated.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_manager.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
+import 'package:tmail_ui_user/features/thread_detail/data/network/thread_detail_api.dart';
 import 'package:tmail_ui_user/main/routes/route_navigation.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/handle_collapsed_email_download_states.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/mark_collapsed_email_star_success.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/mark_collapsed_email_unread_success.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/quick_create_rule_from_collapsed_email_success.dart';
 import 'package:tmail_ui_user/features/email/presentation/utils/email_utils.dart';
+import 'package:model/extensions/email_extension.dart';
 import 'package:model/email/email_in_thread_status.dart';
 
 class ThreadDetailController extends BaseController {
@@ -81,6 +84,7 @@ class ThreadDetailController extends BaseController {
   final emailIdsPresentation = <EmailId, PresentationEmail?>{}.obs;
   final currentExpandedEmailId = Rxn<EmailId>();
   final currentEmailLoaded = Rxn<EmailLoaded>();
+  final showPreviousMessages = false.obs;
 
   late final EmailActionReactor emailActionReactor;
   final additionalProperties = Properties({
@@ -91,7 +95,7 @@ class ThreadDetailController extends BaseController {
   });
   final cachedEmailLoaded = <EmailId, EmailLoaded>{};
   late final _threadGetDebouncer = Debouncer<ThreadId?>(
-    const Duration(milliseconds: 500),
+    const Duration(milliseconds: 50), // Reduced delay for immediate loading
     initialValue: null,
     checkEquality: false,
     onChanged: (threadId) {
@@ -204,7 +208,22 @@ class ThreadDetailController extends BaseController {
     if (session == null || accountId == null || sentMailboxId == null || ownEmailAddress == null) return;
 
     try {
-      // Step 1: fetch email ids for the thread
+      // Step 0: seed from current mailbox list (often includes many of the thread emails)
+      try {
+        final mailboxEmails = mailboxDashBoardController.emailsInCurrentMailbox;
+        final sameThread = mailboxEmails.where((e) => e.threadId?.id.value == threadId.id.value);
+        for (final p in sameThread) {
+          if (p.id == null) continue;
+          final shouldCollapse = p.id != selectedEmailId;
+          emailIdsPresentation[p.id!] = p.copyWith(
+            emailInThreadStatus: shouldCollapse
+                ? EmailInThreadStatus.collapsed
+                : EmailInThreadStatus.expanded,
+          );
+        }
+      } catch (_) {}
+
+      // Step 1: fetch email ids for the thread (Thread/get)
       final eitherIds = await _getEmailIdsByThreadIdInteractor.execute(
         threadId,
         session!,
@@ -216,14 +235,13 @@ class ThreadDetailController extends BaseController {
 
       await eitherIds.fold((_) async {}, (success) async {
         if (success is GetThreadByIdSuccess && success.emailIds.isNotEmpty) {
-          // Initialize map with ids (selected email has data already in dashboard controller)
+          // Initialize/merge ids (selected email has data already in dashboard controller)
           final selected = mailboxDashBoardController.selectedEmail.value;
-          emailIdsPresentation.clear();
           for (final id in success.emailIds) {
             if (id == selectedEmailId && selected != null) {
               emailIdsPresentation[id] = selected;
             } else {
-              emailIdsPresentation[id] = null;
+              emailIdsPresentation.putIfAbsent(id, () => null);
             }
           }
 
@@ -255,20 +273,65 @@ class ThreadDetailController extends BaseController {
           });
         }
       });
+
+      // Step 3: if map still too small, try scanning Inbox and Sent for same threadId
+      if (emailIdsPresentation.length <= 1) {
+        try {
+          final api = Get.find<ThreadDetailApi>();
+          final inboxId = mailboxDashBoardController.mapDefaultMailboxIdByRole[PresentationMailbox.roleInbox];
+          if (inboxId != null) {
+            final inboxRecent = await api.queryRecentEmailsInMailbox(session!, accountId!, inboxId, limit: 50);
+            for (final e in inboxRecent) {
+              if (e.threadId?.id.value == threadId.id.value && e.id != null) {
+                final shouldCollapse = e.id != selectedEmailId;
+                emailIdsPresentation[e.id!] = e.toPresentationEmail().copyWith(
+                  emailInThreadStatus: shouldCollapse ? EmailInThreadStatus.collapsed : EmailInThreadStatus.expanded,
+                );
+              }
+            }
+          }
+          if (emailIdsPresentation.length <= 1 && sentMailboxId != null) {
+            final sentRecent = await api.queryRecentEmailsInMailbox(session!, accountId!, sentMailboxId!, limit: 50);
+            for (final e in sentRecent) {
+              if (e.threadId?.id.value == threadId.id.value && e.id != null) {
+                final shouldCollapse = e.id != selectedEmailId;
+                emailIdsPresentation[e.id!] = e.toPresentationEmail().copyWith(
+                  emailInThreadStatus: shouldCollapse ? EmailInThreadStatus.collapsed : EmailInThreadStatus.expanded,
+                );
+              }
+            }
+          }
+        } catch (_) {}
+      }
     } catch (_) {
       // Silently ignore in embed mode
     }
   }
 
   bool _validateLoadThread(ThreadId? threadId) {
-    return mailboxDashBoardController.selectedEmail.value?.threadId != null &&
-        threadId == mailboxDashBoardController.selectedEmail.value?.threadId &&
-        session != null &&
-        accountId != null &&
-        sentMailboxId != null &&
-        ownEmailAddress != null &&
-        networkConnected &&
-        isThreadDetailEnabled;
+    final selectedThreadId = mailboxDashBoardController.selectedEmail.value?.threadId;
+    final hasSession = session != null;
+    final hasAccountId = accountId != null;
+    final hasSentMailboxId = sentMailboxId != null;
+    final hasOwnEmailAddress = ownEmailAddress != null;
+    final isNetworkConnected = networkConnected;
+    final isThreadEnabled = isThreadDetailEnabled;
+    
+    
+    // Allow thread loading when in threadDetailed route even if thread detail is disabled
+    final isInThreadDetailedRoute = mailboxDashBoardController.dashboardRoute.value == DashboardRoutes.threadDetailed;
+    
+    final isValid = selectedThreadId != null &&
+        threadId == selectedThreadId &&
+        hasSession &&
+        hasAccountId &&
+        hasSentMailboxId &&
+        hasOwnEmailAddress &&
+        isNetworkConnected &&
+        (isThreadEnabled || isInThreadDetailedRoute);
+    
+    
+    return isValid;
   }
 
   void reset() {
@@ -279,6 +342,7 @@ class ThreadDetailController extends BaseController {
     currentEmailLoaded.value = null;
     cachedEmailLoaded.clear();
     _threadGetDebouncer.value = null;
+    showPreviousMessages.value = false; // Reset the collapsible state
   }
 
   @override
