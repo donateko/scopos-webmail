@@ -30,19 +30,14 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
             entry.value?.emailInThreadStatus == EmailInThreadStatus.collapsed)
         .toList();
 
-    // If we're not showing previous messages and there are collapsed emails, show the group bar
-    if (!showPreviousMessages.value && collapsedEmails.isNotEmpty) {
-      final mostRecentCollapsedEmail = collapsedEmails.last.value;
-      if (mostRecentCollapsedEmail != null) {
-        widgets.add(ThreadDetailCollapsedEmail(
-          presentationEmail: mostRecentCollapsedEmail,
-          showSubject: false,
-          imagePaths: imagePaths,
-          responsiveUtils: responsiveUtils,
-          collapsedCount: collapsedEmails.length,
-          onToggleThreadDetailCollapseExpand: toggleShowPreviousMessages,
-        ));
-      }
+    // Only show group bar if there are 3 or more collapsed emails
+    if (!showPreviousMessages.value && collapsedEmails.length >= 3) {
+      widgets.add(ThreadDetailLoadMoreCircle(
+        count: collapsedEmails.length,
+        onTap: toggleShowPreviousMessages,
+        imagePaths: imagePaths,
+        isLoading: false,
+      ));
     }
 
     // Always show expanded emails and optionally show individual collapsed emails
@@ -73,9 +68,10 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
 
       final isFirstEmailInThreadDetail = indexOfEmailId == 0;
 
-      // Show collapsed emails only if showPreviousMessages is true
+      // Show collapsed emails if showPreviousMessages is true OR if there are fewer than 3 collapsed emails
       if ((presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed ||
-          presentationEmail.emailInThreadStatus == null) && showPreviousMessages.value) {
+          presentationEmail.emailInThreadStatus == null) && 
+          (showPreviousMessages.value || collapsedEmails.length < 3)) {
         
         return ThreadDetailCollapsedEmail(
           presentationEmail: presentationEmail.copyWith(
@@ -147,8 +143,8 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
         );
       }
 
-      // Don't show collapsed emails if showPreviousMessages is false (they're grouped)
-      if (!showPreviousMessages.value && 
+      // Don't show collapsed emails if showPreviousMessages is false AND there are 3+ collapsed emails (they're grouped)
+      if (!showPreviousMessages.value && collapsedEmails.length >= 3 &&
           (presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed ||
            presentationEmail.emailInThreadStatus == null)) {
         return const SizedBox.shrink();

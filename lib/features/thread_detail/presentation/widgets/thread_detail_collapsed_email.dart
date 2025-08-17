@@ -11,9 +11,10 @@ import 'package:tmail_ui_user/features/email/presentation/widgets/email_sender_b
 import 'package:tmail_ui_user/features/email/presentation/widgets/email_subject_widget.dart';
 import 'package:tmail_ui_user/features/email/presentation/widgets/email_view_app_bar_widget.dart';
 import 'package:tmail_ui_user/features/email/presentation/widgets/information_sender_and_receiver_builder.dart';
+import 'package:tmail_ui_user/features/thread/presentation/mixin/base_email_item_tile.dart' as thread_mixin;
 
-class ThreadDetailCollapsedEmail extends StatelessWidget {
-  const ThreadDetailCollapsedEmail({
+class ThreadDetailCollapsedEmail extends StatelessWidget with thread_mixin.BaseEmailItemTile {
+  ThreadDetailCollapsedEmail({
     super.key,
     required this.presentationEmail,
     required this.showSubject,
@@ -46,27 +47,20 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
   Widget build(BuildContext context) {
     if (collapsedCount != null && collapsedCount! > 0) {
       return Material(
-        color: Colors.white,
+        color: const Color(0xfff3f6f9),
         child: InkWell(
           onTap: onToggleThreadDetailCollapseExpand,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            decoration: const BoxDecoration(
-              border: Border(
-                top: BorderSide(
-                    color: AppColor.colorDividerEmailView, width: 0.5),
-                bottom: BorderSide(
-                    color: AppColor.colorDividerEmailView, width: 0.5),
-              ),
-            ),
             child: Row(
               children: [
-                const Icon(Icons.history),
-                const SizedBox(width: 16),
-                Text(
-                  'Show $collapsedCount previous messages',
-                  style:
-                      ThemeUtils.textStyleBodyBody1(fontWeight: FontWeight.w600),
+                buildThreadCountBadge(context, collapsedCount!, forceVisible: true),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    '$collapsedCount previous messages',
+                    style: ThemeUtils.textStyleBodyBody2(),
+                  ),
                 ),
               ],
             ),
@@ -77,7 +71,7 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
 
     return DecoratedBox(
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0xfff3f6f9),
         border: Border(
           top: BorderSide(
             color: AppColor.colorDividerEmailView,
