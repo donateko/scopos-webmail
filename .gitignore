@@ -121,3 +121,4 @@ app.*.symbols
 messages_*.dart
 *.mocks.dart
 integration_test/test_bundle.dartupdated.zip
+updated.zip
