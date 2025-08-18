@@ -24,6 +24,8 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
     this.onEmailActionClick,
     this.onMoreActionClick,
     this.onToggleThreadDetailCollapseExpand,
+    this.suppressTopBorder = false,
+    this.suppressBottomBorder = false,
   });
 
   final PresentationEmail presentationEmail;
@@ -36,19 +38,29 @@ class ThreadDetailCollapsedEmail extends StatelessWidget {
   final OnEmailActionClick? onEmailActionClick;
   final OnMoreActionClick? onMoreActionClick;
   final VoidCallback? onToggleThreadDetailCollapseExpand;
+  final bool suppressTopBorder;
+  final bool suppressBottomBorder;
 
   String get preview => presentationEmail.getPartialContent();
 
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: const BoxDecoration(
-        color: Color(0xfff3f6f9),
+      decoration: BoxDecoration(
+        color: Colors.white,
         border: Border(
-          top: BorderSide(
-            color: AppColor.colorDividerEmailView,
-            width: 0.5,
-          ),
+          top: suppressTopBorder
+              ? BorderSide.none
+              : const BorderSide(
+                  color: AppColor.colorDividerEmailView,
+                  width: 0.5,
+                ),
+          bottom: suppressBottomBorder
+              ? BorderSide.none
+              : const BorderSide(
+                  color: AppColor.colorDividerEmailView,
+                  width: 0.5,
+                ),
         ),
       ),
       child: InkWell(

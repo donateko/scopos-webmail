@@ -51,6 +51,8 @@ class EmailView extends GetWidget<SingleEmailController> {
     this.threadSubject,
     this.onToggleThreadDetailCollapseExpand,
     this.scrollController,
+    this.suppressTopBorder = false,
+    this.suppressAppBarDivider = false,
   });
 
   final bool isInsideThreadDetailView;
@@ -59,6 +61,8 @@ class EmailView extends GetWidget<SingleEmailController> {
   final String? threadSubject;
   final VoidCallback? onToggleThreadDetailCollapseExpand;
   final ScrollController? scrollController;
+  final bool suppressTopBorder;
+  final bool suppressAppBarDivider;
 
   @override
   String? get tag => emailId?.id.value;
@@ -99,7 +103,7 @@ class EmailView extends GetWidget<SingleEmailController> {
                       );
                     },
                     supportBackAction: !isInsideThreadDetailView,
-                    appBarDecoration: isInsideThreadDetailView
+                    appBarDecoration: isInsideThreadDetailView && !suppressAppBarDivider
                         ? const BoxDecoration(
                             border: Border(
                               bottom: BorderSide(
@@ -246,7 +250,8 @@ class EmailView extends GetWidget<SingleEmailController> {
   BoxDecoration _getDecorationEmailView(BuildContext context) {
     if ((controller.responsiveUtils.isWebDesktop(context) && !isInsideThreadDetailView) ||
         controller.currentEmail == null ||
-        isFirstEmailInThreadDetail) {
+        isFirstEmailInThreadDetail ||
+        suppressTopBorder) {
       return const BoxDecoration(color: Colors.white);
     }
 
