@@ -7,22 +7,29 @@ extension WebPageTitleExtension on MailboxDashBoardController {
   void updateWebTitleFromInboxAndProfile() {
     if (!PlatformInfo.isWeb) return;
 
-    final inboxId = mapDefaultMailboxIdByRole[PresentationMailbox.roleInbox];
-    final inbox = inboxId != null ? mapMailboxById[inboxId] : null;
+    // Determine the current mailbox to reflect in the title
+    final PresentationMailbox? current = selectedMailbox.value;
+    // Resolve the freshest mailbox from the map if possible
+    final PresentationMailbox? mailbox = current != null
+        ? mapMailboxById[current.id] ?? current
+        : null;
+
+    // Folder display name (always shown)
+    final String folderName = mailbox?.displayName
+        ?? mailbox?.name?.name
+        ?? 'Mailbox';
 
     // Prefer unreadThreads, fallback to unreadEmails, default 0
-    final num unreadNum = inbox?.unreadThreads?.value.value
-            ?? inbox?.unreadEmails?.value.value
+    final num unreadNum = mailbox?.unreadThreads?.value.value
+            ?? mailbox?.unreadEmails?.value.value
             ?? 0;
-    final int inboxUnread = unreadNum.toInt();
+    final int unread = unreadNum.toInt();
 
     final email = ownEmailAddress.value;
 
-    // Build title similarly to UI: show Inbox(X) only when X > 0
+    // Build title: Always folder. Append (X) when X > 0. Then email (if any). Then app name.
     final parts = <String>[];
-    if (inboxUnread > 0) {
-      parts.add('Inbox($inboxUnread)');
-    }
+    parts.add(unread > 0 ? '$folderName($unread)' : folderName);
     if (email.isNotEmpty) {
       parts.add(email);
     }

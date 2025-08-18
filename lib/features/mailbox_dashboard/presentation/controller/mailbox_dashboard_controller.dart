@@ -375,6 +375,8 @@ class MailboxDashBoardController extends ReloadableController
     _loadLabelColorsFromPrefs();
     // Minimal: update browser tab title using existing Inbox count and own email
     updateWebTitleFromInboxAndProfile();
+    // Keep title in sync with current folder selection
+    ever<PresentationMailbox?>(selectedMailbox, (_) => updateWebTitleFromInboxAndProfile());
     super.onReady();
   }
 
