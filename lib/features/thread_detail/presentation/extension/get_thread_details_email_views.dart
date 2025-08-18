@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:model/email/email_action_type.dart';
 import 'package:model/extensions/presentation_email_extension.dart';
+import 'package:jmap_dart_client/jmap/mail/email/email.dart';
 import 'package:tmail_ui_user/features/email/presentation/email_view.dart';
 import 'package:model/email/email_in_thread_status.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/extensions/handle_open_context_menu_extension.dart';
@@ -21,25 +22,28 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
   List<Widget> getThreadDetailEmailViews() {
     final loadMoreSegments = Map<LoadMoreIndex, LoadMoreCount>.from(this.loadMoreSegments);
 
+    // Determine the first NON-NULL email id to keep its header/title always visible
+    EmailId? firstEmailId;
+    for (final entry in emailIdsPresentation.entries) {
+      final value = entry.value;
+      if (value != null) {
+        firstEmailId = entry.key;
+        break;
+      }
+    }
+    // Fallback: if still null, use the very first key
+    firstEmailId ??= emailIdsPresentation.keys.isNotEmpty
+        ? emailIdsPresentation.keys.first
+        : null;
 
-    final widgets = <Widget>[];
-    
-    // Get collapsed emails (excluding the currently expanded one)
-    final collapsedEmails = emailIdsPresentation.entries
-        .where((entry) =>
-            entry.value?.emailInThreadStatus == EmailInThreadStatus.collapsed)
+    // Get collapsed emails, but exclude the first message from grouping consideration
+    final collapsedEmailsExcludingFirst = emailIdsPresentation.entries
+        .where((entry) => entry.key != firstEmailId)
+        .where((entry) => entry.value?.emailInThreadStatus == EmailInThreadStatus.collapsed)
         .toList();
 
-    // Only show group bar if there are 3 or more collapsed emails
-final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.length >= 3;
-    if (showGlobalCollapsedGroup) {
-      widgets.add(ThreadDetailLoadMoreCircle(
-        count: collapsedEmails.length,
-        onTap: toggleShowPreviousMessages,
-        imagePaths: imagePaths,
-        isLoading: false,
-      ));
-    }
+    // Only show group bar if there are 3 or more collapsed emails after the first message
+    final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmailsExcludingFirst.length >= 3;
 
     // Always show expanded emails and optionally show individual collapsed emails
     return emailIdsPresentation.entries.map((entry) {
@@ -73,14 +77,15 @@ final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.
         );
       }
 
-      final isFirstEmailInThreadDetail = indexOfEmailId == 0;
+      final isFirstEmailInThreadDetail = emailId == firstEmailId;
 
       // Show collapsed emails if showPreviousMessages is true OR if there are fewer than 3 collapsed emails
+      // Always render the first message even when grouping is active
       if ((presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed ||
           presentationEmail.emailInThreadStatus == null) && 
-          (showPreviousMessages.value || collapsedEmails.length < 3)) {
+          (isFirstEmailInThreadDetail || showPreviousMessages.value || collapsedEmailsExcludingFirst.length < 3)) {
         
-        return ThreadDetailCollapsedEmail(
+        final collapsedWidget = ThreadDetailCollapsedEmail(
           presentationEmail: presentationEmail.copyWith(
             subject: isFirstEmailInThreadDetail
               ? emailIdsPresentation.values.last?.subject
@@ -128,11 +133,26 @@ final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.
             toggleThreadDetailCollapeExpand(presentationEmail);
           },
         );
+        if (isFirstEmailInThreadDetail && showGlobalCollapsedGroup) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              collapsedWidget,
+              ThreadDetailLoadMoreCircle(
+                count: collapsedEmailsExcludingFirst.length,
+                onTap: toggleShowPreviousMessages,
+                imagePaths: imagePaths,
+                isLoading: false,
+              ),
+            ],
+          );
+        }
+        return collapsedWidget;
       }
 
       // Show expanded emails
       if (presentationEmail.emailInThreadStatus == EmailInThreadStatus.expanded) {
-        return Padding(
+        final expanded = Padding(
           padding: const EdgeInsetsDirectional.only(bottom: 16),
           child: EmailView(
             key: GlobalObjectKey('${presentationEmail.id?.id.value ?? ''}${isFirstEmailInThreadDetail ? 'firstInThread' : ''}'),
@@ -148,17 +168,33 @@ final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.
             scrollController: scrollController,
           ),
         );
+        // If this is the first email, and global grouping is active, append the group bar AFTER the first email
+        if (isFirstEmailInThreadDetail && showGlobalCollapsedGroup) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              expanded,
+              ThreadDetailLoadMoreCircle(
+                count: collapsedEmailsExcludingFirst.length,
+                onTap: toggleShowPreviousMessages,
+                imagePaths: imagePaths,
+                isLoading: false,
+              ),
+            ],
+          );
+        }
+        return expanded;
       }
 
       // Don't show collapsed emails if showPreviousMessages is false AND there are 3+ collapsed emails (they're grouped)
-      if (!showPreviousMessages.value && collapsedEmails.length >= 3 &&
+      // but never hide the first message
+      if (!isFirstEmailInThreadDetail && !showPreviousMessages.value && collapsedEmailsExcludingFirst.length >= 3 &&
           (presentationEmail.emailInThreadStatus == EmailInThreadStatus.collapsed ||
            presentationEmail.emailInThreadStatus == null)) {
         return const SizedBox.shrink();
       }
 
       return const SizedBox.shrink();
-    }).where((widget) => widget is! SizedBox || (widget as SizedBox).child != null).toList()
-      ..insertAll(0, widgets); // Add the group bar at the top
+    }).where((widget) => widget is! SizedBox || (widget as SizedBox).child != null).toList();
   }
 }
