@@ -31,7 +31,7 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
         .toList();
 
     // Only show group bar if there are 3 or more collapsed emails
-    final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.length >= 3;
+final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.length >= 3;
     if (showGlobalCollapsedGroup) {
       widgets.add(ThreadDetailLoadMoreCircle(
         count: collapsedEmails.length,
