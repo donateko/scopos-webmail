@@ -1,4 +1,3 @@
-
 import 'package:core/utils/app_logger.dart';
 import 'package:flutter_appauth_platform_interface/flutter_appauth_platform_interface.dart';
 import 'package:get/get.dart';
@@ -45,6 +44,12 @@ class AuthenticationClientWeb implements AuthenticationClientBase {
 
   @override
   Future<bool> logoutOidc(TokenId tokenId, OIDCConfiguration config, OIDCDiscoveryResponse oidcRescovery) async {
+    // If discovery does not expose end_session_endpoint, skip IdP end-session to avoid broken '/null' redirects.
+    if (oidcRescovery.endSessionEndpoint == null || oidcRescovery.endSessionEndpoint!.isEmpty) {
+      // Return true so upper layers proceed with local logout and app-driven login flow.
+      return true;
+    }
+
     final authorizationServiceConfiguration = oidcRescovery.authorizationEndpoint == null || oidcRescovery.tokenEndpoint == null
       ? null
       : AuthorizationServiceConfiguration(
