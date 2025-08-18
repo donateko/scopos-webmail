@@ -31,7 +31,8 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
         .toList();
 
     // Only show group bar if there are 3 or more collapsed emails
-    if (!showPreviousMessages.value && collapsedEmails.length >= 3) {
+    final showGlobalCollapsedGroup = !showPreviousMessages.value && collapsedEmails.length >= 3;
+    if (showGlobalCollapsedGroup) {
       widgets.add(ThreadDetailLoadMoreCircle(
         count: collapsedEmails.length,
         onTap: toggleShowPreviousMessages,
@@ -47,6 +48,12 @@ extension GetThreadDetailEmailViews on ThreadDetailController {
       final indexOfEmailId = emailIdsPresentation.keys.toList().indexOf(emailId);
       
       if (presentationEmail == null) {
+        // When the global collapsed group bar is active, do not render per-segment
+        // load-more circles (from null placeholders). Otherwise we end up with
+        // extra small groups like a lone "1" near the newest email.
+        if (showGlobalCollapsedGroup) {
+          return const SizedBox.shrink();
+        }
         if (loadMoreSegments[indexOfEmailId] == null) {
           return const SizedBox.shrink();
         }

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:jmap_dart_client/jmap/mail/email/email.dart';
 import 'package:model/email/presentation_email.dart';
 import 'package:tmail_ui_user/features/email/presentation/bindings/email_bindings.dart';
 import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/model/dashboard_routes.dart';
@@ -51,7 +52,10 @@ extension HandleGetEmailsByIdsSuccess on ThreadDetailController {
       }
     }
 
-    final latestEmailId = latestEmail?.id;
+// Determine which email to expand. Prefer the chronologically latest by receivedAt.
+    // If timestamps are missing (e.g., newly created reply without metadata),
+    // fall back to expanding the last email id in the list so the UI visibly updates.
+    EmailId? latestEmailId = latestEmail?.id;
 
     for (var presentationEmail in success.presentationEmails) {
       if (presentationEmail.id == null) continue;
@@ -71,14 +75,52 @@ extension HandleGetEmailsByIdsSuccess on ThreadDetailController {
       }
     }
 
-    // Also update any existing emails that might need status change
+    // Also update any existing emails that might need status change  
     emailIdsPresentation.updateAll((key, value) {
       if (value == null) return null;
       final shouldExpand = key == latestEmailId;
-      return value.copyWith(
-        emailInThreadStatus: shouldExpand ? EmailInThreadStatus.expanded : EmailInThreadStatus.collapsed,
-      );
+      final newStatus = shouldExpand ? EmailInThreadStatus.expanded : EmailInThreadStatus.collapsed;
+      
+      // Update the expanded email reference if this is the new latest
+      if (shouldExpand) {
+        currentExpandedEmailId.value = key;
+      }
+      
+      return value.copyWith(emailInThreadStatus: newStatus);
     });
+
+    // Re-sort the emailIdsPresentation map chronologically to ensure proper order
+    final sortedEntries = emailIdsPresentation.entries.toList()
+      ..sort((a, b) {
+        final aTime = a.value?.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+        final bTime = b.value?.receivedAt?.value ?? DateTime.fromMillisecondsSinceEpoch(0);
+        return aTime.compareTo(bTime);
+      });
+    
+    // Rebuild the map with proper chronological order
+    emailIdsPresentation.clear();
+    for (final entry in sortedEntries) {
+      emailIdsPresentation[entry.key] = entry.value;
+    }
+
+    // If no latestEmailId determined from timestamps, pick the last entry after sorting
+    latestEmailId ??= emailIdsPresentation.keys.isNotEmpty
+        ? emailIdsPresentation.keys.last
+        : success.presentationEmails.lastOrNull?.id;
+
+    if (latestEmailId != null) {
+      // Ensure the chosen email is expanded
+      currentExpandedEmailId.value = latestEmailId;
+      emailIdsPresentation.updateAll((key, value) {
+        if (value == null) return null;
+        final shouldExpand = key == latestEmailId;
+        return value.copyWith(
+          emailInThreadStatus: shouldExpand
+              ? EmailInThreadStatus.expanded
+              : EmailInThreadStatus.collapsed,
+        );
+      });
+    }
     threadDetailManager.currentMobilePageViewIndex.refresh();
 
     // Metadata loaded

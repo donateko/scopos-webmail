@@ -29,10 +29,17 @@ extension HandleRefreshThreadDetailAction on ThreadDetailController {
         .emailChangeResponse
         .updated
         ?.listEmailIds ?? [];
+        
+      // Also check for created emails in the current thread (e.g., new replies)
+      final createdEmailsInThread = action
+        .emailChangeResponse
+        .created
+        ?.where((email) => email.threadId == currentThreadId)
+        .toList() ?? [];
 
-      if (updatedEmailIds.contains(currentEmailId)) {
-        // Instead of manually creating with just 1 email, 
-        // call the proper interactor to get ALL thread emails
+      // Refresh if current email was updated OR if new emails were created in the thread
+      if (updatedEmailIds.contains(currentEmailId) || createdEmailsInThread.isNotEmpty) {
+        // Call the proper interactor to get ALL thread emails
         consumeState(getThreadByIdInteractor.execute(
           currentThreadId,
           session!,
@@ -40,7 +47,7 @@ extension HandleRefreshThreadDetailAction on ThreadDetailController {
           sentMailboxId!,
           ownEmailAddress!,
           selectedEmailId: currentEmailId,
-          updateCurrentThreadDetail: true,
+          updateCurrentThreadDetail: false,
         ));
       }
 
@@ -79,13 +86,33 @@ extension HandleRefreshThreadDetailAction on ThreadDetailController {
       destroyed: emailIdsDestroyed.toList(),
     );
 
-    if (afterRefreshedEmailIds.isEmpty) {
-      closeThreadDetailAction(currentContext);
+    // Align IDs to the set of refreshed email objects to avoid null placeholders
+    final alignedIds = afterRefreshedEmails
+      .map((e) => e.id)
+      .nonNulls
+      .toList(growable: false);
+
+    if (alignedIds.isEmpty) {
+  // Fallback: sometimes the change payload doesn't carry created/updated items
+      // for this thread (e.g., self-sent replies). Trigger a full Thread/get to
+      // rebuild the IDs and merge correctly.
+      final currentEmailId = mailboxDashBoardController.selectedEmail.value?.id;
+      if (session != null && accountId != null && sentMailboxId != null && ownEmailAddress != null) {
+        consumeState(getThreadByIdInteractor.execute(
+          currentThreadId,
+          session!,
+          accountId!,
+          sentMailboxId!,
+          ownEmailAddress!,
+          selectedEmailId: currentEmailId,
+          updateCurrentThreadDetail: true,
+        ));
+      }
       return;
     }
 
     consumeState(Stream.value(Right(GetThreadByIdSuccess(
-      afterRefreshedEmailIds,
+      alignedIds,
       threadId: currentThreadId,
       updateCurrentThreadDetail: true,
     ))));

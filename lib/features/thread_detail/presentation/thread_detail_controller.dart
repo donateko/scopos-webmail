@@ -15,6 +15,7 @@ import 'package:jmap_dart_client/jmap/mail/email/individual_header_identifier.da
 import 'package:jmap_dart_client/jmap/mail/mailbox/mailbox.dart';
 import 'package:model/email/email_property.dart';
 import 'package:model/email/presentation_email.dart';
+import 'package:model/email/email_action_type.dart';
 import 'package:model/extensions/keyword_identifier_extension.dart';
 import 'package:model/extensions/session_extension.dart';
 import 'package:model/mailbox/presentation_mailbox.dart';
@@ -50,6 +51,7 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/extension/hand
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/handle_refresh_thread_detail_action.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/initialize_thread_detail_emails.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/thread_detail_on_selected_email_updated.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/extension/refresh_current_thread.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_manager.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 import 'package:tmail_ui_user/features/thread_detail/data/network/thread_detail_api.dart';
@@ -85,6 +87,7 @@ class ThreadDetailController extends BaseController {
   final currentExpandedEmailId = Rxn<EmailId>();
   final currentEmailLoaded = Rxn<EmailLoaded>();
   final showPreviousMessages = false.obs;
+  final showNewMessageNotification = false.obs;
 
   late final EmailActionReactor emailActionReactor;
   final additionalProperties = Properties({
@@ -343,6 +346,7 @@ class ThreadDetailController extends BaseController {
     cachedEmailLoaded.clear();
     _threadGetDebouncer.value = null;
     showPreviousMessages.value = false; // Reset the collapsible state
+    showNewMessageNotification.value = false; // Reset notification
   }
 
   @override

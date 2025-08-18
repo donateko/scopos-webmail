@@ -21,8 +21,10 @@ import 'package:tmail_ui_user/features/thread_detail/presentation/extension/get_
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/get_thread_details_email_views.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/on_thread_page_changed.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/extension/thread_detail_on_email_action_click.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/extension/refresh_current_thread.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_controller.dart';
 import 'package:tmail_ui_user/features/thread_detail/presentation/widgets/thread_detail_app_bar.dart';
+import 'package:tmail_ui_user/features/thread_detail/presentation/widgets/new_message_notification_widget.dart';
 import 'package:tmail_ui_user/main/localizations/app_localizations.dart';
 
 import '../../manage_account/presentation/vacation/widgets/vacation_notification_message_widget.dart';
@@ -121,6 +123,17 @@ class ThreadDetailView extends GetWidget<ThreadDetailController> {
               vacationResponse: vacation!,
               actionGotoVacationSetting: controller.mailboxDashBoardController.goToVacationSetting,
               actionEndNow: controller.mailboxDashBoardController.disableVacationResponder,
+            );
+          } else {
+            return const SizedBox.shrink();
+          }
+        }),
+        Obx(() {
+          if (controller.showNewMessageNotification.value) {
+            return NewMessageNotificationWidget(
+              onRefreshTap: controller.refreshCurrentThread,
+              onDismiss: controller.dismissNewMessageNotification,
+              imagePaths: controller.imagePaths,
             );
           } else {
             return const SizedBox.shrink();

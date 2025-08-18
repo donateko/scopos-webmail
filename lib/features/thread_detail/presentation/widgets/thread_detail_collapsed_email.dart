@@ -11,10 +11,8 @@ import 'package:tmail_ui_user/features/email/presentation/widgets/email_sender_b
 import 'package:tmail_ui_user/features/email/presentation/widgets/email_subject_widget.dart';
 import 'package:tmail_ui_user/features/email/presentation/widgets/email_view_app_bar_widget.dart';
 import 'package:tmail_ui_user/features/email/presentation/widgets/information_sender_and_receiver_builder.dart';
-import 'package:tmail_ui_user/features/thread/presentation/mixin/base_email_item_tile.dart' as thread_mixin;
-
-class ThreadDetailCollapsedEmail extends StatelessWidget with thread_mixin.BaseEmailItemTile {
-  ThreadDetailCollapsedEmail({
+class ThreadDetailCollapsedEmail extends StatelessWidget {
+  const ThreadDetailCollapsedEmail({
     super.key,
     required this.presentationEmail,
     required this.showSubject,
@@ -26,12 +24,10 @@ class ThreadDetailCollapsedEmail extends StatelessWidget with thread_mixin.BaseE
     this.onEmailActionClick,
     this.onMoreActionClick,
     this.onToggleThreadDetailCollapseExpand,
-    this.collapsedCount,
   });
 
   final PresentationEmail presentationEmail;
   final bool showSubject;
-  final int? collapsedCount;
   final ImagePaths imagePaths;
   final ResponsiveUtils responsiveUtils;
   final OnOpenEmailAddressDetailAction? openEmailAddressDetailAction;
@@ -45,30 +41,6 @@ class ThreadDetailCollapsedEmail extends StatelessWidget with thread_mixin.BaseE
 
   @override
   Widget build(BuildContext context) {
-    if (collapsedCount != null && collapsedCount! > 0) {
-      return Material(
-        color: const Color(0xfff3f6f9),
-        child: InkWell(
-          onTap: onToggleThreadDetailCollapseExpand,
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            child: Row(
-              children: [
-                buildThreadCountBadge(context, collapsedCount!, forceVisible: true),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    '$collapsedCount previous messages',
-                    style: ThemeUtils.textStyleBodyBody2(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     return DecoratedBox(
       decoration: const BoxDecoration(
         color: Color(0xfff3f6f9),
