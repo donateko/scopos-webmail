@@ -100,6 +100,7 @@ import 'package:tmail_ui_user/main/routes/navigation_router.dart';
 import 'package:tmail_ui_user/main/routes/route_navigation.dart';
 import 'package:tmail_ui_user/main/routes/route_utils.dart';
 import 'package:tmail_ui_user/main/utils/ios_sharing_manager.dart';
+import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/extensions/web_page_title_extension.dart';
 
 class MailboxController extends BaseMailboxController
     with MailboxActionHandlerMixin,
@@ -435,6 +436,8 @@ class MailboxController extends BaseMailboxController
       affectedMailboxId,
       unreadChanges: (unreadCount ?? 0) - (readCount ?? 0),
     );
+    // Update browser tab title minimally when unread counts change
+    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   int _computeUnreadThreadCountForSelectedMailbox(MailboxId mailboxId) {
@@ -458,6 +461,8 @@ class MailboxController extends BaseMailboxController
     if (affectedMailboxId == null) return;
 
     clearUnreadCount(affectedMailboxId);
+    // Update browser tab title after clearing mailbox unread
+    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   void _handleDraftSaved({
@@ -470,6 +475,8 @@ class MailboxController extends BaseMailboxController
       affectedMailboxId,
       totalEmailsChanged,
     );
+    // Drafts can affect counts in some views; refresh title just in case
+    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   void _handleDeleteEmailsFromMailbox({
@@ -482,6 +489,7 @@ class MailboxController extends BaseMailboxController
       affectedMailboxId,
       totalEmailsChanged,
     );
+    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   void _handleMoveEmailsToMailbox({
@@ -536,6 +544,8 @@ class MailboxController extends BaseMailboxController
     final destUnreadThreads = _countDistinctUnreadThreads(allMovedIds);
     updateMailboxTotalEmailsCountById(destinationMailboxId, destThreads);
     updateUnreadCountOfMailboxById(destinationMailboxId, unreadChanges: destUnreadThreads);
+    // After moves, totals/unreads changed; update title
+    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   void _initWebSocketQueueHandler() {
@@ -640,6 +650,8 @@ class MailboxController extends BaseMailboxController
 
     mailboxDashBoardController.setMapDefaultMailboxIdByRole(mapDefaultMailboxIdByRole);
     mailboxDashBoardController.setMapMailboxById(mapMailboxById);
+    // After mailbox maps are set/updated, ensure title reflects latest Inbox count
+    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   void _setOutboxMailbox() {

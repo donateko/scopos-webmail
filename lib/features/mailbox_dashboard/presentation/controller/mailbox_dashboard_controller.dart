@@ -198,6 +198,7 @@ import 'package:uuid/uuid.dart';
   import 'package:tmail_ui_user/features/contact/data/network/carddav_api.dart';
   import 'package:model/contact/contacts.dart';
   import 'package:collection/collection.dart';
+  import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/extensions/web_page_title_extension.dart';
 
 class MailboxDashBoardController extends ReloadableController
     with ContactSupportMixin {
@@ -372,6 +373,8 @@ class MailboxDashBoardController extends ReloadableController
     _handleArguments();
     _loadAppGrid();
     _loadLabelColorsFromPrefs();
+    // Minimal: update browser tab title using existing Inbox count and own email
+    updateWebTitleFromInboxAndProfile();
     super.onReady();
   }
 
