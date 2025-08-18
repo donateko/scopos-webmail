@@ -52,7 +52,7 @@ class EmailView extends GetWidget<SingleEmailController> {
     this.onToggleThreadDetailCollapseExpand,
     this.scrollController,
     this.suppressTopBorder = false,
-    this.suppressAppBarDivider = false,
+this.suppressAppBarDivider = false,
   });
 
   final bool isInsideThreadDetailView;

@@ -199,6 +199,8 @@ import 'package:uuid/uuid.dart';
   import 'package:model/contact/contacts.dart';
   import 'package:collection/collection.dart';
   import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/extensions/web_page_title_extension.dart';
+  import 'package:tmail_ui_user/features/thread_detail/presentation/thread_detail_controller.dart';
+  import 'package:tmail_ui_user/features/thread/presentation/thread_controller.dart';
 
 class MailboxDashBoardController extends ReloadableController
     with ContactSupportMixin {
@@ -377,6 +379,18 @@ class MailboxDashBoardController extends ReloadableController
     updateWebTitleFromInboxAndProfile();
     // Keep title in sync with current folder selection
     ever<PresentationMailbox?>(selectedMailbox, (_) => updateWebTitleFromInboxAndProfile());
+    // Also react to route changes and selected email changes
+    ever<DashboardRoutes>(dashboardRoute, (_) => updateWebTitleFromInboxAndProfile());
+    ever<PresentationEmail?>(selectedEmail, (_) => updateWebTitleFromInboxAndProfile());
+    // React to thread preview/expand changes when controllers are available
+    if (Get.isRegistered<ThreadDetailController>()) {
+      final td = Get.find<ThreadDetailController>();
+      ever(td.currentExpandedEmailId, (_) => updateWebTitleFromInboxAndProfile());
+    }
+    if (Get.isRegistered<ThreadController>()) {
+      final tc = Get.find<ThreadController>();
+      ever(tc.latestEmailSelectedOrUnselected, (_) => updateWebTitleFromInboxAndProfile());
+    }
     super.onReady();
   }
 

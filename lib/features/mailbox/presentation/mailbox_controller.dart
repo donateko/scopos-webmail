@@ -105,13 +105,13 @@ import 'package:tmail_ui_user/features/mailbox_dashboard/presentation/extensions
 class MailboxController extends BaseMailboxController
     with MailboxActionHandlerMixin,
         ContactSupportMixin,
-        LauncherApplicationMixin,
+LauncherApplicationMixin,
         MailboxWidgetMixin {
 
   final mailboxDashBoardController = Get.find<MailboxDashBoardController>();
   final isMailboxListScrollable = false.obs;
   final CreateNewMailboxInteractor _createNewMailboxInteractor;
-  final DeleteMultipleMailboxInteractor _deleteMultipleMailboxInteractor;
+final DeleteMultipleMailboxInteractor _deleteMultipleMailboxInteractor;
   final RenameMailboxInteractor _renameMailboxInteractor;
   final MoveMailboxInteractor _moveMailboxInteractor;
   final SubscribeMailboxInteractor _subscribeMailboxInteractor;
@@ -436,8 +436,8 @@ class MailboxController extends BaseMailboxController
       affectedMailboxId,
       unreadChanges: (unreadCount ?? 0) - (readCount ?? 0),
     );
-    // Update browser tab title minimally when unread counts change
-    mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
+// Update browser tab title minimally when unread counts change
+mailboxDashBoardController.updateWebTitleFromInboxAndProfile();
   }
 
   int _computeUnreadThreadCountForSelectedMailbox(MailboxId mailboxId) {
