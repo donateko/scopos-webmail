@@ -10,7 +10,19 @@
   
 
 This project aims at providing a multi-platform mobile email application, running the [JMAP protocol](https://jmap.io/) and will also deliver additional 
-features to the [Mailbux](https://mailbux.com).
+features to the [Mailbux Cross Email Client](https://mailbux.com) built for [Mailwish - Unlimited business email hosting](https://mailwish.com) and forked from [Tmail by linagora](https://github.com/linagora/tmail-flutter).
+
+> ⚠️ **Important Notice**  
+> This email client has been heavily customized to work specifically with the **[MailWish/MailBux Business Email Hosting](https://mailwish.com)**.  
+>
+> - We **do not provide support** for customization, third-party code changes, or bug fixes.  
+> - This version is released **as-is**, intended for developers who wish to:  
+>   - Contribute improvements through commits.  
+>   - Adjust branding for their business (if using MailWish as the backend).  
+>
+> If you are running the **MailWish Business Email Hosting**, you may use this client as your front end.  
+> Otherwise, please note that compatibility and support are not guaranteed.
+
 
 
 ## Build app
