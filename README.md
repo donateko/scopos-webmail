@@ -1,4 +1,5 @@
-# Mailbux Mail Client
+# Mailbux Mail Client 
+# ⚠️ This is only the email client! You will also need the mail server, which we provide at the lowest rate in the world for unlimited accounts. Find out here [Mailwish - Unlimited business email hosting](https://mailwish.com)
 
 
    <p align="center">
