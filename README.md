@@ -1,14 +1,8 @@
 # Mailbux Mail Client 
-# ⚠️ This is only the email client! You will also need the mail server, which we provide at the lowest rate in the world for unlimited accounts. Find out here [Mailwish - Unlimited business email hosting](https://mailwish.com)
-
-
-   <p align="center">
-    <a href="https://github.com/linagora/tmail-flutter/">Forked from Mailbux</a>
-  </p>
+⚠️ This is only the email client! You will also need the mail server, which we provide at the lowest rate in the world for unlimited accounts. Find out here [Mailwish - Unlimited business email hosting](https://mailwish.com)
 
 ---
 
-  
 
 This project aims at providing a multi-platform mobile email application, running the [JMAP protocol](https://jmap.io/) and will also deliver additional 
 features to the [Mailbux Cross Email Client](https://mailbux.com) built for [Mailwish - Unlimited business email hosting](https://mailwish.com) and forked from [Tmail by linagora](https://github.com/linagora/tmail-flutter).
