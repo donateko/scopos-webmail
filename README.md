@@ -18,7 +18,9 @@ features to the [Mailbux Cross Email Client](https://mailbux.com) built for [Mai
 > - We **do not provide support** for customization, third-party code changes, or bug fixes.  
 > - This version is released **as-is**, intended for developers who wish to:  
 >   - Contribute improvements through commits.  
->   - Adjust branding for their business (if using MailWish as the backend).  
+>   - Adjust branding for their business (if using MailWish as the backend).
+>   - The login page at https://auth.mailbux.com
+ is not customizable. You will need to update the email client to support self-login without OIDC, plain JMAP login (Developer required).
 >
 > If you are running the **MailWish Business Email Hosting**, you may use this client as your front end.  
 > Otherwise, please note that compatibility and support are not guaranteed.
