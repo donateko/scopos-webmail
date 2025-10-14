@@ -184,7 +184,7 @@ class HtmlUtils {
         ${styleCSS ?? ''}
       </style>
       </head>
-      <body ${direction == TextDirection.rtl ? 'dir="rtl"' : ''} style = "overflow-x: hidden; ${contentPadding != null ? 'margin: $contentPadding;' : ''}";>
+      <body ${direction == TextDirection.rtl ? 'dir="rtl"' : ''} style = "overflow-x: hidden; margin: ${contentPadding != null ? '${contentPadding}px' : '0'}; padding: 0;";>
       <div class="tmail-content">$content</div>
       ${javaScripts ?? ''}
       </body>
@@ -596,7 +596,7 @@ class HtmlUtils {
 
     final containerElement = '<div class="quote-toggle-container" >$htmlString</div>';
 
-    final containerDom = html.DomParser().parseFromString(containerElement, 'text/html');
+final containerDom = html.DomParser().parseFromString(containerElement, 'text/html');
     html.ElementList blockquotes = containerDom.querySelectorAll('.quote-toggle-container > blockquote');
     int currentSearchLevel = 1;
 

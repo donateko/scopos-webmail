@@ -483,19 +483,16 @@ this.suppressAppBarDivider = false,
               final allEmailContents = controller.emailContents.value ?? '';
 
               if (PlatformInfo.isWeb) {
-                return Padding(
-                  padding: EmailViewStyles.emailContentPadding,
-                  child: HtmlContentViewerOnWeb(
-                    key: ValueKey(tag),
-                    widthContent: bodyConstraints.maxWidth,
-                    contentHtml: allEmailContents,
-                    mailtoDelegate: controller.openMailToLink,
-                    direction: AppUtils.getCurrentDirection(context),
-                    contentPadding: 0,
-                    useDefaultFont: true,
-                    scrollController: scrollController,
-                    enableQuoteToggle: isInsideThreadDetailView,
-                  ),
+                return HtmlContentViewerOnWeb(
+                  key: ValueKey(tag),
+                  widthContent: bodyConstraints.maxWidth,
+                  contentHtml: allEmailContents,
+                  mailtoDelegate: controller.openMailToLink,
+                  direction: AppUtils.getCurrentDirection(context),
+                  contentPadding: 0,
+                  useDefaultFont: true,
+                  scrollController: scrollController,
+                  enableQuoteToggle: isInsideThreadDetailView,
                 );
               } else if (PlatformInfo.isIOS) {
                 return Obx(() {

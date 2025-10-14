@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
+import 'dart:ui';
 
 import 'package:core/presentation/constants/constants_ui.dart';
 import 'package:core/presentation/extensions/color_extension.dart';
@@ -88,6 +89,7 @@ class _HtmlContentViewerOnWebState extends State<HtmlContentViewerOnWeb>
   static const String iframeOnLoadMessage = 'iframeHasBeenLoaded';
   static const String onClickHyperLinkName = 'onClickHyperLink';
   static const String onScrollChangedEvent = 'onScrollChanged';
+  
 
   @override
   void initState() {
@@ -143,7 +145,7 @@ class _HtmlContentViewerOnWebState extends State<HtmlContentViewerOnWeb>
   ) {
     final deltaY = data['deltaY'] ?? 0.0;
     final newOffset = controller.offset + deltaY;
-    log('_HtmlContentViewerOnWebState::_handleIframeOnScrollChangedListener:deltaY = $deltaY | newOffset = $newOffset');
+    
     if (newOffset < controller.position.minScrollExtent) {
       controller.jumpTo(controller.position.minScrollExtent);
     } else if (newOffset > controller.position.maxScrollExtent) {
@@ -330,6 +332,29 @@ class _HtmlContentViewerOnWebState extends State<HtmlContentViewerOnWeb>
               "deltaY": deltaY
             }), "*");
           });
+          
+          // Touch scrolling for mobile
+          let _lastTouchY = null;
+          window.addEventListener('touchstart', function (event) {
+            if (event.touches && event.touches.length > 0) {
+              _lastTouchY = event.touches[0].clientY;
+            }
+          }, { passive: true });
+
+          window.addEventListener('touchmove', function (event) {
+            if (_lastTouchY === null || !(event.touches && event.touches.length > 0)) {
+              return;
+            }
+            const currentY = event.touches[0].clientY;
+            const deltaY = _lastTouchY - currentY;
+            _lastTouchY = currentY;
+            
+            window.parent.postMessage(JSON.stringify({
+              "view": "$_createdViewId",
+              "type": "toDart: $onScrollChangedEvent",
+              "deltaY": deltaY
+            }), "*");
+          }, { passive: true });
         ''' : ''}
       </script>
     ''';
@@ -374,9 +399,9 @@ class _HtmlContentViewerOnWebState extends State<HtmlContentViewerOnWeb>
       ..width = _actualWidth.toString()
       ..height = _actualHeight.toString()
       ..srcdoc = _htmlData ?? ''
-      ..style.border = 'none'
-      ..style.overflow = 'hidden'
-      ..style.width = '100%'
+  ..style.border = 'none'
+  ..style.overflow = 'hidden'
+  ..style.width = '100%'
       ..style.height = '100%';
 
     ui.platformViewRegistry.registerViewFactory(_createdViewId, (int viewId) => iframe);
@@ -390,7 +415,7 @@ class _HtmlContentViewerOnWebState extends State<HtmlContentViewerOnWeb>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+super.build(context);
 
     if (widget.autoAdjustHeight) {
       return _buildHtmlElementView();
