@@ -1,4 +1,8 @@
-# Mailbux Mail Client 
+# Mailbux Mail Client
+⚠️❌ **Deprecated — A new version has been built, currently not public.<br> 
+The new version supports all platforms: Desktop, Android, and iOS: https://mailbux.com**
+
+
 ⚠️ **Note**  
  This is only the email client! You will also need the mail server, which we provide at the lowest rate in the world for unlimited accounts  
  *(starting at only $3.95 with unlimited email accounts).*  
