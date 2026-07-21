@@ -60,7 +60,7 @@ class NavigationBarWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ScoposHorizontalLogoWidget(height: 34, onTapAction: onTapApplicationLogoAction),
+              ScoposHorizontalLogoWidget(height: 34, markOnly: true, onTapAction: onTapApplicationLogoAction),
               const Spacer(),
             ],
           ),

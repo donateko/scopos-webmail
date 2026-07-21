@@ -13,10 +13,16 @@ class ScoposHorizontalLogoWidget extends StatelessWidget {
   final double height;
   final VoidCallback? onTapAction;
 
+  /// Mark without the wordmark. The header allocates a fixed, narrow slot
+  /// that the full lockup overflows, and a signed-in user already knows
+  /// whose product this is, so the wordmark earns nothing there.
+  final bool markOnly;
+
   const ScoposHorizontalLogoWidget({
     super.key,
     this.height = 30,
     this.onTapAction,
+    this.markOnly = false,
   });
 
   @override
@@ -25,27 +31,31 @@ class ScoposHorizontalLogoWidget extends StatelessWidget {
     // height keeps the pairing proportional at any size.
     final wordmarkHeight = height * 0.42;
 
-    final lockup = Row(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        SvgPicture.asset(
-          'assets/images/scopos_mark_light.svg',
-          height: height,
-          fit: BoxFit.contain,
-        ),
-        SizedBox(width: height * 0.38),
-        Image.asset(
-          'assets/images/scopos_wordmark_light.png',
-          height: wordmarkHeight,
-          // Decode near display size rather than downscaling at paint time,
-          // which aliases the thin letterforms.
-          cacheHeight: (wordmarkHeight * 3).round(),
-          filterQuality: FilterQuality.high,
-          fit: BoxFit.contain,
-        ),
-      ],
+    final mark = SvgPicture.asset(
+      'assets/images/scopos_mark_light.svg',
+      height: height,
+      fit: BoxFit.contain,
     );
+
+    final lockup = markOnly
+      ? mark
+      : Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            mark,
+            SizedBox(width: height * 0.38),
+            Image.asset(
+              'assets/images/scopos_wordmark_light.png',
+              height: wordmarkHeight,
+              // Decode near display size rather than downscaling at paint
+              // time, which aliases the thin letterforms.
+              cacheHeight: (wordmarkHeight * 3).round(),
+              filterQuality: FilterQuality.high,
+              fit: BoxFit.contain,
+            ),
+          ],
+        );
 
     if (onTapAction == null) return lockup;
 
