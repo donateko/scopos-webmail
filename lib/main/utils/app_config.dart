@@ -26,6 +26,14 @@ class AppConfig {
   static String get baseUrl => dotenv.get('SERVER_URL', fallback: '');
   static String get domainRedirectUrl => dotenv.get('DOMAIN_REDIRECT_URL', fallback: '');
   static String get webOidcClientId => dotenv.get('WEB_OIDC_CLIENT_ID', fallback: '');
+
+  /// Skip OIDC discovery and present the in-app credential form instead.
+  /// The upstream client hands off to the provider's hosted login page, which
+  /// carries the provider's branding and cannot be themed. A rebranded
+  /// deployment needs its own login surface, so this forces the plain-JMAP
+  /// path the client already supports.
+  static bool get disableOidc =>
+      dotenv.get('DISABLE_OIDC', fallback: 'false').toLowerCase() == 'true';
   static bool get appGridDashboardAvailable {
     final supported = dotenv.get('APP_GRID_AVAILABLE', fallback: 'unsupported');
     if (supported == 'supported') {

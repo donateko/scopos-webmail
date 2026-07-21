@@ -340,6 +340,15 @@ class LoginController extends ReloadableController {
   }
 
   void _checkOIDCIsAvailable() {
+    // DISABLE_OIDC short-circuits discovery so the client never hands off to
+    // the provider's hosted login page. Routed through the existing
+    // no-OIDC-available handler rather than a parallel path, so the fallback
+    // stays the one the client already ships and tests.
+    if (AppConfig.disableOidc) {
+      log('LoginController::_checkOIDCIsAvailable: OIDC disabled by config, using credential form');
+      _handleCommonOIDCFailure();
+      return;
+    }
     if (_currentBaseUrl == null) {
       dispatchState(Left(CheckOIDCIsAvailableFailure(CanNotFoundBaseUrl())));
     } else {
