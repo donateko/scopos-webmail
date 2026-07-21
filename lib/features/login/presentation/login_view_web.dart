@@ -23,12 +23,46 @@ class LoginView extends BaseLoginView {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColor.primaryLightColor,
-      body: Center(child: SingleChildScrollView(
-          child: ResponsiveWidget(
-            responsiveUtils: controller.responsiveUtils,
-            mobile: _buildMobileForm(context),
-            desktop: _buildWebForm(context),
-          ))),
+      // Site hero treatment: the world-map image darkened to brightness 0.3
+      // and desaturated, under the same two near-black gradients the marketing
+      // hero uses. Keeps the consultant tool visually continuous with the
+      // public site, and removes the bright first paint entirely.
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/world-map-pillar.webp'),
+            fit: BoxFit.cover,
+            alignment: Alignment.centerLeft,
+            colorFilter: ColorFilter.matrix(<double>[
+              0.3, 0.0, 0.0, 0, 0,
+              0.0, 0.3, 0.0, 0, 0,
+              0.0, 0.0, 0.3, 0, 0,
+              0.0, 0.0, 0.0, 1, 0,
+            ]),
+          ),
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [
+                Color(0xFA0D0D0D),
+                Color(0xED0D0D0D),
+                Color(0xC20D0D0D),
+                Color(0xA80D0D0D),
+              ],
+              stops: [0.0, 0.32, 0.56, 1.0],
+            ),
+          ),
+          child: Center(child: SingleChildScrollView(
+              child: ResponsiveWidget(
+                responsiveUtils: controller.responsiveUtils,
+                mobile: _buildMobileForm(context),
+                desktop: _buildWebForm(context),
+              ))),
+        ),
+      ),
     );
   }
 
