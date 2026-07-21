@@ -238,13 +238,16 @@ class _LabelMailboxItemWidgetState extends State<LabelMailboxItemWidget> {
 
   TextStyle get _displayNameTextStyle {
     if (widget.isSelected) {
+      // Selected row is white, so its label is dark ink.
       return ThemeUtils.textStyleInter700(
-        color: _responsiveUtils.isDesktop(context) ? null : AppColor.iconFolder,
+        color: const Color(0xFF141414),
         fontSize: 14,
       );
     } else {
+      // Sidebar sits on the dark panel, so the stock black label is
+      // invisible; the site's muted ink is the right weight here.
       return _responsiveUtils.isWebDesktop(context)
-        ? ThemeUtils.textStyleBodyBody3(color: Colors.black)
+        ? ThemeUtils.textStyleBodyBody3(color: const Color(0xFFB8B6B2))
         : ThemeUtils.textStyleInter500();
     }
   }

@@ -19,7 +19,9 @@ class MailboxView extends BaseMailboxView {
     final isDesktop = controller.responsiveUtils.isDesktop(context);
 
     return Drawer(
-        backgroundColor: isDesktop ? AppColor.colorBgDesktop : Colors.white,
+        // Sidebar paints the dark sidebar colour, not colorBgDesktop, which is
+        // now the light message viewport.
+        backgroundColor: AppColor.colorBgMailbox,
         shape: InputBorder.none,
         shadowColor: AppColor.blackAlpha20,
         child: Column(

@@ -13,7 +13,7 @@ class MailboxView extends BaseMailboxView {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
+      backgroundColor: AppColor.colorBgMailbox,
       shape: InputBorder.none,
       shadowColor: AppColor.blackAlpha20,
       child: SafeArea(

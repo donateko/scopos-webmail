@@ -67,7 +67,9 @@ extension AppColor on Color {
   static const buttonActionToastWithActionColor = Color(0xFF7ADCF8);
   static const backgroundCountAttachment = Color(0x681C1C1C);
   static const bgStatusResultSearch = Color(0xFFF5F5F7);
-  static const colorNameEmail = Color(0xFFF4F3F0);
+  // Dark ink: this is the message-list ink on the light viewport. The
+  // login card sets its own ivory inline for the dark ground.
+  static const colorNameEmail = Color(0xFF141414);
   static const colorContentEmail = Color(0xFF6D7885);
   static const colorTextButton = Color(0xFFAC0014);
   static const colorHintSearchBar = Color(0xFF818C99);
@@ -247,7 +249,7 @@ extension AppColor on Color {
   static const steelGrayA540 = Color(0xFFB8B6B2);
   static const steelGray200 = Color(0xFFAEB7C2);
   static const blue700 = Color(0xFF208BFF);
-  static const steelGray400 = Color(0xFFB8B6B2);
+  static const steelGray400 = Color(0xFF55534E);
   static const steelGray600 = Color(0xFF4E5966);
   static const blue100 = Color(0xFFDFEEFF);
   static const blue400 = Color(0xFF80BDFF);

@@ -25,7 +25,7 @@ class CreateNewIdentityButtonWidget extends StatelessWidget {
       text: AppLocalizations.of(context).createNewIdentity,
       icon: imagePaths.icAddIdentity,
       backgroundColor: AppColor.primaryMain,
-      borderRadius: 100,
+      borderRadius: 0,
       height: 48,
       maxWidth: 300,
       margin: margin,
