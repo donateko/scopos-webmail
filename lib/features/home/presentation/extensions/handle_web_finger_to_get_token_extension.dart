@@ -16,6 +16,15 @@ extension HandleWebFingerToGetTokenExtension on HomeController {
       PlatformInfo.isWeb && isNotSignedIn(failure);
 
   void checkOIDCIsAvailable() {
+    // DISABLE_OIDC: skip discovery entirely and hand off to the login screen,
+    // which presents the in-app credential form. This runs before the login
+    // screen loads, so it is the path that actually reaches the provider's
+    // hosted page; guarding LoginController alone is not enough.
+    if (AppConfig.disableOidc) {
+      goToLogin();
+      return;
+    }
+
     final baseUri = Uri.tryParse(AppConfig.baseUrl);
 
     if (baseUri == null) {

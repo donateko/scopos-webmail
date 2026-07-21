@@ -211,7 +211,10 @@ class LoginView extends BaseLoginView {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 66),
-                      child: ApplicationLogoWidthTextWidget()
+                      // The stock 48px square renders a wide wordmark
+                      // illegibly small; the sign-in card is the primary
+                      // brand moment, so it gets a legible size.
+                      child: ApplicationLogoWidthTextWidget(iconSize: 150)
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 67),
