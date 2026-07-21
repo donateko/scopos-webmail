@@ -78,15 +78,9 @@ class LoginView extends BaseLoginView {
             ],
           )
         ),
-        Positioned.fill(
-          bottom: 24,
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: SvgPicture.asset(
-              controller.imagePaths.icPowerByLinagora,
-              width: 97,
-              height: 44,
-              fit: BoxFit.fill)))
+        // The bottom mark was a vendor "powered by" credit. With the app
+        // fully rebranded it only duplicates the logo in the sign-in card,
+        // so it is removed rather than restyled.
       ],
     );
   }
