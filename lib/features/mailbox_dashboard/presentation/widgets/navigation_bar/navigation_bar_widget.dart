@@ -5,6 +5,7 @@ import 'package:core/presentation/resources/image_paths.dart';
 import 'package:core/presentation/utils/responsive_utils.dart';
 import 'package:core/presentation/views/button/tmail_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:tmail_ui_user/features/base/widget/scopos_horizontal_logo_widget.dart';
 import 'package:get/get.dart';
 import 'package:jmap_dart_client/jmap/account_id.dart';
 import 'package:model/support/contact_support_capability.dart';
@@ -49,7 +50,9 @@ class NavigationBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: NavigationBarStyle.barHeight,
-      color: Colors.white,
+      // Site DNA: dark chrome. Also the only ground the light wordmark
+      // lockup reads on, and the brand ships no dark wordmark.
+      color: const Color(0xFF0D0D0D),
       padding: const EdgeInsetsDirectional.symmetric(horizontal: NavigationBarStyle.horizontalMargin),
       child: Row(children: [
         SizedBox(
@@ -57,7 +60,7 @@ class NavigationBarWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ApplicationLogoWidthTextWidget(onTapAction: onTapApplicationLogoAction),
+              ScoposHorizontalLogoWidget(height: 34, onTapAction: onTapApplicationLogoAction),
               const Spacer(),
             ],
           ),
