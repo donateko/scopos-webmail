@@ -126,92 +126,9 @@ class LoginView extends BaseLoginView {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 86),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  AppLocalizations.of(context).jmapBasedMailSolution,
-                  style: ThemeUtils.defaultTextStyleInterFont.copyWith(
-                    fontSize: 36,
-                    color: AppColor.colorNameEmail,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: SloganBuilder(
-                    arrangedByHorizontal: true,
-                    logo: controller.imagePaths.icJMAPStandard,
-                    sizeLogo: 48.0,
-                    paddingText: const EdgeInsets.only(left: 12),
-                    text: AppLocalizations.of(context).jmapStandard,
-                    textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.colorNameEmail,
-                    ),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: SloganBuilder(
-                    arrangedByHorizontal: true,
-                    logo: controller.imagePaths.icEncrypted,
-                    sizeLogo: 48.0,
-                    paddingText: const EdgeInsets.only(left: 12),
-                    text: AppLocalizations.of(context).encryptedMailbox,
-                    textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.colorNameEmail,
-                    ),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: SloganBuilder(
-                    arrangedByHorizontal: true,
-                    logo: controller.imagePaths.icTeam,
-                    sizeLogo: 48.0,
-                    paddingText: const EdgeInsets.only(left: 12),
-                    text: AppLocalizations.of(context).manageEmailAsATeam,
-                    textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.colorNameEmail,
-                    ),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: SloganBuilder(
-                    arrangedByHorizontal: true,
-                    logo: controller.imagePaths.icIntegration,
-                    sizeLogo: 48.0,
-                    paddingText: const EdgeInsets.only(left: 12),
-                    text: AppLocalizations.of(context).multipleIntegrations,
-                    textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w400,
-                      color: AppColor.colorNameEmail,
-                    ),
-                  )
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 44),
-                  child: SvgPicture.asset(
-                    controller.imagePaths.icLoginGraphic,
-                    fit: BoxFit.fill,
-                    alignment: Alignment.center
-                  )
-                )
-              ],
-            )
-          ),
+          // Vendor marketing panel (JMAP pitch, feature bullets, product
+          // illustration) removed: this is an internal consultant tool, not a
+          // product landing page. The sign-in card now centres on the hero.
           Column(
             children: [
               Container(
