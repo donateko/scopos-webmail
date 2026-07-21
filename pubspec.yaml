@@ -400,6 +400,12 @@ flutter:
           weight: 700
         - asset: assets/fonts/BarlowCondensed/BarlowCondensed-SemiBold.ttf
           weight: 600
+    - family: SpaceMono
+      fonts:
+        - asset: assets/fonts/SpaceMono/SpaceMono-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/SpaceMono/SpaceMono-Regular.ttf
+          weight: 400
 
 flutter_icons:
   android: true

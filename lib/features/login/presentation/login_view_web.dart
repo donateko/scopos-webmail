@@ -108,7 +108,17 @@ class LoginView extends BaseLoginView {
                 padding: EdgeInsets.only(top: 16),
                 child: PrivacyLinkWidget(),
               ),
-              const ApplicationVersionWidget(padding: EdgeInsets.only(top: 8)),
+              const ApplicationVersionWidget(
+                      padding: EdgeInsets.only(top: 8),
+                      // Mono for the version stamp, matching the site's
+                      // treatment of fine print.
+                      textStyle: TextStyle(
+                        fontFamily: 'SpaceMono',
+                        fontSize: 11,
+                        letterSpacing: 0.3,
+                        color: Color(0xFF6E6A62),
+                      ),
+                    ),
             ],
           )
         ),
@@ -189,7 +199,7 @@ class LoginView extends BaseLoginView {
                     Padding(
                       padding: const EdgeInsets.only(top: 67),
                       child: Text(
-                        AppLocalizations.of(context).signIn,
+                        AppLocalizations.of(context).signIn.toUpperCase(),
                         // Ivory, scoped to this view: colorNameEmail is near
                         // black and is used across the inbox on light ground,
                         // so it must not be changed globally.
@@ -225,7 +235,17 @@ class LoginView extends BaseLoginView {
                       padding: EdgeInsets.only(top: 16),
                       child: PrivacyLinkWidget()
                     ),
-                    const ApplicationVersionWidget(padding: EdgeInsets.only(top: 8)),
+                    const ApplicationVersionWidget(
+                      padding: EdgeInsets.only(top: 8),
+                      // Mono for the version stamp, matching the site's
+                      // treatment of fine print.
+                      textStyle: TextStyle(
+                        fontFamily: 'SpaceMono',
+                        fontSize: 11,
+                        letterSpacing: 0.3,
+                        color: Color(0xFF6E6A62),
+                      ),
+                    ),
                   ],
                 )
               ),

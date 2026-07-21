@@ -30,12 +30,11 @@ abstract class BaseLoginView extends GetWidget<LoginController> {
         ),
         onPressed: () => controller.handleLoginPressed(context),
         child: Text(
-          AppLocalizations.of(context).signIn.toUpperCase(),
+          AppLocalizations.of(context).signIn,
           style: const TextStyle(
-            fontFamily: 'BarlowCondensed',
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 1.4,
+            fontFamily: 'Barlow',
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
         ),

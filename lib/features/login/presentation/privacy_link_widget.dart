@@ -18,18 +18,23 @@ class PrivacyLinkWidget extends StatelessWidget {
       children: [
         Text(
           AppLocalizations.of(context).byContinuingYouAreAgreeingToOur,
-          style: ThemeUtils.defaultTextStyleInterFont.copyWith(
-            color: AppColor.colorTextBody,
-            fontSize: 14,
+          // Space Mono: the site's mono face, used for fine print.
+          style: const TextStyle(
+            fontFamily: 'SpaceMono',
+            color: Color(0xFF8A8A8A),
+            fontSize: 12,
+            letterSpacing: 0.2,
             fontWeight: FontWeight.w400,
           ),
         ),
         RichText(
           text: TextSpan(
             text: AppLocalizations.of(context).privacyPolicy,
-            style: ThemeUtils.defaultTextStyleInterFont.copyWith(
-              color: AppColor.loginTextFieldFocusedBorder,
-              fontSize: 14),
+            style: const TextStyle(
+              fontFamily: 'SpaceMono',
+              color: Color(0xFFAC0014),
+              fontSize: 12,
+              letterSpacing: 0.2),
             recognizer: TapGestureRecognizer()..onTap = () => AppUtils.launchLink(privacyUrlString)
           )
         )
