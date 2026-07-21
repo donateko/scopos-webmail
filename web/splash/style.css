@@ -74,8 +74,10 @@ body {
 }
 
 @keyframes scopos-pulse {
-  0%, 100% { opacity: 1;    transform: scale(1); }
-  50%      { opacity: 0.55; transform: scale(0.94); }
+  /* .center positions via translate(-50%, -50%); the keyframes must carry it
+     too, or the scale replaces it and the mark drifts off centre. */
+  0%, 100% { opacity: 1;    transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.55; transform: translate(-50%, -50%) scale(0.94); }
 }
 
 @media (prefers-reduced-motion: reduce) {
