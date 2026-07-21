@@ -5,7 +5,7 @@ import 'package:core/utils/platform_info.dart';
 import 'package:flutter/material.dart';
 
 class TabletContainerViewStyle {
-  static const double radius = 28;
+  static const double radius = 0;
   static const double elevation = 16;
 
   static const Color backgroundColor = Colors.white;

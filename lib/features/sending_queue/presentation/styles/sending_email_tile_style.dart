@@ -6,7 +6,7 @@ import 'package:tmail_ui_user/features/offline_mode/model/sending_state.dart';
 
 class SendingEmailTileStyle {
   static const double avatarIconSize = 60;
-  static const double avatarIconRadius = 30;
+  static const double avatarIconRadius = 0;
   static const double selectIconSize = 24;
   static const double attachmentIconSize = 20;
   static const double space = 8;

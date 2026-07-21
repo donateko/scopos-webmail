@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class AppBarSendingQueueWidgetStyle {
   static const double height = 52;
-  static const double leadingRadius = 15;
+  static const double leadingRadius = 0;
   static const double space = 8;
   static const double trailingSize = 50;
 

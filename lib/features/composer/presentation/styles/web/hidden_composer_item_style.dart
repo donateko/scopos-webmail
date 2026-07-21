@@ -2,7 +2,7 @@ import 'package:core/presentation/extensions/color_extension.dart';
 import 'package:flutter/material.dart';
 
 class HiddenComposerItemStyle {
-  static const double radius = 12;
+  static const double radius = 0;
   static const double elevation = 16;
   static const double width = 320;
   static const double height = 52;

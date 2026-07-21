@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 class DropdownButtonFontSizeWidgetStyle {
   static const double borderWidth = 0.5;
-  static const double radius = 8;
+  static const double radius = 0;
   static const double height = 36;
-  static const double labelRadius = 4;
+  static const double labelRadius = 0;
   static const double space = 4;
 
   static const Color borderColor = AppColor.dropdownButtonBorderColor;

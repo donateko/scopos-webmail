@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AttachmentHeaderComposerWidgetStyle {
   static const double space = 8;
   static const double iconSize = 20;
-  static const double sizeLabelRadius = 12;
+  static const double sizeLabelRadius = 0;
 
   static const Color iconColor = AppColor.colorLabelComposer;
   static const Color sizeLabelBackground = AppColor.primaryColor;

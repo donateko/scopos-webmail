@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 
 class EmptyMailboxDialogOverlayStyles {
   static const double width = 300;
-  static const double radius = 16;
+  static const double radius = 0;
   static const double closeButtonIconSize = 28;
   static const double space = 12;
   static const double buttonSpace = 9;
-  static const double buttonRadius = 8;
+  static const double buttonRadius = 0;
   static const double elevation = 8;
 
   static const EdgeInsetsGeometry margin = EdgeInsetsDirectional.only(start: 12);

@@ -9,7 +9,7 @@ class EmailViewBottomBarWidgetStyles {
   static const double topBorderWidth = 0.5;
   static const double buttonRadius = 0;
   static const double buttonIconSize = 20;
-  static const double radius = 20;
+  static const double radius = 0;
 
   static const Color iconColor = AppColor.steelGrayA540;
   static const Color topBorderColor = AppColor.colorDividerHorizontal;

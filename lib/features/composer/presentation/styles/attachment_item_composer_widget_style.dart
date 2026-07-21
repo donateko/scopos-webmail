@@ -3,11 +3,11 @@ import 'package:core/presentation/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 
 class AttachmentItemComposerWidgetStyle {
-  static const double radius = 8;
+  static const double radius = 0;
   static const double iconSize = 20;
   static const double space = 8;
   static const double deleteIconSize = 18;
-  static const double deleteIconRadius = 10;
+  static const double deleteIconRadius = 0;
   static const double width = 260;
 
   static const Color borderColor = AppColor.colorAttachmentBorder;

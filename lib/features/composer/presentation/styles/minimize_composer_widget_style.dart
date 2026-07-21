@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tmail_ui_user/features/composer/presentation/styles/composer_style.dart';
 
 class MinimizeComposerWidgetStyle {
-  static const double radius = 24;
+  static const double radius = 0;
   static const double elevation = 16;
   static const double width = ComposerStyle.minimizeWidth;
   static const double height = ComposerStyle.minimizeHeight;

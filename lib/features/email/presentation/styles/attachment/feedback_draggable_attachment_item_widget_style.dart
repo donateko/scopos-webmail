@@ -4,7 +4,7 @@ import 'package:core/presentation/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackDraggableAttachmentItemWidgetStyle {
-  static const double radius = 8;
+  static const double radius = 0;
   static const double iconSize = 24;
   static const double space = 12;
   static const double maxWidth = 300;

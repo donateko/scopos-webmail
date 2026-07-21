@@ -3,7 +3,7 @@ import 'package:core/presentation/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 
 class RecipientSuggestionItemWidgetStyle {
-  static const double radius = 20;
+  static const double radius = 0;
   static const double selectedIconSize = 24;
 
   static const EdgeInsetsGeometry suggestionDuplicatedMargin = EdgeInsets.all(8.0);

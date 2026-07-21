@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class SpamReportBannerButtonStyles {
   static const double padding = 8;
   static const double paddingIcon = 4;
-  static const double borderRadius = 10;
+  static const double borderRadius = 0;
   static const double labelTextSize = 16;
   static const double iconSize = 20;
   static const Color backgroundColor = AppColor.colorSpamReportBannerButtonBackground;

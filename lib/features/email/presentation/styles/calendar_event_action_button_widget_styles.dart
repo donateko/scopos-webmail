@@ -3,7 +3,7 @@ import 'package:core/presentation/extensions/color_extension.dart';
 import 'package:flutter/material.dart';
 
 class CalendarEventActionButtonWidgetStyles {
-  static const double borderRadius = 10;
+  static const double borderRadius = 0;
   static const double textSize = 16;
   static const double space = 16;
   static const double borderWidth = 1;

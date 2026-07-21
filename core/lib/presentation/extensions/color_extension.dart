@@ -109,13 +109,16 @@ extension AppColor on Color {
   static const colorTextSettingDescriptions = colorTextButtonHeaderThread;
   static const colorButtonHeaderThread = Color(0x99EBEDF0);
   static const colorBorderBodyThread = Color(0x5CB8C1CC);
-  static const colorBgDesktop = Color(0xFF0D0D0D);
+  // Message viewport: very light grey, so content reads on a calm ground
+  // while the chrome around it stays dark.
+  static const colorBgDesktop = Color(0xFFF1F1F1);
   static const colorItemEmailSelectedDesktop = Color(0xFFDFEEFF);
   static const colorAvatar = Color(0xFFDE5E5E);
   static const colorFocusButton = Color(0x14818C99);
   static const colorBorderEmailAddressInvalid = Color(0xFFFF3347);
   static const colorBorderIdentityInfo = Color(0xFFE7E8EC);
-  static const colorBgMailboxSelected = Color(0xFF262626);
+  // Selected folder row is white against the dark sidebar.
+  static const colorBgMailboxSelected = Color(0xFFFFFFFF);
   static const colorLoading = Color(0x2999A2AD);
   static const colorBgMenuItemDropDownSelected = Color(0x80DEE2E7);
   static const colorButtonCancelDialog = Color(0x0D000000);
@@ -198,7 +201,7 @@ extension AppColor on Color {
   static const colorLabelQuotas = Color(0xFF818C99);
   static const colorLabelCancelButton = Color(0xFFAEB7C2);
   static const colorCreateFiltersButton = Color(0xFFF3F3F7);
-  static const colorTextBody = Color(0xFF818C99);
+  static const colorTextBody = Color(0xFFB8B6B2);
   static const colorClosePopupDialogButton = Color(0xFFAEB7C2);
   static const colorCancelPopupDialogButton = Color(0xFFEBEDF0);
   static const colorRemoveRuleFilterConditionButton = Color(0xFFE6E8EC);
@@ -241,10 +244,10 @@ extension AppColor on Color {
   static const colorStarredSearchFilterIcon = Color(0xFFFFCC00);
   static const colorMobileSearchFilterButton = Color(0xFFEBEDF0);
   static const colorContactViewClearFilterButton = Color(0x001C3D0D);
-  static const steelGrayA540 = Color(0xFF55687D);
+  static const steelGrayA540 = Color(0xFFB8B6B2);
   static const steelGray200 = Color(0xFFAEB7C2);
   static const blue700 = Color(0xFF208BFF);
-  static const steelGray400 = Color(0xFF818C99);
+  static const steelGray400 = Color(0xFFB8B6B2);
   static const steelGray600 = Color(0xFF4E5966);
   static const blue100 = Color(0xFFDFEEFF);
   static const blue400 = Color(0xFF80BDFF);
@@ -283,17 +286,20 @@ extension AppColor on Color {
   static const lightIconTertiary = Color(0xFFB8C1CC);
   static const gray6D7885 = Color(0xFF6D7885);
 
+  // Avatar gradients, restrained to the Scopos register: graphite, navy,
+  // and deep red rather than the stock candy palette. Each pair is a
+  // shade-to-shade step of one hue so the avatars read as a family.
   static const mapGradientColor = [
-    [Color(0xFF21D4FD), Color(0xFFB721FF)],
-    [Color(0xFF38F9D7), Color(0xFF43E97B)],
-    [Color(0xFF11E6F0), Color(0xFF4FACFE)],
-    [Color(0xFFE88395), Color(0xFFEF9C8F)],
-    [Color(0xFF8DDAD5), Color(0xFF00CDAC)],
-    [Color(0xFFE4ABF0), Color(0xFFD96EED)],
-    [Color(0xFFF0FF00), Color(0xFF58CFFB)],
-    [Color(0xFFEFC0D7), Color(0xFF1AD5E4)],
-    [Color(0xFFFFD26F), Color(0xFF3677FF)],
-    [Color(0xFF87A6F8), Color(0xFF645FF6)],
+    [Color(0xFF3A3A3A), Color(0xFF1F1F1F)],
+    [Color(0xFF0F2E7A), Color(0xFF081F5B)],
+    [Color(0xFF8A1220), Color(0xFFAC0014)],
+    [Color(0xFF55534E), Color(0xFF33322F)],
+    [Color(0xFF1C3A6E), Color(0xFF12264A)],
+    [Color(0xFF6E2A33), Color(0xFF4A181F)],
+    [Color(0xFF4A4A4A), Color(0xFF2B2B2B)],
+    [Color(0xFF243B63), Color(0xFF16263F)],
+    [Color(0xFF7A2029), Color(0xFF52141A)],
+    [Color(0xFF605D57), Color(0xFF3D3B37)],
   ];
 
   int toInt() {

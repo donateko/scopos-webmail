@@ -3,7 +3,7 @@ import 'package:core/presentation/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 
 class AutocompleteTagItemStyle {
-  static const double radius = 10;
+  static const double radius = 0;
   static const double space = 4;
   static const double deleteIconSize = 24;
 

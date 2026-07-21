@@ -6,7 +6,7 @@ import 'package:tmail_ui_user/features/composer/presentation/styles/web/bottom_b
 class DropZoneWidgetStyle {
   static const double space = 20;
   static const double borderWidth = 2;
-  static const double radius = 16;
+  static const double radius = 0;
   static const Duration animationDuration = Duration(milliseconds: 180);
 
   static const List<double> dashSize = [6, 3];

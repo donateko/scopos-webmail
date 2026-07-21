@@ -2,7 +2,7 @@ import 'package:core/presentation/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 
 class RecipientTagItemWidgetStyle {
-  static const double radius = 10;
+  static const double radius = 0;
   static const double avatarIconSize = 20;
   static const double avatarLabelFontSize = 12;
 

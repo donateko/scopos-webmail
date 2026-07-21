@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CalendarEventDetailWidgetStyles {
   static const double textSize = 24;
-  static const double borderRadius = 16;
+  static const double borderRadius = 0;
   static const double verticalMargin = 12;
   static const double horizontalMargin = 16;
   static const double contentPadding = 16;

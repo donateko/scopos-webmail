@@ -7,7 +7,7 @@ class AdvancedSearchInputFormStyle {
     color: AppColor.m3SurfaceBackground,
   );
 
-  static const double inputFieldBorderRadius = 10;
+  static const double inputFieldBorderRadius = 0;
   static const double inputFieldBorderWidth = 1;
   static const double inputFieldHeight = 40;
   static const double labelMaxWidth = 112;

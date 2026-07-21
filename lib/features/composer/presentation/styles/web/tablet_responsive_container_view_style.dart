@@ -3,7 +3,7 @@ import 'package:core/presentation/utils/responsive_utils.dart';
 import 'package:flutter/material.dart';
 
 class TabletResponsiveContainerViewStyle {
-  static const double radius = 28;
+  static const double radius = 0;
   static const double elevation = 16;
 
   static const Color backgroundColor = Colors.white;

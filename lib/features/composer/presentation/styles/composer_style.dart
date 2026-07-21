@@ -6,7 +6,7 @@ import 'package:core/utils/platform_info.dart';
 import 'package:flutter/material.dart';
 
 class ComposerStyle {
-  static const double radius = 28;
+  static const double radius = 0;
   static const double keyboardToolBarHeight = 200;
   static const double suggestionItemHeight = 60;
   static const double normalWidth = 600;

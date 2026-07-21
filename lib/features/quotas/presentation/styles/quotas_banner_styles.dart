@@ -10,7 +10,7 @@ class QuotasBannerStyles {
   static const double titleTextSize = 17;
   static const double messageTextSize = 15;
   static const double space = 4;
-  static const double borderRadius = 12;
+  static const double borderRadius = 0;
 
   static const Color messageTextColor = AppColor.steelGray400;
 
