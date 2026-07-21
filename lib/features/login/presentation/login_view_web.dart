@@ -243,10 +243,9 @@ class LoginView extends BaseLoginView {
                   ],
                 )
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 44, bottom: 10),
-                child: SvgPicture.asset(controller.imagePaths.icPowerByLinagora, width: 97, height: 44, fit: BoxFit.fill)
-              )
+              // Second vendor "powered by" credit, on the narrow layout.
+              // Removed for the same reason as the wide one: it duplicates
+              // the sign-in card logo now that the app is fully rebranded.
             ]
           )
         ],
