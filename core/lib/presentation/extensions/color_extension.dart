@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 extension AppColor on Color {
   static const primaryColor = Color(0xFF081F5B);
   static const primaryDarkColor = Color(0xFF1C1C1C);
-  static const primaryLightColor = Color(0xFFFFFFFF);
+  // Matches the HTML splash background (#E6E6E6). Pure white here caused a
+  // bright flash on hand-off from the splash to the first Flutter paint.
+  static const primaryLightColor = Color(0xFFE6E6E6);
   static const primarySelectedColor = Color(0xFFDFEEFF);
   static const baseTextColor = Color(0xFF7E869B);
   static const textFieldTextColor = Color(0xFF7E869B);
