@@ -29,19 +29,19 @@ extension WebPageTitleExtension on MailboxDashBoardController {
       }
 
       if (matches('settings')) {
-        html.document.title = 'Settings - Mailbux';
+        html.document.title = 'Settings - Scopos Mail';
         return;
       }
       if (matches('calendar')) {
-        html.document.title = 'Calendar - Mailbux';
+        html.document.title = 'Calendar - Scopos Mail';
         return;
       }
       if (matches('drive')) {
-        html.document.title = 'Drive - Mailbux';
+        html.document.title = 'Drive - Scopos Mail';
         return;
       }
       if (matches('contacts')) {
-        html.document.title = 'Contacts - Mailbux';
+        html.document.title = 'Contacts - Scopos Mail';
         return;
       }
     } catch (_) {
@@ -49,11 +49,11 @@ extension WebPageTitleExtension on MailboxDashBoardController {
     }
 
     if (route == DashboardRoutes.drive) {
-      html.document.title = 'Drive - Mailbux';
+      html.document.title = 'Drive - Scopos Mail';
       return;
     }
     if (route == DashboardRoutes.contacts) {
-      html.document.title = 'Contacts - Mailbux';
+      html.document.title = 'Contacts - Scopos Mail';
       return;
     }
 
@@ -99,9 +99,9 @@ extension WebPageTitleExtension on MailboxDashBoardController {
     if (email.isNotEmpty) {
       parts.add(email);
     }
-    // Avoid duplicating app name when folderName (or only part) already equals 'Mailbux'
-    if (parts.isEmpty || parts.last != 'Mailbux') {
-      parts.add('Mailbux');
+    // Avoid duplicating app name when folderName (or only part) already equals 'Scopos Mail'
+    if (parts.isEmpty || parts.last != 'Scopos Mail') {
+      parts.add('Scopos Mail');
     }
 
     html.document.title = parts.join(' - ');

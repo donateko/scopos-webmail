@@ -282,7 +282,7 @@ class CalDavApi {
     final b = StringBuffer()
       ..writeln('BEGIN:VCALENDAR')
       ..writeln('VERSION:2.0')
-      ..writeln('PRODID:-//Mailbux Flutter//EN')
+      ..writeln('PRODID:-//Scopos Mail//EN')
       ..writeln('CALSCALE:GREGORIAN')
       // ..writeln('METHOD:REQUEST') // Usually not required when storing resource; server handles scheduling
       ..writeln('BEGIN:VEVENT')

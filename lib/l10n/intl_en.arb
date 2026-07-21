@@ -5,7 +5,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Mailbux",
+  "login_text_slogan": "Scopos Mail",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -805,7 +805,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Mailbux",
+  "app_name": "Scopos Mail",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -949,7 +949,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Mailbux",
+  "page_name": "Scopos Mail",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1523,7 +1523,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Set the language you use on Mailbux.",
+  "languageSubtitle": "Set the language you use on Scopos Mail.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -2523,7 +2523,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Mailbux",
+  "appTitlePushNotification": "Scopos Mail",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],

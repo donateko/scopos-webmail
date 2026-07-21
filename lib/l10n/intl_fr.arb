@@ -6,7 +6,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Mailbux",
+  "login_text_slogan": "Scopos Mail",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -668,7 +668,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Mailbux",
+  "app_name": "Scopos Mail",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -818,7 +818,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Mailbux",
+  "page_name": "Scopos Mail",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1236,7 +1236,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Définissez la langue de Mailbux.",
+  "languageSubtitle": "Définissez la langue de Scopos Mail.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -1846,7 +1846,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Mailbux",
+  "appTitlePushNotification": "Scopos Mail",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],
@@ -2098,7 +2098,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "textQuotasRunOutOfStorageContent": "Maintenant, vous ne pouvez temporairement pas envoyer ou recevoir d'e-mail. Veuillez libérer ou mettre à niveau votre espace de stockage pour bénéficier de toutes les fonctionnalités de Mailbux.",
+  "textQuotasRunOutOfStorageContent": "Maintenant, vous ne pouvez temporairement pas envoyer ou recevoir d'e-mail. Veuillez libérer ou mettre à niveau votre espace de stockage pour bénéficier de toutes les fonctionnalités de Scopos Mail.",
   "@textQuotasRunOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2218,7 +2218,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "textQuotasRunningOutOfStorageContent": "Bientôt, vous ne pourrez plus envoyer d'e-mails via Mailbux. Veuillez nettoyer votre stockage ou mettre à niveau votre stockage pour obtenir toutes les fonctionnalités de Mailbux.",
+  "textQuotasRunningOutOfStorageContent": "Bientôt, vous ne pourrez plus envoyer d'e-mails via Scopos Mail. Veuillez nettoyer votre stockage ou mettre à niveau votre stockage pour obtenir toutes les fonctionnalités de Scopos Mail.",
   "@textQuotasRunningOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2896,7 +2896,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "quotaWarningBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Mailbux. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Mailbux.",
+  "quotaWarningBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Scopos Mail. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Scopos Mail.",
   "@quotaWarningBannerMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -2990,7 +2990,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "quotaErrorBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Mailbux. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Mailbux.",
+  "quotaErrorBannerMessage": "Bientôt, vous ne pourrez plus envoyer de messages dans Scopos Mail. Veuillez nettoyer ou mettre à niveau votre stockage pour bénéficier de toutes les fonctionnalités de Scopos Mail.",
   "@quotaErrorBannerMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -3682,7 +3682,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bannerProgressingRecoveryMessage": "La récupération est en cours. Vous pouvez continuer à utiliser Mailbux",
+  "bannerProgressingRecoveryMessage": "La récupération est en cours. Vous pouvez continuer à utiliser Scopos Mail",
   "@bannerProgressingRecoveryMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -4032,7 +4032,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseAllowNotifications": "Veuillez autoriser les notifications de Mailbux dans les réglages de l'appareil",
+  "pleaseAllowNotifications": "Veuillez autoriser les notifications de Scopos Mail dans les réglages de l'appareil",
   "@pleaseAllowNotifications": {
     "type": "text",
     "placeholders_order": [],
@@ -4074,7 +4074,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Permet à Mailbux de vous avertir quand un nouveau message arrive sur votre téléphone",
+  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Permet à Scopos Mail de vous avertir quand un nouveau message arrive sur votre téléphone",
   "@allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": {
     "type": "text",
     "placeholders_order": [],

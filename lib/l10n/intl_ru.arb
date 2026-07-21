@@ -6,7 +6,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Mailbux",
+  "login_text_slogan": "Scopos Mail",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -674,7 +674,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Mailbux",
+  "app_name": "Scopos Mail",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -858,7 +858,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Mailbux",
+  "page_name": "Scopos Mail",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -2346,7 +2346,7 @@
       "softLimit": {}
     }
   },
-  "textQuotasRunOutOfStorageContent": "Теперь вы временно не можете отправлять или получать письма. Пожалуйста, освободите хранилище или обновите подписку, чтобы получить доступ ко всем функциям Mailbux.",
+  "textQuotasRunOutOfStorageContent": "Теперь вы временно не можете отправлять или получать письма. Пожалуйста, освободите хранилище или обновите подписку, чтобы получить доступ ко всем функциям Scopos Mail.",
   "@textQuotasRunOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2410,7 +2410,7 @@
       "progress": {}
     }
   },
-  "textQuotasRunningOutOfStorageContent": "Скоро вы потеряете возможность отправлять письма в Mailbux. Пожалуйста, очистите хранилище или обновите подписку, чтобы получить все функции Mailbux.",
+  "textQuotasRunningOutOfStorageContent": "Скоро вы потеряете возможность отправлять письма в Scopos Mail. Пожалуйста, очистите хранилище или обновите подписку, чтобы получить все функции Scopos Mail.",
   "@textQuotasRunningOutOfStorageContent": {
     "type": "text",
     "placeholders_order": [],
@@ -2470,7 +2470,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Mailbux",
+  "appTitlePushNotification": "Scopos Mail",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],
@@ -3468,7 +3468,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Выберите язык Mailbux.",
+  "languageSubtitle": "Выберите язык Scopos Mail.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -3800,7 +3800,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bannerProgressingRecoveryMessage": "Мы уже занимаемся восстановлением. Вы можете продолжать использовать Mailbux",
+  "bannerProgressingRecoveryMessage": "Мы уже занимаемся восстановлением. Вы можете продолжать использовать Scopos Mail",
   "@bannerProgressingRecoveryMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -4068,7 +4068,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseAllowNotifications": "Перейдите в настройки устройства и разрешите Mailbux присылать уведомления",
+  "pleaseAllowNotifications": "Перейдите в настройки устройства и разрешите Scopos Mail присылать уведомления",
   "@pleaseAllowNotifications": {
     "type": "text",
     "placeholders_order": [],
@@ -4080,7 +4080,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Позволяет Mailbux уведомлять вас о поступлении нового сообщения",
+  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Позволяет Scopos Mail уведомлять вас о поступлении нового сообщения",
   "@allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": {
     "type": "text",
     "placeholders_order": [],

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 extension AppColor on Color {
-  static const primaryColor = Color(0xFF007AFF);
+  static const primaryColor = Color(0xFF081F5B);
   static const primaryDarkColor = Color(0xFF1C1C1C);
   static const primaryLightColor = Color(0xFFFFFFFF);
   static const primarySelectedColor = Color(0xFFDFEEFF);
@@ -64,7 +64,7 @@ extension AppColor on Color {
   static const bgStatusResultSearch = Color(0xFFF5F5F7);
   static const colorNameEmail = Color(0xFF000000);
   static const colorContentEmail = Color(0xFF6D7885);
-  static const colorTextButton = Color(0xFF007AFF);
+  static const colorTextButton = Color(0xFF081F5B);
   static const colorHintSearchBar = Color(0xFF818C99);
   static const colorBgSearchBar = Color(0x99EBEDF0);
   static const colorBgIdentityButton = Color(0x00EBEDF0);
@@ -251,7 +251,7 @@ extension AppColor on Color {
   static const grayBackgroundColor = Color(0xFFF3F6F9);
   static const m3SurfaceBackground = Color(0xFF1C1B1F);
   static const warningColor = Color(0xFFFFC107);
-  static const primaryMain = Color(0xFF0A84FF);
+  static const primaryMain = Color(0xFF0F2E7A);
   static const m3LayerDarkOutline = Color(0xFF938F99);
   static const blackAlpha40 = Color.fromRGBO(0, 0, 0, 0.4);
   static const blackAlpha20 = Color.fromRGBO(0, 0, 0, 0.2);

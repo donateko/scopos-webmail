@@ -41,7 +41,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Mailbux",
+  "login_text_slogan": "Scopos Mail",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -3301,7 +3301,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Legen Sie die Sprache fest, die Sie in Mailbux verwenden.",
+  "languageSubtitle": "Legen Sie die Sprache fest, die Sie in Scopos Mail verwenden.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -3461,7 +3461,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Mailbux",
+  "page_name": "Scopos Mail",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -3485,7 +3485,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Mailbux",
+  "app_name": "Scopos Mail",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -3569,7 +3569,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseAllowNotifications": "Bitte erlauben Sie Benachrichtigungen von Mailbux in den Einstellungen des Geräts",
+  "pleaseAllowNotifications": "Bitte erlauben Sie Benachrichtigungen von Scopos Mail in den Einstellungen des Geräts",
   "@pleaseAllowNotifications": {
     "type": "text",
     "placeholders_order": [],
@@ -3647,7 +3647,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Mailbux",
+  "appTitlePushNotification": "Scopos Mail",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],
@@ -3665,7 +3665,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bannerProgressingRecoveryMessage": "Die Wiederherstellung ist im Gange. Sie können Mailbux weiterhin verwenden",
+  "bannerProgressingRecoveryMessage": "Die Wiederherstellung ist im Gange. Sie können Scopos Mail weiterhin verwenden",
   "@bannerProgressingRecoveryMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -3919,7 +3919,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Erlaubt Mailbux, Sie zu benachrichtigen, wenn eine neue Nachricht auf Ihrem Telefon ankommt",
+  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Erlaubt Scopos Mail, Sie zu benachrichtigen, wenn eine neue Nachricht auf Ihrem Telefon ankommt",
   "@allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": {
     "type": "text",
     "placeholders_order": [],

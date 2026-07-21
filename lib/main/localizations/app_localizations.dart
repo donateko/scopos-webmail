@@ -25,7 +25,7 @@ class AppLocalizations {
   }
 
   String get login_text_slogan {
-    return Intl.message('Mailbux',
+    return Intl.message('Scopos Mail',
         name: 'login_text_slogan');
   }
 
@@ -873,7 +873,7 @@ class AppLocalizations {
 
   String get app_name {
     return Intl.message(
-        'Mailbux',
+        'Scopos Mail',
         name: 'app_name');
   }
 
@@ -1042,7 +1042,7 @@ class AppLocalizations {
 
   String get page_name {
     return Intl.message(
-        'Mailbux',
+        'Scopos Mail',
         name: 'page_name');
   }
 
@@ -1628,7 +1628,7 @@ return Intl.message('Switch Account',
 
   String get languageSubtitle {
     return Intl.message(
-        'Set the language you use on Mailbux.',
+        'Set the language you use on Scopos Mail.',
         name: 'languageSubtitle');
   }
 
@@ -2710,7 +2710,7 @@ return Intl.message('Switch Account',
 
   String get appTitlePushNotification {
     return Intl.message(
-      'Mailbux',
+      'Scopos Mail',
       name: 'appTitlePushNotification');
   }
 
@@ -3869,7 +3869,7 @@ return Intl.message('Switch Account',
 
   String get bannerProgressingRecoveryMessage {
     return Intl.message(
-      'The recovery is in progress. You can continue using Mailbux',
+      'The recovery is in progress. You can continue using Scopos Mail',
       name: 'bannerProgressingRecoveryMessage',
     );
   }
@@ -4193,7 +4193,7 @@ return Intl.message('Switch Account',
 
   String get pleaseAllowNotifications {
     return Intl.message(
-      'Please allow notifications from Mailbux in the device\'s Settings',
+      'Please allow notifications from Scopos Mail in the device\'s Settings',
       name: 'pleaseAllowNotifications',
     );
   }
@@ -4207,7 +4207,7 @@ return Intl.message('Switch Account',
 
   String get allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone {
     return Intl.message(
-      'Allows Mailbux to notify you when a new message arrives on your phone',
+      'Allows Scopos Mail to notify you when a new message arrives on your phone',
       name: 'allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone',
     );
   }

@@ -1,11 +1,11 @@
 {
-    "name": "Mailbux - JMAP Email Client",
-    "short_name": "Mailbux",
+    "name": "Scopos Mail",
+    "short_name": "Scopos Mail",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "Mailbux - JMAP Email Client",
+    "background_color": "#F4F3F0",
+    "theme_color": "#081F5B",
+    "description": "Scopos Mail",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

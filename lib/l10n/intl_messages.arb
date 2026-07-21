@@ -1,12 +1,12 @@
 {
-  "@@last_modified": "2025-08-18T11:11:26.803547",
+  "@@last_modified": "2026-07-21T23:56:20.464264",
   "initializing_data": "Initializing data...",
   "@initializing_data": {
     "type": "text",
     "placeholders_order": [],
     "placeholders": {}
   },
-  "login_text_slogan": "Mailbux",
+  "login_text_slogan": "Scopos Mail",
   "@login_text_slogan": {
     "type": "text",
     "placeholders_order": [],
@@ -860,7 +860,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "app_name": "Mailbux",
+  "app_name": "Scopos Mail",
   "@app_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1016,7 +1016,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "page_name": "Mailbux",
+  "page_name": "Scopos Mail",
   "@page_name": {
     "type": "text",
     "placeholders_order": [],
@@ -1608,7 +1608,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "languageSubtitle": "Set the language you use on Mailbux.",
+  "languageSubtitle": "Set the language you use on Scopos Mail.",
   "@languageSubtitle": {
     "type": "text",
     "placeholders_order": [],
@@ -2650,7 +2650,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "appTitlePushNotification": "Mailbux",
+  "appTitlePushNotification": "Scopos Mail",
   "@appTitlePushNotification": {
     "type": "text",
     "placeholders_order": [],
@@ -3724,7 +3724,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "bannerProgressingRecoveryMessage": "The recovery is in progress. You can continue using Mailbux",
+  "bannerProgressingRecoveryMessage": "The recovery is in progress. You can continue using Scopos Mail",
   "@bannerProgressingRecoveryMessage": {
     "type": "text",
     "placeholders_order": [],
@@ -4022,7 +4022,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "pleaseAllowNotifications": "Please allow notifications from Mailbux in the device's Settings",
+  "pleaseAllowNotifications": "Please allow notifications from Scopos Mail in the device's Settings",
   "@pleaseAllowNotifications": {
     "type": "text",
     "placeholders_order": [],
@@ -4034,7 +4034,7 @@
     "placeholders_order": [],
     "placeholders": {}
   },
-  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Allows Mailbux to notify you when a new message arrives on your phone",
+  "allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": "Allows Scopos Mail to notify you when a new message arrives on your phone",
   "@allowsTwakeMailToNotifyYouWhenANewMessageArrivesOnYourPhone": {
     "type": "text",
     "placeholders_order": [],
