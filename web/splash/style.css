@@ -5,9 +5,9 @@ html {
 body {
   margin: 0;
   min-height: 100%;
-  /* Scopos ivory, the brand's light surface. Matches background_color in
-     manifest.json so the PWA launch colour and the splash agree. */
-  background-color: #F4F3F0;
+  /* Light grey. Matches background_color in manifest.json so the PWA
+     launch colour and the splash agree with no flash between them. */
+  background-color: #F1F1F1;
   background-size: 100% 100%;
 }
 

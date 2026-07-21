@@ -205,10 +205,16 @@ class LoginView extends BaseLoginView {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 66),
-                      // The stock 48px square renders a wide wordmark
-                      // illegibly small; the sign-in card is the primary
-                      // brand moment, so it gets a legible size.
-                      child: ApplicationLogoWidthTextWidget(iconSize: 150)
+                      // Raster rather than the SVG widget: flutter_svg
+                      // renders these letterforms thinner and lighter than
+                      // the source artwork. The 1000px asset has ample
+                      // headroom at this display size on retina.
+                      child: Image.asset(
+                        'assets/images/scopos_logo_lockup.png',
+                        width: 220,
+                        filterQuality: FilterQuality.high,
+                        fit: BoxFit.contain,
+                      )
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 67),
