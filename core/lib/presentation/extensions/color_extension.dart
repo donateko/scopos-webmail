@@ -227,7 +227,9 @@ extension AppColor on Color {
   static const messageDialogHighlightColor = Color(0xFF37383A);
   static const labelColor = Color(0xFF71767C);
   static const thumbScrollbarColor = Color(0xFFC1C1C1);
-  static const loginViewShadowColor = Color(0x3DBCBCBC);
+  // A light-grey shadow reads as a glow once the card sits on the dark
+  // hero; a soft black gives depth instead.
+  static const loginViewShadowColor = Color(0x66000000);
   static const colorEmailTileCheckboxUnhover = Color(0xFFAEB7C2);
   static const colorSearchFilterButton = Color(0xFFECEEF1);
   static const colorSearchFilterTitle = Color(0xFF686E76);
