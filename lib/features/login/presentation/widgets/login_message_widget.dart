@@ -84,7 +84,8 @@ class LoginMessageWidget extends StatelessWidget {
             }
           ),
           textAlign: TextAlign.center,
-          style: ThemeUtils.defaultTextStyleInterFont.copyWith(
+          style: TextStyle(
+            fontFamily: 'Barlow',
             fontSize: 15,
             fontWeight: FontWeight.w400,
             // Muted ivory: this widget only ever renders on the dark login
@@ -92,7 +93,7 @@ class LoginMessageWidget extends StatelessWidget {
             color: viewState.fold(
               (failure) => AppColor.textFieldErrorBorderColor,
               (success) => const Color(0xFFB8B6B2)
-            )
+            ),
           ),
         )
       )

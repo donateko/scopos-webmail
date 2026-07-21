@@ -380,6 +380,26 @@ flutter:
         - asset: assets/fonts/Inter/Inter-Medium.ttf
           weight: 500
         - asset: assets/fonts/Inter/Inter-Regular.ttf
+    # Scopos site typography, bundled rather than pulled from Google Fonts
+    # so the app makes no external request at load.
+    - family: Barlow
+      fonts:
+        - asset: assets/fonts/Barlow/Barlow-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Barlow/Barlow-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Barlow/Barlow-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Barlow/Barlow-Light.ttf
+          weight: 300
+    - family: BarlowCondensed
+      fonts:
+        - asset: assets/fonts/BarlowCondensed/BarlowCondensed-ExtraBold.ttf
+          weight: 800
+        - asset: assets/fonts/BarlowCondensed/BarlowCondensed-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/BarlowCondensed/BarlowCondensed-SemiBold.ttf
+          weight: 600
 
 flutter_icons:
   android: true

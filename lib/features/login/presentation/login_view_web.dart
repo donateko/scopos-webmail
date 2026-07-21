@@ -131,17 +131,36 @@ class LoginView extends BaseLoginView {
           // product landing page. The sign-in card now centres on the hero.
           Column(
             children: [
-              Container(
+              Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  // Site .hero-portrait-accent: a 1px red keyline at 35%
+                  // alpha, offset 12px up and left, sitting behind the panel.
+                  Positioned(
+                    left: -12,
+                    top: -12,
+                    right: 12,
+                    bottom: 12,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0x59AC0014),
+                          width: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                  Container(
                 height: 684,
                 width: 458,
                 padding: const EdgeInsets.symmetric(horizontal: 31),
                 clipBehavior: Clip.antiAlias,
                 decoration: const ShapeDecoration(
                   // Site DNA: cards are --black on dark ground, never a light
-                  // panel. Ivory text on top, red for the single CTA.
+                  // panel, with square corners rather than a soft radius.
                   color: Color(0xFF1A1A1A),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderRadius: BorderRadius.zero,
                   ),
                   shadows: [
                     BoxShadow(
@@ -174,7 +193,14 @@ class LoginView extends BaseLoginView {
                         // Ivory, scoped to this view: colorNameEmail is near
                         // black and is used across the inbox on light ground,
                         // so it must not be changed globally.
-                        style: ThemeUtils.defaultTextStyleInterFont.copyWith(fontSize: 32, color: const Color(0xFFF4F3F0), fontWeight: FontWeight.w900)
+                        style: const TextStyle(
+                          fontFamily: 'BarlowCondensed',
+                          fontSize: 40,
+                          height: 1.1,
+                          letterSpacing: 0.02,
+                          color: Color(0xFFF4F3F0),
+                          fontWeight: FontWeight.w800,
+                        )
                       )
                     ),
                     Obx(() => LoginMessageWidget(
@@ -202,6 +228,8 @@ class LoginView extends BaseLoginView {
                     const ApplicationVersionWidget(padding: EdgeInsets.only(top: 8)),
                   ],
                 )
+              ),
+                ],
               ),
               // Second vendor "powered by" credit, on the narrow layout.
               // Removed for the same reason as the wide one: it duplicates
