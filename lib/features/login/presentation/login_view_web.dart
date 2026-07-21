@@ -137,7 +137,9 @@ class LoginView extends BaseLoginView {
                 padding: const EdgeInsets.symmetric(horizontal: 31),
                 clipBehavior: Clip.antiAlias,
                 decoration: const ShapeDecoration(
-                  color: Colors.white,
+                  // Scopos ivory rather than pure white: softer against the
+                  // dark hero, and still 16.6:1 against the body text.
+                  color: Color(0xFFF4F3F0),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
