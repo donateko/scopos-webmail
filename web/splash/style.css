@@ -7,7 +7,7 @@ body {
   min-height: 100%;
   /* Light grey. Matches background_color in manifest.json so the PWA
      launch colour and the splash agree with no flash between them. */
-  background-color: #F1F1F1;
+  background-color: #E6E6E6;
   background-size: 100% 100%;
 }
 
