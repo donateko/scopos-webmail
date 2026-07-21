@@ -212,6 +212,11 @@ class LoginView extends BaseLoginView {
                       child: Image.asset(
                         'assets/images/scopos_logo_lockup.png',
                         width: 220,
+                        // Decode at ~3x the display width instead of
+                        // downscaling a 1000px bitmap at paint time. Paint-time
+                        // downscaling aliases the thin letterforms in the
+                        // wordmark; decoding near target size does not.
+                        cacheWidth: 660,
                         filterQuality: FilterQuality.high,
                         fit: BoxFit.contain,
                       )
