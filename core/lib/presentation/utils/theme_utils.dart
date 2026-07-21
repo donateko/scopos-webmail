@@ -8,7 +8,7 @@ class ThemeUtils {
 
   static ThemeData buildAppTheme(BuildContext context) {
     return ThemeData(
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: const Color(0xFF0D0D0D),
       fontFamily: ConstantsUI.fontApp,
       appBarTheme: _appBarTheme,
       textTheme: _textTheme,

@@ -21,11 +21,11 @@ class ConfirmDialogButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final outlineBorder = borderColor != null
         ? RoundedRectangleBorder(
-            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             side: BorderSide(width: 1, color: borderColor!),
           )
         : const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(100)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
           );
 
     return TextButton(

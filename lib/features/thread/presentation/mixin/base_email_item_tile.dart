@@ -144,7 +144,7 @@ mixin BaseEmailItemTile {
           margin: const EdgeInsetsDirectional.only(start: 8),
           padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(100)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             color: bgColor,
             border: Border.all(color: chipColor.withOpacity(0.6)),
           ),
@@ -204,7 +204,7 @@ mixin BaseEmailItemTile {
                   return Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(100)),
+                      borderRadius: const BorderRadius.all(Radius.circular(0)),
                       color: bgColor,
                       border: Border.all(color: chipColor.withOpacity(0.6)),
                     ),
@@ -234,7 +234,7 @@ mixin BaseEmailItemTile {
         margin: const EdgeInsetsDirectional.only(start: 8),
         padding: const EdgeInsetsDirectional.symmetric(horizontal: 8),
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(100)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           color: bgColor,
           border: Border.all(color: chipColor.withOpacity(0.6)),
         ),

@@ -67,7 +67,7 @@ extension AppColor on Color {
   static const buttonActionToastWithActionColor = Color(0xFF7ADCF8);
   static const backgroundCountAttachment = Color(0x681C1C1C);
   static const bgStatusResultSearch = Color(0xFFF5F5F7);
-  static const colorNameEmail = Color(0xFF000000);
+  static const colorNameEmail = Color(0xFFF4F3F0);
   static const colorContentEmail = Color(0xFF6D7885);
   static const colorTextButton = Color(0xFFAC0014);
   static const colorHintSearchBar = Color(0xFF818C99);
@@ -77,7 +77,7 @@ extension AppColor on Color {
   static const colorDividerMailbox = Color(0x1F000000);
   static const colorCollapseMailbox = Color(0xFFB8C1CC);
   static const colorExpandMailbox = Color(0xFF007AFF);
-  static const colorBgMailbox = Color(0xFFF7F7F7);
+  static const colorBgMailbox = Color(0xFF141414);
   static const colorFilterMessageDisabled = Color(0xFF99A2AD);
   static const colorFilterMessageEnabled = Color(0xFF007AFF);
   static const colorDefaultCupertinoActionSheet = Color(0x66000000);
@@ -109,13 +109,13 @@ extension AppColor on Color {
   static const colorTextSettingDescriptions = colorTextButtonHeaderThread;
   static const colorButtonHeaderThread = Color(0x99EBEDF0);
   static const colorBorderBodyThread = Color(0x5CB8C1CC);
-  static const colorBgDesktop = Color(0xFFF3F6F9);
+  static const colorBgDesktop = Color(0xFF0D0D0D);
   static const colorItemEmailSelectedDesktop = Color(0xFFDFEEFF);
   static const colorAvatar = Color(0xFFDE5E5E);
   static const colorFocusButton = Color(0x14818C99);
   static const colorBorderEmailAddressInvalid = Color(0xFFFF3347);
   static const colorBorderIdentityInfo = Color(0xFFE7E8EC);
-  static const colorBgMailboxSelected = Color(0x99E4E8EC);
+  static const colorBgMailboxSelected = Color(0xFF262626);
   static const colorLoading = Color(0x2999A2AD);
   static const colorBgMenuItemDropDownSelected = Color(0x80DEE2E7);
   static const colorButtonCancelDialog = Color(0x0D000000);
@@ -258,7 +258,9 @@ extension AppColor on Color {
   static const grayBackgroundColor = Color(0xFFF3F6F9);
   static const m3SurfaceBackground = Color(0xFF1C1B1F);
   static const warningColor = Color(0xFFFFC107);
-  static const primaryMain = Color(0xFF0F2E7A);
+  // Was navy; site DNA reserves navy as structural and uses red for
+  // anything actionable.
+  static const primaryMain = Color(0xFFAC0014);
   static const m3LayerDarkOutline = Color(0xFF938F99);
   static const blackAlpha40 = Color.fromRGBO(0, 0, 0, 0.4);
   static const blackAlpha20 = Color.fromRGBO(0, 0, 0, 0.2);
