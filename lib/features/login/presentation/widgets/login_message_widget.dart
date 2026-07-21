@@ -87,9 +87,11 @@ class LoginMessageWidget extends StatelessWidget {
           style: ThemeUtils.defaultTextStyleInterFont.copyWith(
             fontSize: 15,
             fontWeight: FontWeight.w400,
+            // Muted ivory: this widget only ever renders on the dark login
+            // card, so the near-black colorNameEmail was invisible there.
             color: viewState.fold(
               (failure) => AppColor.textFieldErrorBorderColor,
-              (success) => AppColor.colorNameEmail
+              (success) => const Color(0xFFB8B6B2)
             )
           ),
         )

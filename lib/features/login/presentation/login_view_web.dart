@@ -158,19 +158,12 @@ class LoginView extends BaseLoginView {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 66),
-                      // Raster rather than the SVG widget: flutter_svg
-                      // renders these letterforms thinner and lighter than
-                      // the source artwork. The 1000px asset has ample
-                      // headroom at this display size on retina.
-                      child: Image.asset(
-                        'assets/images/scopos_logo_lockup.png',
+                      // Light-on-dark lockup, vector. The earlier raster swap
+                      // was working around paint-time downscaling, which the
+                      // SVG does not suffer since it rasterises at draw size.
+                      child: SvgPicture.asset(
+                        'assets/images/scopos_logo_lockup.svg',
                         width: 220,
-                        // Decode at ~3x the display width instead of
-                        // downscaling a 1000px bitmap at paint time. Paint-time
-                        // downscaling aliases the thin letterforms in the
-                        // wordmark; decoding near target size does not.
-                        cacheWidth: 660,
-                        filterQuality: FilterQuality.high,
                         fit: BoxFit.contain,
                       )
                     ),
