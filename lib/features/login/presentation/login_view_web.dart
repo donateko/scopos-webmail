@@ -137,9 +137,9 @@ class LoginView extends BaseLoginView {
                 padding: const EdgeInsets.symmetric(horizontal: 31),
                 clipBehavior: Clip.antiAlias,
                 decoration: const ShapeDecoration(
-                  // Scopos ivory rather than pure white: softer against the
-                  // dark hero, and still 16.6:1 against the body text.
-                  color: Color(0xFFF4F3F0),
+                  // Site DNA: cards are --black on dark ground, never a light
+                  // panel. Ivory text on top, red for the single CTA.
+                  color: Color(0xFF1A1A1A),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
@@ -178,7 +178,10 @@ class LoginView extends BaseLoginView {
                       padding: const EdgeInsets.only(top: 67),
                       child: Text(
                         AppLocalizations.of(context).signIn,
-                        style: ThemeUtils.defaultTextStyleInterFont.copyWith(fontSize: 32, color: AppColor.colorNameEmail, fontWeight: FontWeight.w900)
+                        // Ivory, scoped to this view: colorNameEmail is near
+                        // black and is used across the inbox on light ground,
+                        // so it must not be changed globally.
+                        style: ThemeUtils.defaultTextStyleInterFont.copyWith(fontSize: 32, color: const Color(0xFFF4F3F0), fontWeight: FontWeight.w900)
                       )
                     ),
                     Obx(() => LoginMessageWidget(

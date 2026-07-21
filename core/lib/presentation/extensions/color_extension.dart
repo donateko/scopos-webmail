@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 extension AppColor on Color {
-  static const primaryColor = Color(0xFF081F5B);
+  // Site red is the CTA colour on dark ground; navy is unreadable there.
+  static const primaryColor = Color(0xFFAC0014);
   static const primaryDarkColor = Color(0xFF1C1C1C);
   // Matches the HTML splash background (#E6E6E6). Pure white here caused a
   // bright flash on hand-off from the splash to the first Flutter paint.
@@ -9,10 +10,12 @@ extension AppColor on Color {
   static const primarySelectedColor = Color(0xFFDFEEFF);
   static const baseTextColor = Color(0xFF7E869B);
   static const textFieldTextColor = Color(0xFF7E869B);
-  static const textFieldLabelColor = Color(0xFF7E869B);
-  static const textFieldHintColor = Color(0xFF757575);
-  static const textFieldBorderColor = Color(0xfff2f3f5);
-  static const textFieldFocusedBorderColor = Color(0xFF007AFF);
+  static const textFieldLabelColor = Color(0xFF9A9A9A);
+  static const textFieldHintColor = Color(0xFF8A8A8A);
+  // Login inputs sit on the dark card: a lifted near-black fill with an
+  // ivory-tinted hairline, red on focus to match the site accent.
+  static const textFieldBorderColor = Color(0xFF262626);
+  static const textFieldFocusedBorderColor = Color(0xFFAC0014);
   static const loginTextFieldBorderColor = Color(0xFFF2F3F5);
   static const textFieldErrorBorderColor = Color(0xffE64646);
   static const loginTextFieldErrorBorder = Color(0xffE64646);
@@ -66,7 +69,7 @@ extension AppColor on Color {
   static const bgStatusResultSearch = Color(0xFFF5F5F7);
   static const colorNameEmail = Color(0xFF000000);
   static const colorContentEmail = Color(0xFF6D7885);
-  static const colorTextButton = Color(0xFF081F5B);
+  static const colorTextButton = Color(0xFFAC0014);
   static const colorHintSearchBar = Color(0xFF818C99);
   static const colorBgSearchBar = Color(0x99EBEDF0);
   static const colorBgIdentityButton = Color(0x00EBEDF0);
