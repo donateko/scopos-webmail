@@ -49,12 +49,12 @@ class _ExpandComposerButtonState extends State<ExpandComposerButton> {
       child: Card(
         elevation: 16,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12))
+          borderRadius: BorderRadius.all(Radius.circular(0))
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: () => setState(() => _visible = !_visible),
-          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           child: Container(
             color: Colors.white,
             width: ComposerStyle.composerExpandMoreButtonMaxWidth,

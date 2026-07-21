@@ -35,7 +35,7 @@ class RecoverDeletedMessageLoadingBannerWidget extends StatelessWidget {
               width: 1,
               color: AppColor.colorBorderBodyThread,
             ),
-            borderRadius: BorderRadius.all(Radius.circular(14)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
           )
         ),
         child: Column(

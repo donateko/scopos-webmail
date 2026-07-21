@@ -40,7 +40,7 @@ class BorderButtonField<T> extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(
                 color: _getBorderColor(),
                 width: 0.5),

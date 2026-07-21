@@ -31,7 +31,7 @@ class IdentityCreatorFormDesktopBuilder extends StatelessWidget {
     Widget bodyWidget = Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.08),

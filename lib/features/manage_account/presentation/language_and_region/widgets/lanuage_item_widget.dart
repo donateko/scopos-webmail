@@ -29,7 +29,7 @@ class LanguageItemWidget extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () => onSelectLanguageAction.call(localeCurrent),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         hoverColor: AppColor.lightGrayEBEDF0.withValues(alpha: 0.6),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 17),

@@ -225,7 +225,7 @@ class DestinationPickerView extends GetWidget<DestinationPickerController>
           ),
           const Spacer(),
           InkWell(
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             onTap: () async {
               final current = ValueNotifier<Color>(controller.tempSelectedColorRx.value ?? Colors.black);
               await ColorPickerDialogBuilder(
@@ -710,7 +710,7 @@ class DestinationPickerView extends GetWidget<DestinationPickerController>
                   right: DirectionUtils.isDirectionRTLByLanguage(context) ? 0 : 16,
                   left: DirectionUtils.isDirectionRTLByLanguage(context) ? 16 : 0),
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(12)),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
                   color: AppColor.colorBgSearchBar),
                 hintText: AppLocalizations.of(context).hintSearchFolders,
                 onClearTextSearchAction: controller.clearSearchText,
@@ -727,10 +727,10 @@ class DestinationPickerView extends GetWidget<DestinationPickerController>
       return BorderRadius.zero;
     } else if (controller.responsiveUtils.isMobile(context)) {
       return const BorderRadius.only(
-          topRight: Radius.circular(16),
-          topLeft: Radius.circular(16));
+          topRight: Radius.circular(0),
+          topLeft: Radius.circular(0));
     } else {
-      return const BorderRadius.all(Radius.circular(16));
+      return const BorderRadius.all(Radius.circular(0));
     }
   }
 

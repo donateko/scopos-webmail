@@ -113,7 +113,7 @@ class _TypeAheadFormFieldBuilderState<T> extends State<TypeAheadFormFieldBuilder
             type: MaterialType.card,
             elevation: 4,
             color: Colors.white,
-            borderRadius: const BorderRadius.all(Radius.circular(16)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             child: child,
           );
         } else {

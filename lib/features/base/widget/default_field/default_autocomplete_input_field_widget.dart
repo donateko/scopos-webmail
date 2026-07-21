@@ -121,7 +121,7 @@ class _DefaultAutocompleteInputFieldWidgetState
           constraints: const BoxConstraints(maxHeight: 40),
           fillColor: Colors.white,
           border: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide.none,
           ),
           hintText: widget.field.getHintText(AppLocalizations.of(context)),
@@ -133,7 +133,7 @@ class _DefaultAutocompleteInputFieldWidgetState
         ),
         padding: _getTagEditorPadding(),
         tagSpacing: PlatformInfo.isWeb ? 4.0 : 8.0,
-        borderRadius: 10,
+        borderRadius: 0,
         borderSize: 1,
         focusedBorderColor: AppColor.primaryColor,
         enableBorder: true,

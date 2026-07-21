@@ -26,7 +26,7 @@ mixin AppLoaderMixin {
         child: LinearPercentIndicator(
           lineHeight: 3.0,
           percent: percent > 1.0 ? 1.0 : percent,
-          barRadius: const Radius.circular(4),
+          barRadius: const Radius.circular(0),
           backgroundColor: AppColor.colorBgMailboxSelected,
           progressColor: AppColor.primaryColor,
         ));

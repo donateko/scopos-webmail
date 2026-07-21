@@ -31,13 +31,13 @@ class EmailAddressDialogBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       child: Container(
         width: 383,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.15),

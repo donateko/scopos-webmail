@@ -38,7 +38,7 @@ class ManageAccountMenuView extends GetWidget<ManageAccountMenuController> {
                   icon: DirectionUtils.isDirectionRTLByLanguage(context)
                       ? controller.imagePaths.icArrowRight
                       : controller.imagePaths.icBack,
-                  borderRadius: 8,
+                  borderRadius: 0,
                   mainAxisSize: MainAxisSize.min,
                   backgroundColor: AppColor.lightGrayEAEDF2,
                   iconColor: AppColor.primaryLinShare,

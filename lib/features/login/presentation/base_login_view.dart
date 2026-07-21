@@ -72,6 +72,13 @@ abstract class BaseLoginView extends GetWidget<LoginController> {
       autocorrect: false,
       autofillHints: const [AutofillHints.email],
       keyboardType: TextInputType.emailAddress,
+      // No style was set here, so typed text inherited a dark default and
+      // was near-invisible on the dark card.
+      textStyle: const TextStyle(
+        fontFamily: 'Barlow',
+        color: Color(0xFFF4F3F0),
+        fontSize: 16,
+      ),
       decoration: (LoginInputDecorationBuilder()
         ..setLabelText(AppLocalizations.of(context).email)
         ..setHintText(AppLocalizations.of(context).email))

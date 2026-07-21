@@ -179,7 +179,7 @@ class LoginView extends BaseLoginView {
           foregroundColor: Colors.white,
           backgroundColor: AppColor.primaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(0),
             side: const BorderSide(width: 0, color: AppColor.primaryColor)
           )
         ),

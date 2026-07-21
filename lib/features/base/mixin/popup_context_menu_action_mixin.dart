@@ -35,8 +35,8 @@ mixin PopupContextMenuActionMixin {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(16.0),
-          topRight: Radius.circular(16.0),
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
         ),
       ),
       backgroundColor: Colors.white,
@@ -70,7 +70,7 @@ mixin PopupContextMenuActionMixin {
       menuPadding: const EdgeInsets.symmetric(vertical: 8),
       elevation: 8,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(6)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       constraints: const BoxConstraints(maxWidth: 300, minWidth: 178),
       items: popupMenuItems,

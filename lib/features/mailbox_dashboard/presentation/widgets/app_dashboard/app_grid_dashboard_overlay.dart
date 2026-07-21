@@ -22,7 +22,7 @@ class AppDashboardOverlay extends StatelessWidget {
         width: _widthAppGrid,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(0),
           boxShadow: AppGridDashboardStyle.cardShadow
         ),
         padding: AppGridDashboardStyle.padding,

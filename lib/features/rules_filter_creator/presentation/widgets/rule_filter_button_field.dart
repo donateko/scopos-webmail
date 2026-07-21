@@ -41,7 +41,7 @@ class RuleFilterButtonField<T> extends StatelessWidget {
       child: Container(
         height: 44,
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(0),
             border: Border.all(
                 color: borderColor ?? AppColor.colorInputBorderCreateMailbox,
                 width: 1),

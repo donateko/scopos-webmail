@@ -80,7 +80,7 @@ class SearchInputFormWidget extends StatelessWidget with AppLoaderMixin {
             textFieldConfiguration: _createConfiguration(context),
             suggestionsBoxDecoration: const QuickSearchSuggestionsBoxDecoration(
               color: Colors.white,
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
             debounceDuration: const Duration(milliseconds: 300),
             listActionButton: const [

@@ -85,7 +85,7 @@ class TopBarDestinationPickerBuilder extends StatelessWidget {
                     child: InkWell(
                       onTap: onBackToAction,
                       customBorder: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8))),
+                          borderRadius: BorderRadius.all(Radius.circular(0))),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
                           vertical: 8,

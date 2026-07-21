@@ -11,7 +11,7 @@ class AttachmentListStyles {
   static const double buttonBorderWidth = 1.0;
 
   static const RoundedRectangleBorder shapeBorder = RoundedRectangleBorder(
-    borderRadius: BorderRadius.all(Radius.circular(16.0))
+    borderRadius: BorderRadius.all(Radius.circular(0))
   );
   static const EdgeInsets dialogPaddingWeb = EdgeInsets.symmetric(
     horizontal: 336.0,
@@ -52,14 +52,14 @@ class AttachmentListStyles {
   static const Color modalBackgroundColor = Colors.transparent;
   static const Color buttonBorderDefaultColor = Colors.transparent;
 
-  static const BorderRadiusGeometry bodyBorderRadius = BorderRadius.all(Radius.circular(16.0));
+  static const BorderRadiusGeometry bodyBorderRadius = BorderRadius.all(Radius.circular(0));
   
-  static const Radius scrollbarTrackRadius = Radius.circular(10.0);
-  static const Radius scrollbarThumbRadius = Radius.circular(10.0);
-  static const BorderRadius buttonRadius = BorderRadius.all(Radius.circular(10.0));
+  static const Radius scrollbarTrackRadius = Radius.circular(0);
+  static const Radius scrollbarThumbRadius = Radius.circular(0);
+  static const BorderRadius buttonRadius = BorderRadius.all(Radius.circular(0));
   static const BorderRadiusGeometry modalRadius = BorderRadius.only(
-    topRight: Radius.circular(14),
-    topLeft: Radius.circular(14),
+    topRight: Radius.circular(0),
+    topLeft: Radius.circular(0),
   );
 
   static const BoxDecoration dialogBodyDecoration = BoxDecoration(

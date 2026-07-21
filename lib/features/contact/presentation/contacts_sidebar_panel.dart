@@ -62,7 +62,7 @@ class ContactsSidebarPanel extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColor.blue700,
                   padding: const EdgeInsetsDirectional.symmetric(horizontal: 12),
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
                   foregroundColor: Colors.white,
                   textStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.white),
                 ),

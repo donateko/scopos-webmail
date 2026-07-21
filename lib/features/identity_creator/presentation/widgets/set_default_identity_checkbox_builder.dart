@@ -36,7 +36,7 @@ class SetDefaultIdentityCheckboxBuilder extends StatelessWidget {
                 width: 20,
                 height: 20,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(0),
                   border: Border.all(color: AppColor.primaryColor, width: 2.0),
                   color: isCheck ? AppColor.primaryColor : Colors.white,
                 ),

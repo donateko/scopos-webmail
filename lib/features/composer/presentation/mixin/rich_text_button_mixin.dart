@@ -41,7 +41,7 @@ mixin RichTextButtonMixin {
               border: Border.all(
                   color: AppColor.colorBorderWrapIconStyleCode,
                   width: 0.5),
-              borderRadius: BorderRadius.circular(8)),
+              borderRadius: BorderRadius.circular(0)),
           child: hasDropdown
               ? Row(
                   mainAxisSize: MainAxisSize.min,
@@ -63,7 +63,7 @@ mixin RichTextButtonMixin {
             border: Border.all(
                 color: AppColor.colorBorderWrapIconStyleCode,
                 width: 0.5),
-            borderRadius: BorderRadius.circular(8)),
+            borderRadius: BorderRadius.circular(0)),
         child: hasDropdown
             ? Row(
                 mainAxisSize: MainAxisSize.min,

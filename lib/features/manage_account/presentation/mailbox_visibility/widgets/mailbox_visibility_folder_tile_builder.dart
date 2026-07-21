@@ -44,7 +44,7 @@ class _MailBoxVisibilityFolderTileBuilderState extends State<MailBoxVisibilityFo
       color: Colors.transparent,
       child: InkWell(
         onTap: () {},
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Row(
@@ -145,7 +145,7 @@ class _MailBoxVisibilityFolderTileBuilderState extends State<MailBoxVisibilityFo
       color: Colors.transparent,
       child: InkWell(
         onTap: () => widget.onClickSubscribeMailboxAction?.call(widget._mailboxNode),
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           child: Text(

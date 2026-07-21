@@ -135,7 +135,7 @@ mixin MessageDialogActionMixin {
             isDismissible: outsideDismissible,
             enableDrag: true,
             ignoreSafeArea: true,
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(18))),
+            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
           );
         } else {
           return (ConfirmationDialogActionSheetBuilder(context, listTextSpan: listTextSpan)

@@ -238,7 +238,7 @@ class ThreadDetailView extends GetWidget<ThreadDetailController> {
     if (controller.responsiveUtils.isDesktop(context)) {
       return Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           color: Colors.white,
         ),
         margin: const EdgeInsetsDirectional.only(end: 16, bottom: 16),

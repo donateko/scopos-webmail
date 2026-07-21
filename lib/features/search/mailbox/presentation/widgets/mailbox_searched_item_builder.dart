@@ -75,7 +75,7 @@ class _MailboxSearchedItemBuilderState extends State<MailboxSearchedItemBuilder>
         onHover: (value) => setState(() => isHoverItem = value),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(0),
             color: getBackgroundColorItem(context)
           ),
           padding: SearchMailboxUtils.getPaddingItemListView(context, _responsiveUtils),
@@ -124,7 +124,7 @@ class _MailboxSearchedItemBuilderState extends State<MailboxSearchedItemBuilder>
         color: Colors.transparent,
         child: InkWell(
           onTap: _onTapMailboxAction,
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           child: Padding(
             padding: SearchMailboxUtils.getPaddingItemListView(context, _responsiveUtils),
             child: Row(
@@ -158,7 +158,7 @@ class _MailboxSearchedItemBuilderState extends State<MailboxSearchedItemBuilder>
       child: InkWell(
         onTap: _onTapMailboxAction,
         onLongPress: _onLongPressMailboxAction,
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Padding(
           padding: SearchMailboxUtils.getPaddingItemListView(context, _responsiveUtils),
           child: Row(

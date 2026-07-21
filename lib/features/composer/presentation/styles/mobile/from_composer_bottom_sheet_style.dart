@@ -19,14 +19,14 @@ class FromComposerBottomSheetStyle {
   static const Color searchIconColor = AppColor.loginTextFieldHintColor;
   
   static const BorderRadius backgroundBorderRadius = BorderRadius.only(
-    topLeft: Radius.circular(14),
-    topRight: Radius.circular(14),
+    topLeft: Radius.circular(0),
+    topRight: Radius.circular(0),
   );
-  static const Radius radius = Radius.circular(10.0);
+  static const Radius radius = Radius.circular(0);
   static const BorderRadius borderRadius  = BorderRadius.all(radius);
 
   static const BoxDecoration searchBarDecoration = BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderRadius: BorderRadius.all(Radius.circular(0)),
     color: AppColor.colorBgSearchBar
   );
 

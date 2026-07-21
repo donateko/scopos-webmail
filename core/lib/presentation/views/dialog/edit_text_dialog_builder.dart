@@ -80,7 +80,7 @@ class _EditTextDialogBuilderState extends State<EditTextDialogBuilder> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       child: GestureDetector(
         onTap: _focusNode.unfocus,
@@ -89,7 +89,7 @@ class _EditTextDialogBuilderState extends State<EditTextDialogBuilder> {
           width: 383,
           decoration: const BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.all(Radius.circular(16)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
           ),
           child: Stack(
             children: [
@@ -196,7 +196,7 @@ class _EditTextDialogBuilderState extends State<EditTextDialogBuilder> {
   }
 
   InputBorder _buildBorder(Color color) => OutlineInputBorder(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         borderSide: BorderSide(width: 1, color: color),
       );
 
@@ -233,7 +233,7 @@ class _EditTextDialogBuilderState extends State<EditTextDialogBuilder> {
         iconSize: 24,
         iconColor: AppColor.m3Tertiary,
         padding: const EdgeInsets.all(10),
-        borderRadius: 24,
+        borderRadius: 0,
         backgroundColor: Colors.transparent,
         onTapActionCallback: widget.onCloseButtonAction,
       ),

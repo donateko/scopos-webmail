@@ -14,7 +14,7 @@ class SortByDropdownStyle {
   static const Offset dropdownOffset = Offset(0.0, -3.0);
 
   static BoxDecoration dropdownDecoration = BoxDecoration(
-    borderRadius: const BorderRadius.all(Radius.circular(16)),
+    borderRadius: const BorderRadius.all(Radius.circular(0)),
     color: Colors.white,
     border: Border.all(color: AppColor.m3Tertiary60),
     boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 24)],
@@ -30,7 +30,7 @@ class SortByDropdownStyle {
     padding: EdgeInsets.symmetric(horizontal: 12),
   );
 
-  static const Radius dropdownScrollbarRadius = Radius.circular(40);
+  static const Radius dropdownScrollbarRadius = Radius.circular(0);
 
   static TextStyle menuItemStyle = ThemeUtils.textStyleInter400.copyWith(
     fontSize: 15,

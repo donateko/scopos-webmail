@@ -24,7 +24,7 @@ class ForwardWarningBanner extends StatelessWidget {
       margin: SettingsUtils.getForwardBannerPadding(context, responsiveUtils),
       padding: const EdgeInsets.all(12),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: AppColor.colorBackgroundNotificationVacationSetting,
       ),
       child: Row(children: [

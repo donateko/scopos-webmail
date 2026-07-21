@@ -39,7 +39,7 @@ class ProfileSettingMenuOverlay extends StatelessWidget {
         width: 260,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(14)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.3),
@@ -93,7 +93,7 @@ class ProfileSettingMenuOverlay extends StatelessWidget {
                 iconSize: 22,
                 iconColor: AppColor.m3Tertiary,
                 padding: const EdgeInsets.all(4),
-                borderRadius: 24,
+                borderRadius: 0,
                 backgroundColor: Colors.transparent,
                 onTapActionCallback: onCloseProfileSettingMenuAction,
               ),

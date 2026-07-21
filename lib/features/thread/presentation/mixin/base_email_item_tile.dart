@@ -90,7 +90,7 @@ mixin BaseEmailItemTile {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: const BoxDecoration(
         color: AppColor.lightGrayEBEDF0,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       child: Text(
         '$count',

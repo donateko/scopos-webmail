@@ -241,7 +241,7 @@ class SearchEmailView extends GetWidget<SearchEmailController>
               text: AppLocalizations.of(context).clearFilter,
               backgroundColor: Colors.transparent,
               margin: const EdgeInsetsDirectional.only(start: 8, top: 6, end: 8),
-              borderRadius: 10,
+              borderRadius: 0,
               textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                 color: AppColor.primaryColor,
                 fontSize: 13,

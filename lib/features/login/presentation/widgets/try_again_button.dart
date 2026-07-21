@@ -25,7 +25,7 @@ class TryAgainButton extends StatelessWidget {
       ),
       backgroundColor: AppColor.primaryColor,
       onTapActionCallback: onRetry,
-      borderRadius: 10,
+      borderRadius: 0,
       margin: const EdgeInsetsDirectional.only(bottom: 16, start: 24, end: 24),
       width: responsiveUtils.getDeviceWidth(context),
       textAlign: TextAlign.center,

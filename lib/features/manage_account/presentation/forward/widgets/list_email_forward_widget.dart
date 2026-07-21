@@ -73,7 +73,7 @@ class ListEmailForwardsWidget extends GetWidget<ForwardController> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+        customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
         onTap: controller.selectAllRecipientForward,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -123,7 +123,7 @@ class ListEmailForwardsWidget extends GetWidget<ForwardController> {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(5))),
+        customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 6),
           child: Text(

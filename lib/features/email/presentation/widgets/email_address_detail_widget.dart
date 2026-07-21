@@ -108,7 +108,7 @@ class EmailAddressDetailWidget extends StatelessWidget {
             iconSize: 24,
             iconColor: AppColor.m3Tertiary,
             padding: const EdgeInsets.all(10),
-            borderRadius: 24,
+            borderRadius: 0,
             backgroundColor: Colors.transparent,
             onTapActionCallback: onCloseDialogAction,
           ),

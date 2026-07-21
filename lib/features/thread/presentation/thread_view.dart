@@ -755,7 +755,7 @@ class ThreadView extends GetWidget<ThreadController>
       height: 60,
       child: Material(
         clipBehavior: Clip.hardEdge,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(0),
         color: AppColor.colorTextButton,
         child: Padding(
           padding: const EdgeInsets.all(16),

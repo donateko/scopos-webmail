@@ -22,7 +22,7 @@ class BannerMessageSendingQueueWidget extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: const BoxDecoration(
           color: AppColor.colorBannerMessageSendingQueue,
-          borderRadius: BorderRadius.all(Radius.circular(8))
+          borderRadius: BorderRadius.all(Radius.circular(0))
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

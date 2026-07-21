@@ -688,8 +688,8 @@ class EmailActionReactor with MessageDialogActionMixin {
         useRootNavigator: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadiusDirectional.only(
-            topStart: Radius.circular(16.0),
-            topEnd: Radius.circular(16.0),
+            topStart: Radius.circular(0),
+            topEnd: Radius.circular(0),
           ),
         ),
         isScrollControlled: true,

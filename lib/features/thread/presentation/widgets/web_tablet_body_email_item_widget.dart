@@ -328,7 +328,7 @@ class _WebTabletBodyEmailItemWidgetState
             widget.isDrag) &&
         responsiveUtils.isDesktop(context)) {
       return const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: AppColor.blue100,
       );
     } else if (widget.isShowingEmailContent &&

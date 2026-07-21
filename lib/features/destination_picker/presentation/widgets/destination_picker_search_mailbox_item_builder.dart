@@ -48,7 +48,7 @@ class DestinationPickerSearchMailboxItemBuilder extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: _onTapMailboxAction,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             hoverColor: AppColor.colorBgMailboxSelected,
             child: Padding(
               padding: SearchMailboxUtils.getPaddingItemListView(context, _responsiveUtils),

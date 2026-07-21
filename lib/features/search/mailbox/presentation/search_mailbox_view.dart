@@ -101,7 +101,7 @@ class SearchMailboxView extends GetWidget<SearchMailboxController>
       ),
       Expanded(child: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           color: AppColor.searchInputBackground
         ),
         alignment: Alignment.center,

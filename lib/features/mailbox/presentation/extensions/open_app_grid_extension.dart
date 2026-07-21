@@ -20,7 +20,7 @@ extension OpenAppGridExtension on MailboxController {
         child: Dialog(
           backgroundColor: Colors.white,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(14)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
           ),
           child: Container(
             width: 254,
@@ -37,7 +37,7 @@ extension OpenAppGridExtension on MailboxController {
                   blurRadius: 2,
                 ),
               ],
-              borderRadius: BorderRadius.all(Radius.circular(14)),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
               color: Colors.white,
             ),
             child: GridView(

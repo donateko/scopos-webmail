@@ -38,7 +38,7 @@ class DefaultEmailAddressDropDownButton extends StatelessWidget {
             customButton: Container(
               height: 40,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                borderRadius: const BorderRadius.all(Radius.circular(0)),
                 border: Border.all(
                   color: AppColor.m3Neutral90,
                   width: 1,
@@ -68,7 +68,7 @@ class DefaultEmailAddressDropDownButton extends StatelessWidget {
             dropdownStyleData: DropdownStyleData(
               maxHeight: 332,
               decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(16)),
+                borderRadius: const BorderRadius.all(Radius.circular(0)),
                 color: Colors.white,
                 border: Border.all(color: AppColor.m3Tertiary60),
                 boxShadow: const [
@@ -79,7 +79,7 @@ class DefaultEmailAddressDropDownButton extends StatelessWidget {
               elevation: 0,
               offset: const Offset(0.0, -3.0),
               scrollbarTheme: ScrollbarThemeData(
-                radius: const Radius.circular(40),
+                radius: const Radius.circular(0),
                 thickness: WidgetStateProperty.all<double>(6),
                 thumbVisibility: WidgetStateProperty.all<bool>(true),
               ),
@@ -95,7 +95,7 @@ class DefaultEmailAddressDropDownButton extends StatelessWidget {
       return Container(
         height: 40,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           border: Border.all(
             color: AppColor.m3Neutral90,
             width: 1,

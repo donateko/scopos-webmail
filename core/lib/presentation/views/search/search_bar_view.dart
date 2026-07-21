@@ -31,13 +31,13 @@ class SearchBarView extends StatelessWidget {
         onTap: onOpenSearchViewAction,
         mouseCursor: SystemMouseCursors.text,
         splashColor: Colors.transparent,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Container(
             alignment: Alignment.center,
             height: 44,
             width: double.infinity,
             decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
               color: AppColor.colorBgSearchBar
             ),
             child: Row(

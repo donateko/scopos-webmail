@@ -88,7 +88,7 @@ class _AutocompleteContactTextFieldWithTagsState extends State<AutocompleteConta
       length: listEmailAddress.length,
       controller: widget.controller,
       focusNodeKeyboard: _focusNodeKeyboard,
-      borderRadius: 12,
+      borderRadius: 0,
       backgroundColor: AppColor.colorInputBackgroundCreateMailbox,
       focusedBorderColor: AppColor.colorTextButton,
       enableBorderColor: AppColor.colorInputBorderCreateMailbox,
@@ -168,7 +168,7 @@ class _AutocompleteContactTextFieldWithTagsState extends State<AutocompleteConta
             suggestionEmailAddress,
             _imagePaths,
             shapeBorder: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12))),
+              borderRadius: BorderRadius.all(Radius.circular(0))),
             selectedContactCallbackAction: (contact) {
               _addEmailAddressToInputFieldAction(
                 context: context,

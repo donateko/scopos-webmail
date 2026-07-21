@@ -68,11 +68,11 @@ class ContactViewStyle {
         (PlatformInfo.isMobile && responsiveUtils.isPortraitMobile(context))
     ) {
       return const BorderRadiusDirectional.only(
-        topEnd: Radius.circular(16),
-        topStart: Radius.circular(16),
+        topEnd: Radius.circular(0),
+        topStart: Radius.circular(0),
       );
     } else {
-      return const BorderRadius.all(Radius.circular(16));
+      return const BorderRadius.all(Radius.circular(0));
     }
   }
 

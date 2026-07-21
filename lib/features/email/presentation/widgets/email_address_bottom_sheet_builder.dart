@@ -28,8 +28,8 @@ class EmailAddressBottomSheetBuilder extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: const BorderRadiusDirectional.only(
-          topStart: Radius.circular(16.0),
-          topEnd: Radius.circular(16.0),
+          topStart: Radius.circular(0),
+          topEnd: Radius.circular(0),
         ),
         boxShadow: [
           BoxShadow(

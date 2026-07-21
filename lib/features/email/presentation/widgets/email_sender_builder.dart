@@ -41,7 +41,7 @@ class EmailSenderBuilder extends StatelessWidget {
                 onLongPress: () {
                   AppUtils.copyEmailAddressToClipboard(context, emailAddress.emailAddress);
                 },
-                borderRadius: 8,
+                borderRadius: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                 customStyle: ThemeUtils.textStyleHeadingH6(
                   color: Colors.black,
@@ -57,7 +57,7 @@ class EmailSenderBuilder extends StatelessWidget {
                 onLongPress: () {
                   AppUtils.copyEmailAddressToClipboard(context, emailAddress.emailAddress);
                 },
-                borderRadius: 8,
+                borderRadius: 0,
                 padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
                 customStyle: ThemeUtils.textStyleBodyBody1(
                   color: AppColor.gray6D7885,

@@ -134,7 +134,7 @@ class MailboxCreatorView extends GetWidget<MailboxCreatorController> {
         ),
         const Spacer(),
         InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           onTap: () async {
             final current = ValueNotifier<Color>(controller.selectedColor.value ?? Colors.black);
             await ColorPickerDialogBuilder(
@@ -187,14 +187,14 @@ class MailboxCreatorView extends GetWidget<MailboxCreatorController> {
           alignment: Alignment.center,
           margin: const EdgeInsets.symmetric(horizontal: 16),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(0),
               color: AppColor.colorBgMailbox
           ),
           child: Material(
             color: Colors.transparent,
             child: InkWell(
               onTap: () => controller.selectMailboxLocation(context),
-              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
               child: Row(children: [
                 const SizedBox(width: 12),
                 Obx(() => SvgPicture.asset(
@@ -303,10 +303,10 @@ class MailboxCreatorView extends GetWidget<MailboxCreatorController> {
       return BorderRadius.zero;
     } else if (controller.responsiveUtils.isMobile(context)) {
       return const BorderRadius.only(
-          topRight: Radius.circular(16),
-          topLeft: Radius.circular(16));
+          topRight: Radius.circular(0),
+          topLeft: Radius.circular(0));
     } else {
-      return const BorderRadius.all(Radius.circular(16));
+      return const BorderRadius.all(Radius.circular(0));
     }
   }
 }

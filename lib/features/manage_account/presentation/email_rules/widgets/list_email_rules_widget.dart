@@ -17,13 +17,13 @@ class ListEmailRulesWidget extends GetWidget<EmailRulesController> {
     return Container(
       decoration: BoxDecoration(
         color: AppColor.colorBackgroundWrapIconStyleCode,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(
             width: 1,
             color: AppColor.colorBorderListRuleFilter)
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(0),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -33,8 +33,8 @@ class ListEmailRulesWidget extends GetWidget<EmailRulesController> {
                 decoration: const BoxDecoration(
                   color: AppColor.colorBackgroundHeaderListRuleFilter,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(16),
-                      topRight: Radius.circular(16)),
+                      topLeft: Radius.circular(0),
+                      topRight: Radius.circular(0)),
                 ),
                 padding: const EdgeInsets.symmetric(
                   vertical: 28,

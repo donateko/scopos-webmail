@@ -29,11 +29,11 @@ class CalendarListView extends StatelessWidget {
     return Container(
       margin: const EdgeInsetsDirectional.only(top: 16, end: 16, bottom: 16),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: Colors.white,
       ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -245,7 +245,7 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
               final dayEvents = items.where((e) => e.start != null && e.start!.year == day.year && e.start!.month == day.month && e.start!.day == day.day).toList();
               return Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(0),
                     border: Border.all(color: const Color(0xFFE5E7EB)),
                   ),
                   padding: const EdgeInsets.all(6),
@@ -268,7 +268,7 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
                           color: _eventBgColor(ev),
-                          borderRadius: BorderRadius.circular(10),
+                          borderRadius: BorderRadius.circular(0),
                         ),
                         child: InkWell(
                           onTap: () => _openEventDetailDialog(context, ev),
@@ -363,7 +363,7 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
                             alignment: Alignment.topLeft,
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                              decoration: BoxDecoration(color: _eventBgColor(slotEvents.first), borderRadius: BorderRadius.circular(4)),
+                              decoration: BoxDecoration(color: _eventBgColor(slotEvents.first), borderRadius: BorderRadius.circular(0)),
                               child: Text(slotEvents.first.summary ?? '', maxLines: 1, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
                             ),
                           ),
@@ -413,7 +413,7 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
                     Expanded(
                       child: Wrap(spacing: 4, runSpacing: 4, children: slotEvents.map((ev) => Container(
                         padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                        decoration: BoxDecoration(color: _eventBgColor(ev), borderRadius: BorderRadius.circular(6)),
+                        decoration: BoxDecoration(color: _eventBgColor(ev), borderRadius: BorderRadius.circular(0)),
                         child: Row(mainAxisSize: MainAxisSize.min, children: [
                           _buildEventColorDot(ev, size: 8), const SizedBox(width: 4),
                           Text(ev.summary ?? '', style: const TextStyle(fontSize: 12)),
@@ -484,7 +484,7 @@ class _CalendarResponsiveGridState extends State<_CalendarResponsiveGrid> {
                 case 'DECLINED': bg = Colors.red.withOpacity(0.15); break;
                 default: bg = Colors.grey.withOpacity(0.15);
               }
-              return Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(16)), child: Text(email, style: const TextStyle(fontSize: 12)));
+              return Container(padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4), decoration: BoxDecoration(color: bg, borderRadius: BorderRadius.circular(0)), child: Text(email, style: const TextStyle(fontSize: 12)));
             }).toList()),
           ]),
         ),

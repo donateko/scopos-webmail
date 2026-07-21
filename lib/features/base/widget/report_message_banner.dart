@@ -136,7 +136,7 @@ class ReportMessageBanner extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: _backgroundColor,
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
       ),
       padding: const EdgeInsetsDirectional.only(start: 16, end: 12),
       margin: margin,

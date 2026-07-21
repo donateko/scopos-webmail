@@ -31,7 +31,7 @@ class LanguageRegionOverlay extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: const BorderRadius.all(Radius.circular(16)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.3),

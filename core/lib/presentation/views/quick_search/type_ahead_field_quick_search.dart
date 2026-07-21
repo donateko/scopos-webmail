@@ -643,8 +643,8 @@ class _TypeAheadFieldQuickSearchState<T, P, R>
         decoration: _suggestionsBox?.isOpened == true
             ? const BoxDecoration(
                 borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(16),
-                  topLeft: Radius.circular(16),
+                  topRight: Radius.circular(0),
+                  topLeft: Radius.circular(0),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -659,7 +659,7 @@ class _TypeAheadFieldQuickSearchState<T, P, R>
                 color: Colors.white,
               )
             : const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 color: AppColor.searchInputBackground,
               ),
         height: widget.maxHeight,

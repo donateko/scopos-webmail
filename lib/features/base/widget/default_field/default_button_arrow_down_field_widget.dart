@@ -21,12 +21,12 @@ class DefaultButtonArrowDownFieldWidget extends StatelessWidget {
       type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         focusColor: AppColor.colorMailboxHovered,
         child: Container(
           height: 40,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             border: Border.all(
               color: AppColor.m3Neutral90,
               width: 1,

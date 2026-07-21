@@ -28,7 +28,7 @@ class TMailDropDownWidget extends StatelessWidget {
       iconAlignment: TextDirection.rtl,
       width: width,
       height: 40,
-      borderRadius: 10,
+      borderRadius: 0,
       backgroundColor: backgroundColor ?? Colors.transparent,
       iconSize: 20,
       iconColor: AppColor.lightIconTertiary,

@@ -15,5 +15,5 @@ class CalendarEventInformationWidgetStyles {
   static const Color titleColor = Colors.black;
   static const Color invitationMessageColor = Colors.black;
 
-  static const radius = Radius.circular(16);
+  static const radius = Radius.circular(0);
 }

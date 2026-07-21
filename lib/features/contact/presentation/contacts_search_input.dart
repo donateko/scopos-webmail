@@ -62,7 +62,7 @@ class ContactsSearchInput extends StatelessWidget {
       ),
       suggestionsBoxDecoration: const QuickSearchSuggestionsBoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       debounceDuration: const Duration(milliseconds: 300),
       suggestionsCallback: (_) async => const <Object>[],

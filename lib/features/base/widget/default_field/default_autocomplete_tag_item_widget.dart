@@ -110,7 +110,7 @@ class DefaultAutocompleteTagItemWidget extends StatelessWidget {
           margin: const EdgeInsetsDirectional.only(start: 8),
           text: '+${currentListEmailAddress.length - collapsedListEmailAddress.length}',
           onTapActionCallback: () => onShowFullAction?.call(field),
-          borderRadius: 10,
+          borderRadius: 0,
           alignment: Alignment.center,
           textStyle: AutoCompleteTagItemWebStyle.collapsedTextStyle,
           padding: PlatformInfo.isWeb

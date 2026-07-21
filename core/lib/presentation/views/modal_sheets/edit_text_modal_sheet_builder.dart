@@ -111,8 +111,8 @@ class EditTextModalSheetBuilder {
       constraints: _constraints,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20.0),
-            topRight: Radius.circular(20.0))),
+            topLeft: Radius.circular(0),
+            topRight: Radius.circular(0))),
       builder: (BuildContext context) {
         return StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
           return Padding(

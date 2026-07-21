@@ -531,10 +531,10 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
     return Container(
       margin: const EdgeInsetsDirectional.only(end: 16, bottom: 16),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: Colors.white),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Column(children: [
           Obx(() {
             final listEmailSelected = controller.listEmailSelected;
@@ -573,7 +573,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
       Obx(() {
         if (controller.isRefreshingAllMailboxAndEmail) {
           return TMailContainerWidget(
-            borderRadius: 10,
+            borderRadius: 0,
             backgroundColor: AppColor.colorFilterMessageButton.withValues(alpha: 0.6),
             padding: const EdgeInsetsDirectional.symmetric(vertical: 8, horizontal: 8.5),
             child: const CupertinoLoadingWidget(size: 16));
@@ -581,7 +581,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
           return TMailButtonWidget.fromIcon(
             key: const Key('refresh_all_mailbox_and_email_button'),
             icon: controller.imagePaths.icRefresh,
-            borderRadius: 10,
+            borderRadius: 0,
             iconSize: 16,
             backgroundColor: AppColor.colorFilterMessageButton.withValues(alpha: 0.6),
             onTapActionCallback: controller.refreshMailboxAction,
@@ -620,7 +620,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                   shadowColor: Colors.transparent,
                   padding: const EdgeInsetsDirectional.symmetric(horizontal: 12, vertical: 8),
                   shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    borderRadius: BorderRadius.all(Radius.circular(0)),
                   ),
                   elevation: 0.0,
                   foregroundColor: AppColor.colorTextButtonHeaderThread,
@@ -659,7 +659,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
           return TMailButtonWidget.fromIcon(
             key: const Key('recover_deleted_messages_button'),
             icon: controller.imagePaths.icRecoverDeletedMessages,
-            borderRadius: 10,
+            borderRadius: 0,
             iconSize: 16,
             backgroundColor: AppColor.colorFilterMessageButton.withValues(alpha: 0.6),
             margin: const EdgeInsetsDirectional.only(start: 16),
@@ -830,7 +830,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                   text: AppLocalizations.of(context).clearFilter,
                   backgroundColor: Colors.transparent,
                   margin: const EdgeInsetsDirectional.only(start: 8),
-                  borderRadius: 10,
+                  borderRadius: 0,
                   textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                     color: AppColor.primaryColor,
                     fontSize: 13,
@@ -841,7 +841,7 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                   text: AppLocalizations.of(context).advancedSearch,
                   backgroundColor: Colors.transparent,
                   margin: const EdgeInsetsDirectional.only(start: 8),
-                  borderRadius: 10,
+                  borderRadius: 0,
                   textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                     color: AppColor.primaryColor,
                     fontSize: 13,

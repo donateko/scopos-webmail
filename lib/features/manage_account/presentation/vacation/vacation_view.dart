@@ -451,7 +451,7 @@ class VacationView extends GetWidget<VacationController> with RichTextButtonMixi
   Widget _buildMessageTextEditor(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(0),
         border: Border.all(color: AppColor.colorInputBorderCreateMailbox),
         color: Colors.white),
       padding: const EdgeInsetsDirectional.only(start: 12, end: 12, top: 12),

@@ -327,7 +327,7 @@ class QuickSearchSuggestionListState<T, P, R>
       shape: widget.decoration!.shape,
       borderRadius: widget.suggestionsBox?.isOpened == true
           ? const BorderRadius.only(
-              bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16))
+              bottomLeft: Radius.circular(0), bottomRight: Radius.circular(0))
           : widget.decoration!.borderRadius,
       shadowColor: widget.decoration!.shadowColor,
       clipBehavior: widget.decoration!.clipBehavior,
@@ -435,7 +435,7 @@ class QuickSearchSuggestionListState<T, P, R>
           child: Material(
             type: MaterialType.transparency,
             child: InkWell(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(0)),
               onTap: () {
                 widget.buttonActionCallback?.call(action);
                 invalidateSuggestions();

@@ -55,7 +55,7 @@ class AttachmentsInfo extends StatelessWidget {
       textStyle: ThemeUtils.textStyleBodyBody1().copyWith(
         color: AppColor.steelGray400,
       ),
-      borderRadius: 5,
+      borderRadius: 0,
       maxLines: 1,
       maxWidth: 120,
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
@@ -101,7 +101,7 @@ class AttachmentsInfo extends StatelessWidget {
               iconColor: AppColor.steelGrayA540,
               iconAlignment: TextDirection.rtl,
               backgroundColor: Colors.transparent,
-              borderRadius: 5,
+              borderRadius: 0,
               mainAxisSize: MainAxisSize.min,
               flexibleText: true,
               maxLines: 1,

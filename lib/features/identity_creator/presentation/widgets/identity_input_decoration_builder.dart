@@ -8,16 +8,16 @@ class IdentityInputDecorationBuilder extends InputDecorationBuilder {
   InputDecoration build() {
     return InputDecoration(
       enabledBorder: enabledBorder ?? const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         borderSide: BorderSide(width: 1, color: AppColor.colorInputBorderCreateMailbox)),
       focusedBorder: enabledBorder ?? const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         borderSide: BorderSide(width: 1, color: AppColor.colorTextButton)),
       errorBorder: errorBorder ?? const OutlineInputBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         borderSide: BorderSide(width: 1, color: AppColor.colorInputBorderErrorVerifyName)),
       focusedErrorBorder: errorBorder ?? const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           borderSide: BorderSide(width: 1, color: AppColor.colorInputBorderErrorVerifyName)),
       prefixText: prefixText,
       labelText: labelText,

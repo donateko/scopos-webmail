@@ -65,7 +65,7 @@ class UserInformationWidget extends StatelessWidget {
                   child: MaterialTextButton(
                     label: AppLocalizations.of(context).manage_account,
                     onTap: onSubtitleClick,
-                    borderRadius: 20,
+                    borderRadius: 0,
                     padding: const EdgeInsetsDirectional.symmetric(horizontal: 8, vertical: 8),
                     customStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                       fontSize: 14,

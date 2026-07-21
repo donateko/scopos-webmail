@@ -51,11 +51,11 @@ class DriveListView extends StatelessWidget with DragDropFileMixin {
     return Container(
       margin: const EdgeInsetsDirectional.only(top: 16, end: 16, bottom: 16),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: Colors.white,
       ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Column(
           children: [
             Obx(() {
@@ -250,7 +250,7 @@ class DriveListView extends StatelessWidget with DragDropFileMixin {
                                   child: DecoratedBox(
                                     decoration: BoxDecoration(
                                       color: Colors.white,
-                                      borderRadius: BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(0),
                                       border: Border.all(color: AppColor.folderDivider, width: 1),
                                     ),
                                     child: Material(
@@ -264,7 +264,7 @@ class DriveListView extends StatelessWidget with DragDropFileMixin {
                                                   height: 12,
                                                   decoration: BoxDecoration(
                                                     color: AppColor.steelGray400,
-                                                    borderRadius: BorderRadius.circular(2),
+                                                    borderRadius: BorderRadius.circular(0),
                                                   ),
                                                 ),
                                               )

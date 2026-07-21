@@ -44,7 +44,7 @@ class RuleFilterConditionWidget extends StatelessWidget {
         children: [
           CustomSlidableAction(
             padding: const EdgeInsets.only(right: 12),
-            borderRadius: const BorderRadius.only(topRight: Radius.circular(12), bottomRight: Radius.circular(12)),
+            borderRadius: const BorderRadius.only(topRight: Radius.circular(0), bottomRight: Radius.circular(0)),
             onPressed: (_) => tapRemoveRuleFilterConditionCallback!(),
             backgroundColor: AppColor.colorBackgroundFieldConditionRulesFilter,
             child: CircleAvatar(
@@ -65,10 +65,10 @@ class RuleFilterConditionWidget extends StatelessWidget {
           valueListenable: slideController?.direction ?? ValueNotifier<int>(0),
           builder: (context, value, _) {
             var borderRadius = value != -1 ? 
-              BorderRadius.circular(12) : 
+              BorderRadius.circular(0) : 
               const BorderRadius.only(
-                bottomLeft: Radius.circular(12),
-                topLeft: Radius.circular(12)
+                bottomLeft: Radius.circular(0),
+                topLeft: Radius.circular(0)
               );
             return Container(
               padding: const EdgeInsets.all(12),

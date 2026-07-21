@@ -38,7 +38,7 @@ class DesktopEditRecipientsView extends StatelessWidget {
       child: Container(
         width: width,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           color: Colors.white,
           boxShadow: [
             BoxShadow(
@@ -155,7 +155,7 @@ class DesktopEditRecipientsView extends StatelessWidget {
                 iconSize: 24,
                 iconColor: AppColor.m3Tertiary,
                 padding: const EdgeInsets.all(10),
-                borderRadius: 24,
+                borderRadius: 0,
                 backgroundColor: Colors.transparent,
                 onTapActionCallback: onCloseAction,
               ),

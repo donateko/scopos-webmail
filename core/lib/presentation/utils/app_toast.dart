@@ -124,7 +124,7 @@ class AppToast {
                 ToastView.dismiss();
                 onActionClick?.call();
               },
-              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+              customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.circular(0)),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                 child: Row(
@@ -241,7 +241,7 @@ class AppToast {
                 action.onActionClick?.call();
               },
               customBorder: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(5),
+                borderRadius: BorderRadius.circular(0),
               ),
               child: Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),

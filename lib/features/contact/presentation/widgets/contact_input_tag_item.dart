@@ -75,7 +75,7 @@ class ContactInputTagItem extends StatelessWidget {
       ),
       backgroundColor: _getTagBackgroundColor(),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(0),
         side: _getTagBorderSide()
       ),
       onDeleted: () => deleteContactCallbackAction?.call(contact),

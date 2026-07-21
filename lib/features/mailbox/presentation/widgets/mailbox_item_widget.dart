@@ -232,7 +232,7 @@ class _MailboxItemWidgetState extends State<MailboxItemWidget> {
                 onTap: () => !_isSelectActionNoValid
                   ? widget.onOpenMailboxFolderClick?.call(widget.mailboxNode)
                   : null,
-                customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+                customBorder: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(0))),
                 hoverColor: AppColor.colorMailboxHovered,
                 child: Container(
                   padding: const EdgeInsetsDirectional.symmetric(

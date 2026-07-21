@@ -17,7 +17,7 @@ class FilterMessageButtonStyle {
   }
   static const EdgeInsetsGeometry elementPadding = EdgeInsetsDirectional.only(start: 8);
   static const EdgeInsetsGeometry buttonMargin = EdgeInsetsDirectional.only(start: 16);
-  static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(10));
+  static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(0));
 
   static TextStyle titleStyle = ThemeUtils.defaultTextStyleInterFont.copyWith(
     fontSize: 13,

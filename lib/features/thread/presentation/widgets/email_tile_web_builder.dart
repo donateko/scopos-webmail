@@ -208,7 +208,7 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
             ),
             onHover: (value) => _hoverNotifier.value = value,
             hoverColor: Theme.of(context).colorScheme.outline.withValues(alpha: 0.08),
-            borderRadius: const BorderRadius.all(Radius.circular(14)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             child: Container(
               padding: widget.padding ?? _getPaddingItem(context),
               decoration: _getDecorationItem(),
@@ -357,7 +357,7 @@ class _EmailTileBuilderState extends State<EmailTileBuilder>  with BaseEmailItem
         responsiveUtils.isDesktop(context)
     ) {
       return const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: AppColor.blue100,
       );
     } else if (widget.isShowingEmailContent && responsiveUtils.isTabletLarge(context)) {

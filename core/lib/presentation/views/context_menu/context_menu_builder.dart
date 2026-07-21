@@ -41,16 +41,16 @@ class ContextMenuBuilder {
   RoundedRectangleBorder _shape() {
     return const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20.0),
-        topRight: Radius.circular(20.0)));
+        topLeft: Radius.circular(0),
+        topRight: Radius.circular(0)));
   }
 
   BoxDecoration _decoration(BuildContext context) {
     return const BoxDecoration(
       color: Colors.white,
       borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(20.0),
-        topRight: Radius.circular(20.0)));
+        topLeft: Radius.circular(0),
+        topRight: Radius.circular(0)));
   }
 
   void build() {

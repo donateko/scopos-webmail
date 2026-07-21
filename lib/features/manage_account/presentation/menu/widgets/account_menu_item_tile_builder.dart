@@ -37,10 +37,10 @@ class AccountMenuItemTileBuilder extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: () => onSelectAccountMenuItemAction.call(menuItem),
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(8)),
+              borderRadius: const BorderRadius.all(Radius.circular(0)),
               color: _isSelected
                 ? AppColor.lightGrayEAEDF2
                 : Colors.transparent,

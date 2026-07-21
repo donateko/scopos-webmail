@@ -37,7 +37,7 @@ class CustomIconLabeledCheckbox extends LabeledCheckbox {
           child: InkWell(
             canRequestFocus: true,
             focusColor: AppColor.colorMailboxHovered,
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
+            borderRadius: const BorderRadius.all(Radius.circular(0)),
             onTap: () => onChanged(!(value)),
             child: SvgPicture.asset(
               value ? selectedSvgIconPath : svgIconPath,
@@ -53,7 +53,7 @@ class CustomIconLabeledCheckbox extends LabeledCheckbox {
       bodyWidget = Material(
         type: MaterialType.transparency,
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           onTap: () => onChanged(!(value)),
           child: SvgPicture.asset(
             value ? selectedSvgIconPath : svgIconPath,

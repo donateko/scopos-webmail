@@ -34,8 +34,8 @@ class EmailPreviewerDialogView extends StatelessWidget {
       return Dialog(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            topRight: Radius.circular(16),
-            topLeft: Radius.circular(16),
+            topRight: Radius.circular(0),
+            topLeft: Radius.circular(0),
           ),
         ),
         insetPadding: EdgeInsets.zero,
@@ -44,8 +44,8 @@ class EmailPreviewerDialogView extends StatelessWidget {
         child: Container(
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
-              topRight: Radius.circular(16),
-              topLeft: Radius.circular(16),
+              topRight: Radius.circular(0),
+              topLeft: Radius.circular(0),
             ),
           ),
           width: double.infinity,

@@ -35,7 +35,7 @@ class MobileEditRecipientsView extends StatelessWidget {
       child: Container(
         width: width,
         decoration: BoxDecoration(
-          borderRadius: const BorderRadius.all(Radius.circular(16)),
+          borderRadius: const BorderRadius.all(Radius.circular(0)),
           color: Colors.white,
           boxShadow: [
             BoxShadow(

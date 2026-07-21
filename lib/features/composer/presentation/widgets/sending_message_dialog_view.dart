@@ -90,7 +90,7 @@ class _SendingMessageDialogViewState extends State<SendingMessageDialogView> {
   Widget build(BuildContext context) {
     return Dialog(
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(12))),
+        borderRadius: BorderRadius.all(Radius.circular(0))),
       insetPadding: const EdgeInsets.symmetric(
         horizontal: 24.0,
         vertical: 16.0
@@ -98,7 +98,7 @@ class _SendingMessageDialogViewState extends State<SendingMessageDialogView> {
       alignment: Alignment.center,
       child: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           color: Colors.white,
         ),
         width: min(context.width, 400),
@@ -110,7 +110,7 @@ class _SendingMessageDialogViewState extends State<SendingMessageDialogView> {
               clipBehavior: Clip.antiAlias,
               padding: const EdgeInsetsDirectional.symmetric(vertical: 8, horizontal: 12),
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(12)),
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 color: AppColor.colorItemSelected,
               ),
               alignment: Alignment.center,
@@ -190,7 +190,7 @@ class _SendingMessageDialogViewState extends State<SendingMessageDialogView> {
                         child: LinearProgressIndicator(
                           color: Colors.white.withValues(alpha: 0.6),
                           backgroundColor: AppColor.primaryColor,
-                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          borderRadius: const BorderRadius.all(Radius.circular(0)),
                         ),
                       )
                     ],

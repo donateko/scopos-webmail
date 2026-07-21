@@ -27,7 +27,7 @@ class EmailRulesHeaderWidget extends StatelessWidget {
       width: double.infinity,
       decoration: const BoxDecoration(
         color: AppColor.colorBackgroundWrapIconStyleCode,
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,7 +56,7 @@ class EmailRulesHeaderWidget extends StatelessWidget {
             key: const Key('new_rule_button'),
             text: AppLocalizations.of(context).addNewRule,
             icon: imagePaths.icAddNewRules,
-            borderRadius: 10,
+            borderRadius: 0,
             backgroundColor: AppColor.colorTextButton,
             iconColor: Colors.white,
             minWidth: 130,
@@ -77,7 +77,7 @@ class EmailRulesHeaderWidget extends StatelessWidget {
         key: const Key('new_rule_button'),
         text: AppLocalizations.of(context).addNewRule,
         icon: imagePaths.icAddNewRules,
-        borderRadius: 10,
+        borderRadius: 0,
         backgroundColor: AppColor.colorTextButton,
         iconColor: Colors.white,
         padding: const EdgeInsets.symmetric(vertical: 12),

@@ -93,7 +93,7 @@ class ConfirmationDialogBuilder extends StatelessWidget {
           )
         : Dialog(
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
             insetPadding: outsideDialogPadding,
             alignment: alignment ?? Alignment.center,
@@ -176,7 +176,7 @@ class _BodyContent extends StatelessWidget {
       constraints: BoxConstraints(maxWidth: maxWidth),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
       ),
       margin: margin,
       child: Stack(
@@ -222,7 +222,7 @@ class _BodyContent extends StatelessWidget {
         iconSize: 24,
         iconColor: AppColor.m3Tertiary,
         padding: const EdgeInsets.all(10),
-        borderRadius: 24,
+        borderRadius: 0,
         backgroundColor: Colors.transparent,
         onTapActionCallback: onCloseButtonAction,
       ),

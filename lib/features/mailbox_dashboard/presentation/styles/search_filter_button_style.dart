@@ -15,7 +15,7 @@ class SearchFilterButtonStyle {
     }
   }
   static const EdgeInsetsGeometry elementPadding = EdgeInsetsDirectional.only(start: 8);
-  static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(10));
+  static const BorderRadius borderRadius = BorderRadius.all(Radius.circular(0));
 
   static TextStyle titleStyle = ThemeUtils.defaultTextStyleInterFont.copyWith(
     fontSize: 13,

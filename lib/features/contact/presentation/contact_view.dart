@@ -73,7 +73,7 @@ class ContactView extends GetWidget<ContactController> {
                             controller.responsiveUtils,
                           ),
                           decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
                             color: AppColor.colorBgSearchBar
                           ),
                           hintText: AppLocalizations.of(context).hintSearchInputContact,

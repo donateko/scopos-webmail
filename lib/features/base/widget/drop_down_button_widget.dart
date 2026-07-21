@@ -157,7 +157,7 @@ class DropDownButtonWidget<T> extends StatelessWidget {
             elevation: 4,
             offset: const Offset(0.0, -8.0),
             scrollbarTheme: ScrollbarThemeData(
-              radius: const Radius.circular(40),
+              radius: const Radius.circular(0),
               thickness: WidgetStateProperty.all<double>(6),
               thumbVisibility: WidgetStateProperty.all<bool>(true),
             ),

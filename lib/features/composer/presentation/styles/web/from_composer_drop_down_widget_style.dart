@@ -30,10 +30,10 @@ class FromComposerDropDownWidgetStyle {
     left: 8.0,
   );
 
-  static const editIdentityIconBorderRadius = BorderRadius.all(Radius.circular(12.0));
+  static const editIdentityIconBorderRadius = BorderRadius.all(Radius.circular(0));
 
   static const BoxDecoration buttonDecoration = BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(10.0)),
+    borderRadius: BorderRadius.all(Radius.circular(0)),
     color: AppColor.colorComposerAppBar,
   );
 
@@ -46,14 +46,14 @@ class FromComposerDropDownWidgetStyle {
   static DropdownStyleData dropdownStyleData = DropdownStyleData(
     maxHeight: 272.0,
     decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      borderRadius: BorderRadius.all(Radius.circular(0)),
       color: Colors.white,
     ),
     width: 381.0,
     elevation: 4,
     offset: const Offset(0.0, -8.0),
     scrollbarTheme: ScrollbarThemeData(
-      radius: const Radius.circular(40.0),
+      radius: const Radius.circular(0),
       thickness: WidgetStateProperty.all<double>(6.0),
       thumbVisibility: WidgetStateProperty.all<bool>(true),
     )

@@ -18,8 +18,22 @@ class ThemeUtils {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       scrollbarTheme: ScrollbarThemeData(
         thickness: WidgetStateProperty.all(6.0),
-        radius: const Radius.circular(10.0),
+        radius: const Radius.circular(0),
         thumbColor: WidgetStateProperty.all(AppColor.thumbScrollbarColor)),
+      // Square edges everywhere, per the Scopos site: Material rounds
+      // checkboxes and dialogs by default.
+      checkboxTheme: const CheckboxThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      ),
+      dialogTheme: const DialogThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      ),
+      cardTheme: const CardThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      ),
+      popupMenuTheme: const PopupMenuThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+      ),
     );
   }
 

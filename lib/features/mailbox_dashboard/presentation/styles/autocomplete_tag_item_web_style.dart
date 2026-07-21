@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class AutoCompleteTagItemWebStyle {
   static const double labelPaddingHorizontal = 4.0;
 
-  static const BorderRadius shapeBorderRadius = BorderRadius.all(Radius.circular(10.0));
+  static const BorderRadius shapeBorderRadius = BorderRadius.all(Radius.circular(0));
 
   static const Color collapsedBackgroundColor = AppColor.colorEmailAddressTag;
 

@@ -2300,8 +2300,8 @@ class SingleEmailController extends BaseController with AppLoaderMixin {
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(20.0),
-          topRight: Radius.circular(20.0),
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
         ),
       ),
       builder: (_) {

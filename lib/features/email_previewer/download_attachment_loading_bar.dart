@@ -22,7 +22,7 @@ class DownloadAttachmentLoadingBar extends StatelessWidget {
         padding: EdgeInsets.zero,
         lineHeight: 5,
         percent: viewState.progress / 100,
-        barRadius: const Radius.circular(1),
+        barRadius: const Radius.circular(0),
         backgroundColor: AppColor.colorProgressLoadingBackground,
         progressColor: AppColor.primaryColor);
     } else {

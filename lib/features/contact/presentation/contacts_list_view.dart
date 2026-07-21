@@ -32,11 +32,11 @@ final controller = Get.isRegistered<ContactsListController>()
     return Container(
       margin: const EdgeInsetsDirectional.only(top: 16, end: 16, bottom: 16),
       decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(0)),
         color: Colors.white
       ),
       child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(20)),
+        borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

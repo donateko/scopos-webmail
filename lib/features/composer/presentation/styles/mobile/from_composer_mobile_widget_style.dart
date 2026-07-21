@@ -13,9 +13,9 @@ class FromComposerMobileWidgetStyle {
     left: 8,
   );
 
-  static const BorderRadius identityButtonInkWellBorderRadius = BorderRadius.all(Radius.circular(10));
+  static const BorderRadius identityButtonInkWellBorderRadius = BorderRadius.all(Radius.circular(0));
   static const BoxDecoration identityButtonDecoration = BoxDecoration(
-    borderRadius: BorderRadius.all(Radius.circular(10)),
+    borderRadius: BorderRadius.all(Radius.circular(0)),
     color: AppColor.colorComposerAppBar,
   );
   static const Border border = Border(

@@ -45,7 +45,7 @@ class AppBarMailboxCreatorBuilder {
 
   Widget _buildCancelButton() {
     return Material(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(0),
         color: Colors.transparent,
         child: TextButton(
             child: Text(
@@ -59,7 +59,7 @@ class AppBarMailboxCreatorBuilder {
 
   Widget _buildCreateButton() {
     return Material(
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(0),
         color: Colors.transparent,
         child: TextButton(
             child: Text(

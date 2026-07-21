@@ -33,11 +33,11 @@ class EmailRecoveryFormDesktopBuilder extends StatelessWidget {
         child: Center(
           child: Card(
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(16)),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
             child: Container(
               decoration: const BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(16)),
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 color: Colors.white,
               ),
               width: min(

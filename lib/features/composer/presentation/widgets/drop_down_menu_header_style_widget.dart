@@ -53,12 +53,12 @@ class DropDownMenuHeaderStyleWidget extends StatelessWidget {
             maxHeight: 200,
             width: dropdownWidth,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(0),
               color: Colors.white),
             elevation: 4,
             offset: const Offset(0.0, -8.0),
             scrollbarTheme: ScrollbarThemeData(
-              radius: const Radius.circular(40),
+              radius: const Radius.circular(0),
               thickness: WidgetStateProperty.all<double>(6),
               thumbVisibility: WidgetStateProperty.all<bool>(true),
             )
@@ -89,7 +89,7 @@ class DropDownMenuHeaderStyleWidget extends StatelessWidget {
         return Container(
             width: dropdownWidth,
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.circular(0),
                 border: Border.all(color: AppColor.colorBorderStyleCode, width: 1.0),
                 color: AppColor.colorBackgroundStyleCode),
             padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8),

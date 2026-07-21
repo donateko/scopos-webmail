@@ -69,8 +69,11 @@ class _LoginTextInputBuilderState extends State<LoginTextInputBuilder> {
           textInputAction: widget.textInputAction,
           autofillHints: widget.autofillHints,
           controller: _controller,
-          textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
-            color: AppColor.loginTextFieldHintColor,
+          // Typed text is ivory on the dark card; the stock hint colour was
+          // a mid grey meant for a white field.
+          textStyle: const TextStyle(
+            fontFamily: 'Barlow',
+            color: Color(0xFFF4F3F0),
             fontSize: 16,
             fontWeight: FontWeight.normal
           ),
@@ -100,21 +103,21 @@ class _LoginTextInputBuilderState extends State<LoginTextInputBuilder> {
                 fontWeight: FontWeight.normal
             ))
             ..setFocusBorder(const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 borderSide: BorderSide(
                   width: 1,
                   color: AppColor.loginTextFieldFocusedBorder
                 )
             ))
             ..setEnabledBorder(const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 borderSide: BorderSide(
                   width: 1,
                   color: AppColor.loginTextFieldBorderColor
                 )
             ))
             ..setErrorBorder(const OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderRadius: BorderRadius.all(Radius.circular(0)),
                 borderSide: BorderSide(
                   width: 1,
                   color: AppColor.loginTextFieldErrorBorder

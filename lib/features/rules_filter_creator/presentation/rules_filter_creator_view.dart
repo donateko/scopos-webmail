@@ -39,14 +39,14 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                   child: Container(
                     decoration: const BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(16),
-                        topRight: Radius.circular(16)),
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(0)),
                       color: Colors.white),
                     margin: EdgeInsets.only(top: PlatformInfo.isWeb ? 70 : 0),
                     child: ClipRRect(
                         borderRadius: const  BorderRadius.only(
-                            topLeft: Radius.circular(16),
-                            topRight: Radius.circular(16)),
+                            topLeft: Radius.circular(0),
+                            topRight: Radius.circular(0)),
                         child: SafeArea(child: _buildRulesFilterFormOnMobile(context))
                     )
                   ),
@@ -61,15 +61,15 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                     decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16),
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
                         )),
                     width: double.infinity,
                     height: controller.responsiveUtils.getSizeScreenHeight(context) * 0.7,
                     child: ClipRRect(
                         borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(16),
-                          topRight: Radius.circular(16)),
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0)),
                         child: _buildRulesFilterFormOnTablet(context)
                     )
                 )),
@@ -82,15 +82,15 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                 child: Center(child: Card(
                     color: Colors.transparent,
                     shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16))),
+                        borderRadius: BorderRadius.all(Radius.circular(0))),
                     child: Container(
                         decoration: const BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.all(Radius.circular(16))),
+                            borderRadius: BorderRadius.all(Radius.circular(0))),
                         width: controller.responsiveUtils.getSizeScreenWidth(context) * 0.6,
                         height: controller.responsiveUtils.getSizeScreenHeight(context) * 0.7,
                         child: ClipRRect(
-                            borderRadius: const BorderRadius.all(Radius.circular(16)),
+                            borderRadius: const BorderRadius.all(Radius.circular(0)),
                             child: _buildRulesFilterFormOnDesktop(context)
                         )
                     )

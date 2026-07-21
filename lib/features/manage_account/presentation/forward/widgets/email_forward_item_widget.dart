@@ -51,7 +51,7 @@ class EmailForwardItemWidget extends StatelessWidget {
             }
           },
           customBorder: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(12))),
+            borderRadius: BorderRadius.all(Radius.circular(0))),
           child: Container(
             padding: const EdgeInsets.only(left: 12, bottom: 12, top: 12),
             decoration: BoxDecoration(

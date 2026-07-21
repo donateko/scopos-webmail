@@ -16,7 +16,7 @@ class HorizontalProgressLoadingButton extends StatelessWidget {
           backgroundColor: AppColor.primaryColor,
           disabledBackgroundColor: AppColor.primaryColor,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(0)),
           )
         ),
         onPressed: null,

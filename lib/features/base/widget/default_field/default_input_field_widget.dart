@@ -37,15 +37,15 @@ class DefaultInputFieldWidget extends StatelessWidget {
         fillColor: Colors.white,
         contentPadding: const EdgeInsetsDirectional.only(start: 12, end: 8),
         enabledBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           borderSide: BorderSide(width: 1, color: AppColor.m3Neutral90),
         ),
         border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           borderSide: BorderSide(width: 1, color: AppColor.m3Neutral90),
         ),
         focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
+          borderRadius: BorderRadius.all(Radius.circular(0)),
           borderSide: BorderSide(width: 1, color: AppColor.primaryColor),
         ),
         hintText: hintText,
