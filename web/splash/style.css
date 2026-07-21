@@ -63,3 +63,21 @@ body {
     left: 50%; /* Start from the horizontal center */
     transform: translateX(-50%); /* Adjust to truly center the image */
 }
+/* Scopos splash mark: vector so it stays sharp at any density, with a slow
+   breathing pulse. Motion is deliberately minimal, and it is disabled
+   entirely for users who ask for reduced motion. */
+.splash-mark {
+  width: 176px;
+  height: 176px;
+  object-fit: contain;
+  animation: scopos-pulse 2.4s ease-in-out infinite;
+}
+
+@keyframes scopos-pulse {
+  0%, 100% { opacity: 1;    transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(0.94); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-mark { animation: none; }
+}
