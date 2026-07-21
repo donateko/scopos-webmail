@@ -23,16 +23,19 @@ abstract class BaseLoginView extends GetWidget<LoginController> {
         style: ElevatedButton.styleFrom(
           foregroundColor: Colors.white,
           backgroundColor: AppColor.primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: const BorderSide(width: 0, color: AppColor.primaryColor)
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(width: 0, color: AppColor.primaryColor)
           )
         ),
         onPressed: () => controller.handleLoginPressed(context),
         child: Text(
-          AppLocalizations.of(context).signIn,
-          style: ThemeUtils.defaultTextStyleInterFont.copyWith(
-            fontSize: 16,
+          AppLocalizations.of(context).signIn.toUpperCase(),
+          style: const TextStyle(
+            fontFamily: 'BarlowCondensed',
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            letterSpacing: 1.4,
             color: Colors.white,
           ),
         ),

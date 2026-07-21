@@ -19,7 +19,10 @@ class AppConfig {
   static const String iOSKeychainSharingGroupId = 'KUT463DS29.com.linagora.ios.teammail.shared';
   static const String iOSKeychainSharingService = 'com.linagora.ios.teammail.sessions';
   static const String saasPlatform = 'saas';
-  static const String linagoraPrivacyUrl = 'https://github.com/linagora/tmail-flutter/blob/master/privacy.md';
+  // Scopos privacy policy, not the upstream project's. The stock value
+  // pointed at Linagora's GitHub, which is the wrong policy to show a
+  // consultant signing in to a Scopos tool.
+  static const String linagoraPrivacyUrl = 'https://scoposstrategies.com/privacy';
   static const String saasRegistrationUrl = 'https://sign-up.twake.app';
   static const String saasJmapServerUrl = 'https://jmap.twake.app';
 
