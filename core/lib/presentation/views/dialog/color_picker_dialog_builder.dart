@@ -115,7 +115,7 @@ class ColorPickerDialogBuilder {
           actions: <Widget>[
             buildButtonWrapText(
                 textActionCancel ?? '',
-                radius: 5,
+                radius: 0,
                 height: 30,
                 textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                     color: Colors.black,
@@ -125,7 +125,7 @@ class ColorPickerDialogBuilder {
                 onTap: () => cancelActionCallback?.call()),
             buildButtonWrapText(
                 textActionResetDefault ?? '',
-                radius: 5,
+                radius: 0,
                 height: 30,
                 textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                     color: Colors.black,
@@ -136,7 +136,7 @@ class ColorPickerDialogBuilder {
                 onTap: () => resetToDefaultActionCallback?.call()),
             buildButtonWrapText(
                 textActionSetColor ?? '',
-                radius: 5,
+                radius: 0,
                 height: 30,
                 textStyle: ThemeUtils.defaultTextStyleInterFont.copyWith(
                   color: Colors.white,

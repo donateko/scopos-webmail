@@ -60,7 +60,7 @@ class ThreadView extends GetWidget<ThreadController>
       onTap: FocusManager.instance.primaryFocus?.unfocus,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
+        backgroundColor: AppColor.colorBgDesktop,
         body: Portal(
           child: Row(children: [
             if (_supportVerticalDivider(context))
@@ -243,7 +243,7 @@ class ThreadView extends GetWidget<ThreadController>
                       Expanded(
                         child: Container(
                           alignment: Alignment.center,
-                          color: Colors.white,
+                          color: AppColor.colorBgDesktop,
                           child: Obx(() {
                             return Visibility(
                               visible: controller.openingEmail.isFalse,
@@ -457,7 +457,7 @@ class ThreadView extends GetWidget<ThreadController>
             child: Divider(
               color: index < listPresentationEmail.length - 1 && controller.mailboxDashBoardController.currentSelectMode.value == SelectMode.INACTIVE
                 ? null
-                : Colors.white,
+                : AppColor.colorBgDesktop,
             ),
           );
         }
@@ -598,7 +598,7 @@ class ThreadView extends GetWidget<ThreadController>
           children: [
             CircleAvatar(
               backgroundColor: AppColor.colorSpamReportBannerBackground,
-              radius: 24,
+              radius: 0,
               child: !presentationEmail.hasRead
                   ? SvgPicture.asset(
                       controller.imagePaths.icMarkAsRead,
@@ -633,7 +633,7 @@ class ThreadView extends GetWidget<ThreadController>
                 const Spacer(),
                 CircleAvatar(
                   backgroundColor: AppColor.colorSpamReportBannerBackground,
-                  radius: 24,
+                  radius: 0,
                   child: SvgPicture.asset(
                     controller.imagePaths.icMailboxArchived,
                     fit: BoxFit.fill,

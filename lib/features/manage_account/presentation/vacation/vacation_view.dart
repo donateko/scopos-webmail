@@ -365,7 +365,7 @@ class VacationView extends GetWidget<VacationController> with RichTextButtonMixi
             ),
             width: 156,
             height: 44,
-            radius: 10,
+            radius: 0,
             onTap: () => controller.saveVacation(context)),
       );
     } else {
@@ -381,7 +381,7 @@ class VacationView extends GetWidget<VacationController> with RichTextButtonMixi
                 backgroundColor: AppColor.emailAddressChipColor,
                 width: 156,
                 height: 44,
-                radius: 10,
+                radius: 0,
                 onTap: () => controller.backToUniversalSettings(context)),
           ),
           const SizedBox(width: 12),
@@ -395,7 +395,7 @@ class VacationView extends GetWidget<VacationController> with RichTextButtonMixi
                 ),
                 width: 156,
                 height: 44,
-                radius: 10,
+                radius: 0,
                 onTap: () => controller.saveVacation(context)),
           )
         ]);
@@ -411,7 +411,7 @@ class VacationView extends GetWidget<VacationController> with RichTextButtonMixi
               backgroundColor: AppColor.emailAddressChipColor,
               width: 156,
               height: 44,
-              radius: 10,
+              radius: 0,
               onTap: () => controller.backToUniversalSettings(context)),
           const SizedBox(width: 12),
           buildTextButton(
@@ -423,7 +423,7 @@ class VacationView extends GetWidget<VacationController> with RichTextButtonMixi
               ),
               width: 156,
               height: 44,
-              radius: 10,
+              radius: 0,
               onTap: () => controller.saveVacation(context))
         ]);
       }

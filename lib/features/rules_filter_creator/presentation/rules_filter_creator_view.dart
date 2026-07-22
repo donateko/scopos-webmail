@@ -237,7 +237,7 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                   backgroundColor: AppColor.emailAddressChipColor,
                   width: 128,
                   height: 44,
-                  radius: 10,
+                  radius: 0,
                   onTap: () => controller.closeView(context)),
                 const SizedBox(width: 12),
                 Obx(() => buildTextButton(
@@ -245,7 +245,7 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                   width: 128,
                   height: 44,
                   backgroundColor: AppColor.colorTextButton,
-                  radius: 10,
+                  radius: 0,
                   onTap: () => controller.createNewRuleFilter(context))),
               ]
             ),
@@ -397,7 +397,7 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                         backgroundColor: AppColor.emailAddressChipColor,
                         width: 128,
                         height: 44,
-                        radius: 10,
+                        radius: 0,
                         onTap: () => controller.closeView(context))),
                     const SizedBox(width: 12),
                     Expanded(child: Obx(() => buildTextButton(
@@ -405,7 +405,7 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                         width: 128,
                         height: 44,
                         backgroundColor: AppColor.colorTextButton,
-                        radius: 10,
+                        radius: 0,
                         onTap: () => controller.createNewRuleFilter(context)))),
                   ]
               ),
@@ -575,7 +575,7 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                         backgroundColor: AppColor.emailAddressChipColor,
                         width: 128,
                         height: 44,
-                        radius: 10,
+                        radius: 0,
                         onTap: () => controller.closeView(context))),
                     const SizedBox(width: 12),
                     Expanded(child: Obx(() => buildTextButton(
@@ -583,7 +583,7 @@ class RuleFilterCreatorView extends GetWidget<RulesFilterCreatorController> {
                         width: 128,
                         height: 44,
                         backgroundColor: AppColor.colorTextButton,
-                        radius: 10,
+                        radius: 0,
                         onTap: () => controller.createNewRuleFilter(context)))),
                   ]
               ),

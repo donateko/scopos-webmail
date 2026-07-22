@@ -19,7 +19,7 @@ class ManageAccountMenuView extends GetWidget<ManageAccountMenuController> {
   @override
   Widget build(BuildContext context) {
      return Scaffold(
-       backgroundColor: AppColor.colorBgDesktop,
+       backgroundColor: const Color(0xFF141414),
        body: Padding(
          padding: const EdgeInsetsDirectional.only(
            start: 9,
@@ -40,8 +40,8 @@ class ManageAccountMenuView extends GetWidget<ManageAccountMenuController> {
                       : controller.imagePaths.icBack,
                   borderRadius: 0,
                   mainAxisSize: MainAxisSize.min,
-                  backgroundColor: AppColor.lightGrayEAEDF2,
-                  iconColor: AppColor.primaryLinShare,
+                  backgroundColor: const Color(0xFF262626),
+                  iconColor: const Color(0xFFB8B6B2),
                   minWidth: 79,
                   iconSize:
                       DirectionUtils.isDirectionRTLByLanguage(context)
@@ -55,7 +55,7 @@ class ManageAccountMenuView extends GetWidget<ManageAccountMenuController> {
                   ),
                   textStyle:
                       Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: AppColor.blue900,
+                            color: const Color(0xFFB8B6B2),
                           ),
                   onTapActionCallback: () =>
                       controller.backToMailboxDashBoard(context),
@@ -67,7 +67,7 @@ class ManageAccountMenuView extends GetWidget<ManageAccountMenuController> {
                  AppLocalizations.of(context).manage_account,
                  style: ThemeUtils.textStyleHeadingHeadingSmall(
                    fontWeight: FontWeight.bold,
-                 ),
+                 ).copyWith(color: const Color(0xFFF4F3F0)),
                )
              ),
              Flexible(
@@ -98,7 +98,7 @@ class ManageAccountMenuView extends GetWidget<ManageAccountMenuController> {
              ),
              const Padding(
                padding: EdgeInsets.only(top: 20, bottom: 12),
-               child: Divider(color: Colors.black12),
+               child: Divider(color: Color(0x22FFFFFF)),
              ),
              Obx(() {
                final accountId = controller

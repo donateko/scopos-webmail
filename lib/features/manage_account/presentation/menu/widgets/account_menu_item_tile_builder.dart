@@ -42,7 +42,7 @@ class AccountMenuItemTileBuilder extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(0)),
               color: _isSelected
-                ? AppColor.lightGrayEAEDF2
+                ? Colors.white
                 : Colors.transparent,
             ),
             padding: const EdgeInsets.all(8),
@@ -53,7 +53,7 @@ class AccountMenuItemTileBuilder extends StatelessWidget {
                 width: 20,
                 height: 20,
                 fit: BoxFit.fill,
-                colorFilter: AppColor.primaryLinShare.asFilter(),
+                colorFilter: (_isSelected ? const Color(0xFF141414) : const Color(0xFFB8B6B2)).asFilter(),
               ),
               const SizedBox(width: 8),
               Expanded(child: Text(
@@ -76,10 +76,10 @@ class AccountMenuItemTileBuilder extends StatelessWidget {
         fontSize: 15,
         height: 20 / 15,
         letterSpacing: 0.0,
-        color: Colors.black,
+        color: const Color(0xFF141414),
       );
     } else {
-      return ThemeUtils.textStyleBodyBody2(color: Colors.black);
+      return ThemeUtils.textStyleBodyBody2(color: const Color(0xFFB8B6B2));
     }
   }
 }

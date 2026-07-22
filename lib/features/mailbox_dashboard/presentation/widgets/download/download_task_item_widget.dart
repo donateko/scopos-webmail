@@ -52,7 +52,7 @@ class DownloadTaskItemWidget extends StatelessWidget {
                       backgroundColor: AppColor.colorBgMailboxSelected,
                       progressColor: AppColor.primaryColor,
                       lineWidth: 3,
-                      radius: 14,
+                      radius: 0,
                     )
               )
             ]),

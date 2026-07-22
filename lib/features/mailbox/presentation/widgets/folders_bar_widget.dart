@@ -40,7 +40,7 @@ class FoldersBarWidget extends StatelessWidget {
     Widget searchBarIcon = TMailButtonWidget.fromIcon(
       icon: imagePaths.icSearchBar,
       backgroundColor: Colors.transparent,
-      iconColor: AppColor.steelGrayA540,
+      iconColor: const Color(0xFFB8B6B2),
       iconSize: 20,
       padding: const EdgeInsets.all(5),
       tooltipMessage: AppLocalizations.of(context).searchForFolders,
@@ -57,7 +57,7 @@ class FoldersBarWidget extends StatelessWidget {
     Widget newFolderIcon = TMailButtonWidget.fromIcon(
       icon: imagePaths.icAddNewFolder,
       backgroundColor: Colors.transparent,
-      iconColor: AppColor.steelGrayA540,
+      iconColor: const Color(0xFFB8B6B2),
       iconSize: 20,
       padding: const EdgeInsets.all(5),
       tooltipMessage: AppLocalizations.of(context).newFolder,
@@ -73,7 +73,7 @@ class FoldersBarWidget extends StatelessWidget {
 
     final labelFolder = Text(
       AppLocalizations.of(context).folders,
-      style: labelStyle ?? ThemeUtils.textStyleInter700(),
+      style: labelStyle ?? ThemeUtils.textStyleInter700(color: const Color(0xFFB8B6B2)),
       maxLines: 1,
       overflow: TextOverflow.ellipsis,
     );
@@ -95,7 +95,7 @@ class FoldersBarWidget extends StatelessWidget {
                     imagePaths,
                     DirectionUtils.isDirectionRTLByLanguage(context),
                   ),
-                  iconColor: Colors.black,
+                  iconColor: const Color(0xFFB8B6B2),
                   iconSize: 17,
                   margin: isDesktop
                     ? const EdgeInsetsDirectional.only(start: 8)

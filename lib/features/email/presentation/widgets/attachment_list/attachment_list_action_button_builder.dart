@@ -19,7 +19,7 @@ class AttachmentListActionButtonBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return buildButtonWrapText(
         name ?? '',
-        radius: 10,
+        radius: 0,
         height: 44,
         textStyle: textStyle,
         bgColor: bgColor,

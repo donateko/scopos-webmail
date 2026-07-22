@@ -45,7 +45,7 @@ class MailboxExpandButton extends StatelessWidget {
 
   Color get _expandIconColor {
     return mailboxNode.item.allowedToDisplay
-        ? Colors.black
+        ? const Color(0xFFB8B6B2)
         : AppColor.steelGray200;
   }
 }
