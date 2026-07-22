@@ -201,6 +201,9 @@ class BottomBarComposerWidget extends StatelessWidget {
           TMailButtonWidget(
             text: AppLocalizations.of(context).send,
             icon: imagePaths.icSend,
+            // Match the white 'Send' label; the shared iconColor stays muted
+            // for the formatting-toolbar icons on the light bar.
+            iconColor: Colors.white,
             iconAlignment: TextDirection.rtl,
             padding: BottomBarComposerWidgetStyle.sendButtonPadding,
             iconSize: BottomBarComposerWidgetStyle.iconSize,
