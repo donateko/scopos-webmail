@@ -31,7 +31,7 @@ class TMailContainerWidget extends StatelessWidget {
     this.onTapActionCallback,
     this.onTapActionAtPositionCallback,
     this.onLongPressActionCallback,
-    this.borderRadius = 20,
+    this.borderRadius = 0,
     this.width,
     this.height,
     this.maxWidth = double.infinity,

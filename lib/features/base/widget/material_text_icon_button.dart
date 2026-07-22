@@ -25,7 +25,7 @@ class MaterialTextIconButton extends StatelessWidget {
     required this.label,
     required this.icon,
     required this.onTap,
-    this.borderRadius = 12,
+    this.borderRadius = 0,
     this.elevation = 0,
     this.iconSize = 24,
     this.labelColor,

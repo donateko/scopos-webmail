@@ -13,7 +13,7 @@ class TMailToast {
     ToastPosition? toastPosition,
     Color? backgroundColor,
     TextStyle? textStyle,
-    double toastBorderRadius = 10.0,
+    double toastBorderRadius = 0,
     Border? border,
     Widget? trailing,
     Widget? leading,

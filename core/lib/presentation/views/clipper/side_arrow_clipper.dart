@@ -17,7 +17,7 @@ class SideArrowClipper extends CustomClipper<Path> {
 
   SideArrowClipper({
     this.isRight = false,
-    this.radius = 16,
+    this.radius = 0,
     this.offset = 30,
     this.arrowSize = 8
   });

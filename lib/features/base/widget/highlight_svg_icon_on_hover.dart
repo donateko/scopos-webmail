@@ -14,7 +14,7 @@ class HighlightSVGIconOnHover extends StatefulWidget {
     Key? key,
     required this.icon,
     this.size = 20.0,
-    this.borderRadius = 5.0,
+    this.borderRadius = 0,
     this.iconColor,
     this.padding,
     this.tooltipMessage,

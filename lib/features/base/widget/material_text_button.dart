@@ -25,7 +25,7 @@ class MaterialTextButton extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.onLongPress,
-    this.borderRadius = 12,
+    this.borderRadius = 0,
     this.labelColor,
     this.labelSize = 15,
     this.labelWeight,
