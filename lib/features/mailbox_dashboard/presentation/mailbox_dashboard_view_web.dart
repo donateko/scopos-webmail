@@ -558,7 +558,10 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
                 ),
               );
             } else {
-              return Padding(
+              // Toolbar header sits a step darker than the light-grey message
+              // list, so the two read as distinct bands.
+              return Container(
+                color: const Color(0xFFE4E4E4),
                 padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                 child: _buildListButtonTopBar(context),
               );
