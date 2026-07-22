@@ -60,9 +60,12 @@ extension AppColor on Color {
   static const enableSendEmailButtonColor = Color(0xFF007AFF);
   static const disableSendEmailButtonColor = Color(0xFFA9B4C2);
   static const borderLeftEmailContentColor = Color(0xFFEFEFEF);
-  static const toastWarningBackgroundColor = Color(0xFFFFC107);
-  static const toastSuccessBackgroundColor = Color(0xFF4BB34B);
-  static const toastErrorBackgroundColor = Color(0xFFE64646);
+  // Scopos amber anchor.
+  static const toastWarningBackgroundColor = Color(0xFFB7791F);
+  // Scopos site green anchor (was candy #4BB34B).
+  static const toastSuccessBackgroundColor = Color(0xFF2E7D32);
+  // Scopos red.
+  static const toastErrorBackgroundColor = Color(0xFFAC0014);
   static const toastWithActionBackgroundColor = Color(0xFF3F3F3F);
   static const buttonActionToastWithActionColor = Color(0xFF7ADCF8);
   static const backgroundCountAttachment = Color(0x681C1C1C);
@@ -142,7 +145,7 @@ extension AppColor on Color {
   static const colorDeletePermanentlyButton = Color(0xffE64646);
   static const colorVacationSettingExplanation = Color(0xFF686E76);
   static const colorBackgroundVacationSettingField = Color(0xFFF2F3F5);
-  static const colorBackgroundNotificationVacationSetting= Color(0xFFFFF5C2);
+  static const colorBackgroundNotificationVacationSetting= Color(0xFFF3E9D2);
   static const colorDivider = Color(0xFFE7E8EC);
   static const colorCloseButton = Color(0xFF818C99);
   static const colorDropShadow = Color(0x0F000000);
