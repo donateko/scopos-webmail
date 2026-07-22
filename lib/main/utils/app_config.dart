@@ -23,6 +23,10 @@ class AppConfig {
   // pointed at Linagora's GitHub, which is the wrong policy to show a
   // consultant signing in to a Scopos tool.
   static const String linagoraPrivacyUrl = 'https://scoposstrategies.com/privacy';
+
+  /// AGPL-3.0 s.13: the app is a modified network-served AGPL work, so the
+  /// corresponding source of the deployed version must be offered to users.
+  static const String sourceCodeUrl = 'https://github.com/donateko/scopos-webmail';
   static const String saasRegistrationUrl = 'https://sign-up.twake.app';
   static const String saasJmapServerUrl = 'https://jmap.twake.app';
 

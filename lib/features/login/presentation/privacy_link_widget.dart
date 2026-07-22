@@ -37,6 +37,19 @@ class PrivacyLinkWidget extends StatelessWidget {
               letterSpacing: 0.2),
             recognizer: TapGestureRecognizer()..onTap = () => AppUtils.launchLink(privacyUrlString)
           )
+        ),
+        // AGPL-3.0 s.13 source offer: the deployed build is a modified
+        // network-served AGPL work, so its corresponding source is offered here.
+        RichText(
+          text: TextSpan(
+            text: 'Source code',
+            style: const TextStyle(
+              fontFamily: 'SpaceMono',
+              color: Color(0xFF8A8A8A),
+              fontSize: 11,
+              letterSpacing: 0.2),
+            recognizer: TapGestureRecognizer()..onTap = () => AppUtils.launchLink(AppConfig.sourceCodeUrl)
+          )
         )
       ],
     );
