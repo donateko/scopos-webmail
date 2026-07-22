@@ -101,7 +101,9 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
               body: GestureDetector(
                 onTap: () => FocusScope.of(context).unfocus(),
                 child: Container(
-                  color: AppColor.colorBgDesktop,
+                  // Left column (compose + folders) is dark, matching the
+                  // sidebar. colorBgDesktop is now the light message viewport.
+                  color: const Color(0xFF141414),
                   child: Column(children: [
                     FutureBuilder(
                       future: CozyConfigManager().isInsideCozy,
@@ -532,7 +534,8 @@ class MailboxDashBoardView extends BaseMailboxDashBoardView {
       margin: const EdgeInsetsDirectional.only(end: 16, bottom: 16),
       decoration: const BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(0)),
-        color: Colors.white),
+        // The message viewport is the light grey ground.
+        color: AppColor.colorBgDesktop),
       child: ClipRRect(
         borderRadius: const BorderRadius.all(Radius.circular(0)),
         child: Column(children: [

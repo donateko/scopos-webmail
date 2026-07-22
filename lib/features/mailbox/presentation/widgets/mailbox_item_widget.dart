@@ -152,7 +152,7 @@ class _MailboxItemWidgetState extends State<MailboxItemWidget> {
                         padding: const EdgeInsetsDirectional.only(
                           end: MailboxItemWidgetStyles.mobileLabelIconSpace,
                         ),
-                        color: AppColor.iconFolder,
+                        color: _isSelected ? const Color(0xFF141414) : const Color(0xFFB8B6B2),
                       ),
                     Expanded(
                       child: LabelMailboxItemWidget(
@@ -201,7 +201,7 @@ class _MailboxItemWidgetState extends State<MailboxItemWidget> {
                         padding: const EdgeInsetsDirectional.only(
                           end: MailboxItemWidgetStyles.mobileLabelIconSpace,
                         ),
-                        color: AppColor.iconFolder,
+                        color: _isSelected ? const Color(0xFF141414) : const Color(0xFFB8B6B2),
                       ),
                     Expanded(
                       child: LabelMailboxItemWidget(
